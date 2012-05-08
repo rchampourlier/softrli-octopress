@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: commands | softr.li]]></title>
+  <link href="http://www.softr.li/blog/categories/commands/atom.xml" rel="self"/>
+  <link href="http://www.softr.li/"/>
+  <updated>2012-05-08T12:30:44+02:00</updated>
+  <id>http://www.softr.li/</id>
+  <author>
+    <name><![CDATA[Romain Champourlier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[MongoDB CheatSheet]]></title>
+    <link href="http://www.softr.li/blog/2012/04/15/mongodb-cheatsheet/"/>
+    <updated>2012-04-15T10:05:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/04/15/mongodb-cheatsheet</id>
+    <content type="html"><![CDATA[<h2>Get a list of handy commands</h2>
+
+<pre><code>help
+</code></pre>
+
+<h2>List DBs</h2>
+
+<pre><code>show dbs
+</code></pre>
+
+<h2>Select a DB</h2>
+
+<pre><code>use mydb
+</code></pre>
+
+<h2>Show collections</h2>
+
+<pre><code>show collections
+</code></pre>
+
+<h2>List all documents in a collection</h2>
+
+<pre><code>db.collectionName.find()
+</code></pre>
+
+<h2>Get a specific object in a collection</h2>
+
+<h3>Through its index</h3>
+
+<pre><code>var object = db.collectionName.find().toArray()[index];
+</code></pre>
+
+<h3>With a where-like clause</h3>
+
+<p>Assuming you want to find objects matching x=1 and y=2:</p>
+
+<pre><code>var objects = db.collectionName.find((x:1), (y:2));
+</code></pre>
+
+<h2>Update an object</h2>
+
+<pre><code>var object.attribute = newValue;
+db.collectionName.save(object);
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

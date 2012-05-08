@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: issue | softr.li]]></title>
+  <link href="http://www.softr.li/blog/categories/issue/atom.xml" rel="self"/>
+  <link href="http://www.softr.li/"/>
+  <updated>2012-05-08T12:30:44+02:00</updated>
+  <id>http://www.softr.li/</id>
+  <author>
+    <name><![CDATA[Romain Champourlier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using cloned virtualized machines but having issues with your network configuration?]]></title>
+    <link href="http://www.softr.li/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration/"/>
+    <updated>2012-01-05T09:18:00+01:00</updated>
+    <id>http://www.softr.li/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration</id>
+    <content type="html"><![CDATA[<p>If like me, you're using <strong>VirtualBox virtual machines</strong> a lot, eg.:</p>
+
+<ul>
+<li>to <strong>simulate your production environment</strong> (what we may call <em>staging</em>),</li>
+<li>or more lately in my case, to <strong>run a PostgreSQL database</strong> and thus stop using SQLite to do your Rails developments and just use the production's server...</li>
+</ul>
+
+
+<p>...then you may have wanted to clone some of your virtual machines once you installed the barebone server, and you may thus have faced <strong>an issue with the network of the cloned machine not working anymore.</strong></p>
+
+<p><strong>The solution to the problem is quite simple, but it needs to be found!</strong></p>
+
+<p>This one is working well with my images under <strong> Ubuntu 10.04.3 LTS</strong>. You can find some help <a href="http://blog.computerant.com/2010/01/02/virtualbox-cloning-ubuntu/">on this other post</a>, or if you want the shortest way:</p>
+
+<p><code>
+sudo mv /etc/udev/rules.d/70-persistent-net.rules /etc/udev/rules.d/70-persistent-net.rules.broken
+sudo shutdown now -r
+</code></p>
+
+<p>This should restart your machine... and restore your network! Have fun ;)</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,1250 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>softr.li</title>
+  <meta name="author" content="Romain Champourlier">
+
+  
+  <meta name="description" content="1
+2
+3
+4
+5
+gem uninstall gem_name
+git clone git://github.com/repo_name/gem_name.git
+cd gem_name
+gem build gem_name.gemspec
+gem install ./&lt;the gem &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.softr.li">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="softr.li" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA–27796788–1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">softr.li</a></h1>
+  
+    <h2>Seeking and sharing about making IT softer</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.softr.li" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/22/manually-installing-a-gem-from-a-git-repo/">Manually Installing a Gem From a Git Repo</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-22T10:16:00+02:00" pubdate data-updated="true">Apr 22<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem uninstall gem_name
+</span><span class='line'>git clone git://github.com/repo_name/gem_name.git
+</span><span class='line'>cd gem_name
+</span><span class='line'>gem build gem_name.gemspec
+</span><span class='line'>gem install ./&lt;the gem that was compiled&gt;</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/">Setup Automatic Clearing of Your Rails Sessions</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-20T10:12:00+02:00" pubdate data-updated="true">Apr 20<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>With every connection to your application of a new user, bot or whatever, Rails will create a new session object.</p>
+
+<p>If you&#8217;re using <a href="http://api.rubyonrails.org/classes/ActiveRecord/SessionStore.html">ActiveRecord::SessionStore</a> to save your sessions in your database, your database may already be alarmingly growing in size, due to the number of sessions it contains.</p>
+
+<h2>The rake db:sessions:clear task</h2>
+
+<p>If you don&#8217;t mind a lot about your users lossing their session, you can simply use the provided <code>rake db:sessions:clear</code> task. It will simply delete all sessions in the database. Side-effect: all current sessions are deleted, so signed in users get signed out, and you should hope they had nothing under way!</p>
+
+<h2>A more user-friendly solution</h2>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions">http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/">Setting Up Log Rotation for Your Web Apps</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-20T10:12:00+02:00" pubdate data-updated="true">Apr 20<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>If, like me, you simply follow the common tutorials and walthroughs to setup your production environment, you may start wondering after some weeks <strong>where this leak on your server&#8217;s disk space is coming from&#8230;</strong></p>
+
+<p><em>(Well, that was when I was still a young CTO&#8230;)</em></p>
+
+<h2>The ugly</h2>
+
+<p>You&#8217;ve installed your <strong>nginx</strong> server, it proxies some well-coded <strong>Rails</strong> applications served by the nice-and-fast <strong>thin</strong> app server. All good.</p>
+
+<p>But you know, these are verbose people. They like to talk. A lot. And as obedient software, they write every character of their chatter. So this is where your leak is coming from.</p>
+
+<p>As a matter of fact, if you don&#8217;t tell somebody to clean their mess, nobody won&#8217;t&#8230; and you&#8217;re server will soon die of low-disk-space agony.</p>
+
+<h2>The bad</h2>
+
+<p>You will have to tell <code>logrotate</code> to do some work for these guys to keep their chatter under control.</p>
+
+<p><code>logrotate</code> is the cowboy which will rule the land ;) Tell it which log has to be rotated and it will automatically does the job for you. So now, get into this configuration stage&#8230;</p>
+
+<p>The <code>logrotate</code> configuration file should be <code>/etc/logrotate.conf</code>.</p>
+
+<p>You can add your instructions for log rotation by adding the following lines in this file, or you can create a new file under <code>/etc/logrotate.d</code> if you think this is a more organized way (I think). This latter option mimics the way packages configure <code>logrotate</code>. You will find several examples in this directory, so you may just look at them too.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/path/to/your/rails/applicaton/log/*.log {
+</span><span class='line'>  daily
+</span><span class='line'>  missingok
+</span><span class='line'>  rotate 7
+</span><span class='line'>  compress
+</span><span class='line'>  delaycompress
+</span><span class='line'>  notifempty
+</span><span class='line'>  copytruncate
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you want to force <code>logrotate</code> to run right now instead of waiting until tomorrow to see if your configuration is OK, you can run this command:</p>
+
+<pre><code>/usr/sbin/logrotate -f /etc/logrotate.conf
+</code></pre>
+
+<p>Else you can just wait a little.</p>
+
+<h2>The good</h2>
+
+<p>If you got through all this useless blabber about bad guys chatting and cowboys, you&#8217;ll be happy to know that some serious<del>ly boring</del> (no no, just kidding, I don&#8217;t even know him) guy has written a far more efficient tutorial on the subject, and you can find it <a href="http://www.nullislove.com/2007/09/10/rotating-rails-log-files/">here</a>.</p>
+
+<p>This guide will help you understand how <code>logrotate</code> works and the purpose of each line in the code above.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/16/linking-local-node-modules-with-npm/">Linking Local Node Modules With Npm</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-16T10:10:00+02:00" pubdate data-updated="true">Apr 16<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>&#8230; instead of installing from npm repository.</p>
+
+<h2>Link a module to a local repo</h2>
+
+<p>When you need a fresher version of a module that the one published to npm repository (e.g. if you have your own patch, if new commits haven&#8217;t been released yet), you may want to clone the module locally and have npm use it instead of the published one.</p>
+
+<p>To do this, you <strong>link</strong> your local package.</p>
+
+<pre><code>git clone https://github.com/repo/node-module.git
+cd node-module
+npm link
+</code></pre>
+
+<p><em>You may need to <code>sudo</code> to perform the <code>link</code> command (this is because the link gets installed system-wide, in <code>/usr/local/lib/node_modules</code> on my MacOS X system).</em></p>
+
+<p><strong>Check the log of this command to see on which path npm references the linked module. In my case, the module was named as <code>node-module</code>, but npm was using <code>module</code> for the reference. In this case, be sure to link in your app (next section) using <code>module</code> and not <code>node-module</code>.</strong></p>
+
+<h2>Link this module in your node application</h2>
+
+<p>You will now tell npm to use this linked version of the module for your application:</p>
+
+<pre><code>cd your_application
+npm link module
+</code></pre>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/15/mongodb-cheatsheet/">MongoDB CheatSheet</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-15T10:05:00+02:00" pubdate data-updated="true">Apr 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Get a list of handy commands</h2>
+
+<pre><code>help
+</code></pre>
+
+<h2>List DBs</h2>
+
+<pre><code>show dbs
+</code></pre>
+
+<h2>Select a DB</h2>
+
+<pre><code>use mydb
+</code></pre>
+
+<h2>Show collections</h2>
+
+<pre><code>show collections
+</code></pre>
+
+<h2>List all documents in a collection</h2>
+
+<pre><code>db.collectionName.find()
+</code></pre>
+
+<h2>Get a specific object in a collection</h2>
+
+<h3>Through its index</h3>
+
+<pre><code>var object = db.collectionName.find().toArray()[index];
+</code></pre>
+
+<h3>With a where-like clause</h3>
+
+<p>Assuming you want to find objects matching x=1 and y=2:</p>
+
+<pre><code>var objects = db.collectionName.find((x:1), (y:2));
+</code></pre>
+
+<h2>Update an object</h2>
+
+<pre><code>var object.attribute = newValue;
+db.collectionName.save(object);
+</code></pre>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/14/how-to-make-your-own-gems-with-jeweler/">How to Make Your Own Gems With Jeweler</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-14T10:03:00+02:00" pubdate data-updated="true">Apr 14<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Prerequisites</h2>
+
+<ul>
+<li>You&#8217;re using Bundler.</li>
+<li>You have <code>gem 'jeweler'</code> in your <code>Gemfile</code>.</li>
+<li>You have run <code>bundle install</code>.</li>
+</ul>
+
+
+<h2>Add the <code>gemspec</code> task to your <code>Rakefile</code></h2>
+
+<p>Add these lines to your <code>Rakefile</code>. This will help Jeweler to build the appropriate <code>gemspec</code> for your gem.</p>
+
+<pre><code>begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gemspec|
+    gemspec.name = "the_name_of_your_gem"
+    gemspec.summary = "A summary for your gem"
+    gemspec.description = "A description for your gem"
+    gemspec.email = "your_name@your_company.com"
+    gemspec.homepage = "http://an_url_for_your_gem.com"
+    gemspec.authors = ["your@email.com"]
+  end
+rescue LoadError
+  puts "Jeweler not available. Install it with: gem install jeweler"
+end
+</code></pre>
+
+<h2>Package the gem</h2>
+
+<p>To package the gem, you just have to run the <code>rake</code> task you added, and another <code>build</code> task.</p>
+
+<pre><code>rake gemspec
+rake build
+</code></pre>
+
+<h2>Include your gem hosted on Github in your Rails application</h2>
+
+<p>Assuming your repository is commited on Github, you can easily include your gem in your Rails project using the following line in your <code>Gemfile</code>:</p>
+
+<pre><code>gem 'your_gem_name', :git =&gt; "path_to_your_gem.git"
+</code></pre>
+
+<p>You can also specify a branch with <code>:branch =&gt; "stable"</code> and a tag with <code>:tag =&gt; "2-stable"</code>.</p>
+
+<h2>Include your gem from a local directory</h2>
+
+<p>You can tell Bundler to get your gem from a local directory using the <code>:path</code> parameter. The path is relative to the directory containing the <code>Gemfile</code>:</p>
+
+<pre><code>gem "rails", :path =&gt; "vendor/rails"
+</code></pre>
+
+<h2>Directly include the library</h2>
+
+<p><em>If you&#8217;re building a gem, that&#8217;s probably not your goal, but you can also just include an external lib without needing to package it as a gem. Just use:</em></p>
+
+<pre><code>require 'path_to_gem/lib/gem'
+</code></pre>
+
+<h2>Hubticle tags</h2>
+
+<p>ruby, gem, jeweler, library, module, share, github</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/14/simple-cheatsheet-for-git-submodules/">Simple Cheatsheet for Git Submodules</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-14T10:01:00+02:00" pubdate data-updated="true">Apr 14<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Steps</h2>
+
+<ol>
+<li>Add the submodule using a <code>git submodule add...</code> command (see below for the different options).</li>
+<li>Run <code>git submodule init</code>.</li>
+</ol>
+
+
+<h2>Local submodules</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git submodule add "/absolute/path/to/the/submodule/repository" local/path/for/the/submodule</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To perform operations on the submodule, go in its folder. From then you can make commits and push them to the &#8216;remote&#8217; repository.</p>
+
+<h2>Remote submodules</h2>
+
+<p>Add a remote submodule, include external project and track updates</p>
+
+<pre><code>git submodule add https://path_to_the_git_repository.git ./local_path_to_the_submodule_directory
+</code></pre>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/10/moving-from-rvm-to-rbenv/">Moving From RVM to Rbenv</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-10T09:56:00+02:00" pubdate data-updated="true">Apr 10<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Why?</h2>
+
+<p><strong>RVM</strong> is a very useful tool that helps you manage your ruby environment when you need multiple rubies and have tons of gems different for each of your projects.</p>
+
+<p>I used <strong>RVM</strong> a long time on my development machine, however I did not bother to keep it on my production environment. Launching ruby applications through other ruby tools (e.g. God) or <code>crontab</code> was causing me headaches (loading RVM path, bundle not found, etc.). Since the gems were not managed by RVM, thanks to the excellent <a href="http://gembundler.com/">Bundler</a>, it was a lot of pain for a poor service.</p>
+
+<p>On the other hand, <strong>rbenv</strong> is really simple and powerful, but it only manages rubies, not gems. But again, we have <strong>Bundler</strong>, so it&#8217;s all that we need.</p>
+
+<p>I will not say that using <strong>rbenv</strong> on a production server is painless, you still have to do some work to load some rbenv-things in your environment, but it&#8217;s a lot more clear and easy than with <strong>RVM</strong>&#8230;</p>
+
+<h2>Uninstall RVM</h2>
+
+<p>Start with the RVM auto-uninstall command:</p>
+
+<pre><code>rvm implode
+</code></pre>
+
+<p>Check your filesystem for other <code>rvm</code> files which may remain: <code>.rvmrc</code> files, maybe <code>/etc/rvmrc</code>. Use <code>find / -name 'rvm' -print</code> or <code>locate rvm</code> for example.</p>
+
+<h2>Install rbenv with ruby-build plugin</h2>
+
+<p>Install <strong>rbenv</strong> by following <a href="https://github.com/sstephenson/rbenv#section_2.1">the project&#8217;s installation tutorial using GitHub checkout</a>. <strong>Read the following before doing the install!</strong></p>
+
+<p>Be sure to adjust the file to which you append your environments changes (steps 2 and 3) to the one your using on your system (<code>.bash_profile</code> in the tutorial, <code>.profile</code> on my Mac system, but you may have <code>.bashrc</code> too).</p>
+
+<p><strong>Stop at the end of step 3</strong>, <strong>restart your term</strong> (close and reopen, sure to work while step 4 <code>exec $SHELL</code> did nothing for me) and do the following to have a simple way of installing rubies:</p>
+
+<pre><code>$ mkdir -p ~/.rbenv/plugins
+$ cd ~/.rbenv/plugins
+$ git clone git://github.com/sstephenson/ruby-build.git
+</code></pre>
+
+<p>If you&#8217;ve done this after step 4, you can just use this command to install the ruby you need, e.g. <code>1.9.2-p290</code>:</p>
+
+<pre><code>rbenv install 1.9.2-p290
+</code></pre>
+
+<p>Don&#8217;t forget to do step 6, <code>rbenv rehash</code>.</p>
+
+<h2>Define rbenv&#8217;s default ruby</h2>
+
+<p>Create the <code>~/.rbenv/default</code> file with the following content, adjusted to your desired ruby:</p>
+
+<pre><code>ruby-1.9.2-p290
+</code></pre>
+
+<h2>Configure Bundler to manage gemsets</h2>
+
+<p>As a replacement to <strong>RVM</strong>&#8217;s gemsets feature, we will use <strong>Bundler</strong>. We will thus ask it to systematically install the gems inside the project&#8217;s <code>vendor/bundle</code> directory, instead of using the system&#8217;s default path.</p>
+
+<p>To do this, create the <code>~/.bundle/config</code> file and add this content:</p>
+
+<pre><code>---
+   BUNDLE_PATH: vendor/bundle
+</code></pre>
+
+<p>You can check the configuration is OK by <code>cd</code>-ing into one of your projects&#8217; directory (assuming it&#8217;s using <strong>Bundle</strong> and so you have a <strong>Gemfile</strong>), and running <code>bundle config</code>. If the configuration is OK, you should have this showed:</p>
+
+<pre><code>path
+  Set for the current user (/Users/&lt;your_name&gt;/.bundle/config): "vendor/bundle"
+</code></pre>
+
+<h2>Using (and aliasing) bundle exec</h2>
+
+<p>Using Bundler to manage your gemsets will now require you to use <code>bundle exec</code> for <strong>every</strong> ruby command you run, even <code>rails server</code> or <code>rails console</code> (they don&#8217;t need <code>bundle exec</code> to load Bundle, however you need Bundler to find them!).</p>
+
+<p>A nice thing to do is to alias the <code>bundle exec</code> command to something shorter. I use <code>be</code>. Add this to your <code>~/.bash_profile</code>, <code>~/.profile</code> or whatever file you use:</p>
+
+<pre><code>alias be='bundle exec'
+</code></pre>
+
+<p>So now you can run: <code>be rails console</code> instead of <code>bundle exec rails console</code>.</p>
+
+<h2>The end</h2>
+
+<p>That&#8217;s it, you&#8217;re done!</p>
+
+<h2>References / credits</h2>
+
+<p>This walkthrough is based on <a href="http://snippets.aktagon.com/snippets/532-How-to-migrate-from-rvm-to-rbenv">this article</a> I used a lot myself, but I finally rewrote it to include some more details on the <strong>rbenv</strong> installation process.</p>
+
+<h2>Hubticle tags</h2>
+
+<p>ruby, RVM, rbenv, gem, gemset, development, environment, bundle</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/23/adding-ssl-on-some-pages-of-your-rails-application/">Adding SSL on Some Pages of Your Rails Application</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-23T09:49:00+01:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Summary</h2>
+
+<p>This tutorial should help you to setup SSL on your <em>staging</em> and <em>production</em> servers as well as update your Rails application to require SSL for specific controller actions.</p>
+
+<h2>Generate a self-signed certificate to test on your staging server</h2>
+
+<p>We start by creating a self-signed certificate you will be able to use on your test/staging server, before buying a real certificate and configuring your production machine with it.</p>
+
+<p><em>On your server console</em></p>
+
+<pre><code>openssl genrsa -aes256 -out server.key 2048
+openssl req -new -key server.key -out server.csr
+openssl rsa -in server.key.bak -out server.key
+sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+</code></pre>
+
+<p>What does it do?</p>
+
+<ul>
+<li>Generates a private/public key pair</li>
+<li>Creates a certificate request
+
+<ul>
+<li>You <strong>must</strong> fill every requested field unless it is marked optional.</li>
+<li>In France, you should use the name of the &#8220;departement&#8221; to fill the <em>State or Province Name</em>.</li>
+<li>Use your company name for <em>Organization Name</em>.</li>
+<li>Be sure to fill the chosen website URL for <em>Common Name</em>. <strong>Don&#8217;t fill your personal name for a website SSL certificate request!</strong></li>
+</ul>
+</li>
+<li>Removed the passphrase from the private key. You have to do this, so that it won&#8217;t be needed when starting the webserver. Since this is probably done automatically (at server boot or through automatic management tools), you won&#8217;t be there to enter the passphrase. <strong>Be sure however that your private key is secure (root user access only), and revoke it as soon as you think it was stolen.</strong></li>
+<li>Generates the certificate.</li>
+</ul>
+
+
+<h2>Move the files to the correct place</h2>
+
+<pre><code>sudo mv server.crt /etc/ssl/application_name.crt
+sudo mv server.key /etc/ssl/private/application_name.key
+</code></pre>
+
+<h2>Change the permissions of the files to make them safe</h2>
+
+<pre><code>sudo chown root:ssl-cert /etc/ssl/private/application_name.key
+sudo chmod 0600 /etc/ssl/private/application_name.key
+sudo chmod 0600 /etc/ssl/certs/application_name.crt 
+sudo chown root:ssl-cert /etc/ssl/certs/application_name.crt 
+</code></pre>
+
+<h2>Update the configuration of your webserver to add a SSL host</h2>
+
+<p><em>This tutorial is written for nginx v0.7.65. It&#8217;s quite old but it&#8217;s the default package on Ubuntu 10.04.3 LTS. I however recommend you to update it by installing it directly from the source, it&#8217;s quite easy!</em></p>
+
+<p>Adding the SSL host to your nginx configuration file essentially means to add the following lines:</p>
+
+<pre><code>server {
+    listen &lt;%= app_port_ssl %&gt;;
+    client_max_body_size 500M;
+    server_name &lt;%= server_name %&gt;;
+    ssl                     on;
+    ssl_certificate         /etc/ssl/certs/application_name.crt;
+    ssl_certificate_key     /etc/ssl/private/application_name.key;
+    ssl_session_timeout     5m;
+
+    [...remaining configuration]
+}
+</code></pre>
+
+<p>You have to make some changes for the location you&#8217;re proxying to Rails too.</p>
+
+<p>In our case, we have this root location:</p>
+
+<pre><code>location / {
+  # Returns file if it exists, else send to app server's location
+  try_files $uri @app_server;
+}
+</code></pre>
+
+<p>Our standard (ie. HTTP) <code>@app_server</code> location is defined like this:</p>
+
+<pre><code>location @app_server {
+  proxy_set_header X-Forwarded-For$proxy_add_x_forwarded_for;
+  proxy_set_header Host $http_host;
+  proxy_pass http://&lt;%= application %&gt;_app_server;
+}
+</code></pre>
+
+<p>The one for SSL is like this:</p>
+
+<pre><code>location @app_server {
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto https;
+  proxy_set_header Host $http_host;
+  proxy_pass http://&lt;%= application %&gt;_app_server;
+  proxy_redirect off;
+  proxy_max_temp_file_size 0;
+}
+</code></pre>
+
+<p>You see some additional proxy directives, in particular <code>proxy_set_header X-Forwarded-Proto https;</code>, they ensure that Rails can correctly detect the request was made through HTTPS, not HTTP.</p>
+
+<p>The remaining configuration may be a copy of your HTTP server configuration, in which case your server will do both HTTP and HTTPS the same way, or a specific configuration if you want to process different locations, perform redirections, etc.</p>
+
+<h2>Update Rails application to require SSL for specific actions</h2>
+
+<p>Our goal is to have only specific controller actions requiring SSL. We don&#8217;t want everything to be secured, this would unnecessarily increase our server&#8217;s load.</p>
+
+<p>We assume that our webserver-level configuration (nginx in our case) is not managing HTTP/HTTPS routing (we could do this through webserver rules, however we consider that this is business/app-level related, so this should be done at app-level).</p>
+
+<p><em>This tutorial is made for Rails 3.0.x (tested with 3.0.12)</em></p>
+
+<h3>Install <code>ssl_requirement</code> gem</h3>
+
+<p>Use this fork: <a href="https://github.com/bartt/ssl_requirement">https://github.com/bartt/ssl_requirement</a> and follow the guide.</p>
+
+<p><strong>If you want the short way&#8230;</strong></p>
+
+<p>Add to your Gemfile</p>
+
+<pre><code>gem 'bartt-ssl_requirement', '~&gt;1.4.0', :require =&gt; 'ssl_requirement'
+</code></pre>
+
+<h3>Configure Devise for SSL</h3>
+
+<p>Add the following code at the bottom of your <code>Application</code> class definition within <code>config/application.rb</code>:</p>
+
+<pre><code>config.to_prepare do
+  Devise::RegistrationsController.ssl_required :new, :create
+  Devise::SessionsController.ssl_required :new, :create
+end
+</code></pre>
+
+<p>Add to your <code>ApplicationController</code></p>
+
+<pre><code>include ::SslRequirement
+</code></pre>
+
+<p>For any other controller action you want SSL, add this  to your controller class:</p>
+
+<pre><code>ssl_required :action_name
+</code></pre>
+
+<h3>Review routes when SSL is required</h3>
+
+<p>You probably don&#8217;t want to limit all your secured routes to SSL. In most cases, it&#8217;s better if you don&#8217;t, so that the user gets a redirection when he tries to access through <code>http</code> a route with ssl required.</p>
+
+<p>However, you can&#8217;t do so for <code>POST</code> routes: redirection won&#8217;t work, since it will redirect to a <code>GET</code>. For these routes, you can add the SSL constraint on the route, so that the user get a <code>404</code> error when he tries to mess with the URL&#8217;s protocol!</p>
+
+<p>If you&#8217;re using Devise, you&#8217;ll probably want to do this for you <code>user_registration</code> and <code>user_session</code> <code>POST</code> routes.</p>
+
+<p>You will have to override Devise&#8217;s defaults routes for <code>sessions</code> and <code>registrations</code> controllers. For the override, you&#8217;ll use:</p>
+
+<pre><code>devise_for  :users, 
+  :skip =&gt; [:registrations, :sessions]
+</code></pre>
+
+<p>This simply tells Devise to skip the registrations and sessions routes, as you&#8217;ll give them yourself to enforce the SSL requirement.</p>
+
+<p>And now, you create these routes by yourself:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">devise_scope</span> <span class="ss">:user</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">scope</span> <span class="s1">&#39;/users&#39;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Setting up registrations routes manually for https on create</span>
+</span><span class='line'>    <span class="n">get</span> <span class="s1">&#39;/cancel&#39;</span><span class="p">,</span>        <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#cancel&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:cancel_user_registration</span>
+</span><span class='line'>    <span class="n">post</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>              <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#create&#39;</span><span class="p">,</span>
+</span><span class='line'>                          <span class="ss">:constraints</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:protocol</span> <span class="o">=&gt;</span> <span class="n">secured_protocol</span> <span class="p">},</span>
+</span><span class='line'>                          <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:user_registration</span>
+</span><span class='line'>    <span class="n">get</span> <span class="s1">&#39;/sign_up&#39;</span><span class="p">,</span>       <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#new&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:new_user_registration</span>
+</span><span class='line'>    <span class="n">get</span> <span class="s1">&#39;/edit&#39;</span><span class="p">,</span>          <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#edit&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:edit_user_registration</span>
+</span><span class='line'>    <span class="n">put</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>               <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#update&#39;</span>
+</span><span class='line'>    <span class="n">delete</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>            <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#destroy&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Sessions routes for https on create</span>
+</span><span class='line'>    <span class="n">get</span> <span class="s1">&#39;/sign_in&#39;</span><span class="p">,</span>       <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/sessions#new&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:new_user_session</span>
+</span><span class='line'>    <span class="n">post</span> <span class="s1">&#39;/sign_in&#39;</span><span class="p">,</span>      <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/sessions#create&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:user_session</span><span class="p">,</span>
+</span><span class='line'>                          <span class="ss">:constraints</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:protocol</span> <span class="o">=&gt;</span> <span class="n">secured_protocol</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">delete</span> <span class="s1">&#39;/sign_out&#39;</span><span class="p">,</span>   <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/sessions#destroy&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:destroy_user_session</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Change your links to go <code>https</code></h2>
+
+<p>This involves using the <code>_url</code> helper instead of the <code>_path</code> one, and adding this option: <code>:protocol =&gt; "https"</code>.</p>
+
+<p>Be sure to change the url of forms matching SSL-enabled routes, or you&#8217;ll get <code>404</code>s!</p>
+
+<h2>Test</h2>
+
+<p>You should now be able to test this configuration with your browser. You will need to deploy your updated app to a staging machine, unless your development is SSL-capable.</p>
+
+<p>You may encounter some issues with your browser recognizing the issued certificate. The browser may complain it is signed by an unknown authority. This may happen when an unknown intermediate certification authority is used. In this case, you have to modify your certificate file to include the complete chain of certificates. Be sure to insert the certificates from the chain <strong>above</strong> your site&#8217;s certificate!</p>
+
+<p>An example line to do this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">cat</span> <span class="n">bundled_certificate_chain</span><span class="o">.</span><span class="n">crt</span> <span class="o">&gt;&gt;</span> <span class="n">server</span><span class="o">.</span><span class="n">crt</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can use this service to check your server is sending the expected certificate chain: <a href="http://www.sslshopper.com/ssl-checker.html">http://www.sslshopper.com/ssl-checker.html</a></p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://wiki.nginx.org/HttpSslModule">http://wiki.nginx.org/HttpSslModule</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/17/getting-the-correct-object-data-model-for-really-automatic-coredata-lightweight-migration/">Getting the Correct Object Data Model for Really Automatic CoreData Lightweight Migrations</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-17T09:31:00+01:00" pubdate data-updated="true">Jan 17<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>If you&#8217;re using CoreData for your iOS application, you may have the need sometimes <strong>to update your data model</strong>. If your application is already live (e.g. shipped on the AppStore), you will have to <strong>migrate your existing data when updating the model</strong>.</p>
+
+<h2>Lightweight migration</h2>
+
+<p>As long as your migration is not too complicated, <strong>CoreData provides a simple way to do this</strong>, using what they call the <strong>lightweight migration process</strong>. This process is not-that-bad documented in Apple documentation&#8217;s <em>(ref 1)</em>, but&#8230; there is a piece of code lacking, and making the whole thing &#8220;automatic&#8221; was not so easy&#8230;</p>
+
+<h2>Automatic migration</h2>
+
+<p>The automatic-nature of the process is given by the creation of a new version of your Data Model in XCode, and telling it which version is the current one (see <em>ref 2</em> for Apple&#8217;s documentation on this matter).</p>
+
+<p>Now that you&#8217;ve created your second version, you may want to use documentation&#8217;s code sample to build your lightweight migration process:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSURL</span> <span class="o">*</span><span class="n">storeURL</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">#</span><span class="n">The</span> <span class="n">URL</span> <span class="n">of</span> <span class="n">a</span> <span class="n">persistent</span> <span class="n">store</span><span class="err">#</span><span class="o">&gt;</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSPersistentStoreCoordinator</span> <span class="o">*</span><span class="n">psc</span> <span class="o">=</span> <span class="o">&lt;</span><span class="err">#</span><span class="n">The</span> <span class="n">coordinator</span><span class="err">#</span><span class="o">&gt;</span><span class="p">;</span>
+</span><span class='line'><span class="n">NSDictionary</span> <span class="o">*</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSDictionary</span> <span class="nl">dictionaryWithObjectsAndKeys:</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">NSNumber</span> <span class="nl">numberWithBool:</span><span class="n">YES</span><span class="p">],</span> <span class="n">NSMigratePersistentStoresAutomaticallyOption</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">NSNumber</span> <span class="nl">numberWithBool:</span><span class="n">YES</span><span class="p">],</span> <span class="n">NSInferMappingModelAutomaticallyOption</span><span class="p">,</span> <span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">[</span><span class="n">psc</span> <span class="nl">addPersistentStoreWithType:</span><span class="o">&lt;</span><span class="err">#</span><span class="n">Store</span> <span class="n">type</span><span class="err">#</span><span class="o">&gt;</span> <span class="nl">configuration:</span><span class="o">&lt;</span><span class="err">#</span><span class="n">Configuration</span> <span class="n">or</span> <span class="nb">nil</span><span class="err">#</span><span class="o">&gt;</span> <span class="nl">URL:</span><span class="n">storeURL</span> <span class="nl">options:</span><span class="n">options</span> <span class="nl">error:</span><span class="o">&amp;</span><span class="n">error</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// Handle the error.</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>At this stage, most of us already have a way of getting the <code>NSManagedObjectModel</code> instance required to build a <code>NSPersistentCoordinator</code> instance. This generally involves this code (often put in the application&#8217;s delegate):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">NSManagedObjectModel</span> <span class="o">*</span><span class="p">)</span><span class="n">managedObjectModel</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">managedObjectModel</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">managedObjectModel</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">managedObjectModel</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSManagedObjectModel</span> <span class="nl">mergedModelFromBundles:</span><span class="nb">nil</span><span class="p">]</span> <span class="n">retain</span><span class="p">];</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">managedObjectModel</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The issue with this is that you&#8217;re gonna get a &#8221;<code>Can't merge models with two different entities named 'EntityName'</code>&#8221; exception, because you&#8217;re in fact merging the two versions of your model&#8230; <strong>And here broke the automaticity!</strong></p>
+
+<p>You indeed can&#8217;t merge your two model versions. What you want is your current model version to get loaded into the <code>NSPersistentStoreCoordinator</code>. Here you have two choices:</p>
+
+<ol>
+<li>Everything I could find on the web was giving me a solution requiring to manually enter the name of the new model version so that I could load the correct model version. But hey! I&#8217;m telling XCode what the current version is, shouldn&#8217;t it be enough?</li>
+<li>Your second solution, the truly automatic one is here, just one line away&#8230;</li>
+</ol>
+
+
+<figure class='code'><figcaption><span>Load the current NSManagedObjectModel using XCode generated VersionInfo property list</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">-</span> <span class="p">(</span><span class="n">NSManagedObjectModel</span> <span class="o">*</span><span class="p">)</span><span class="n">currentManagedObjectModel</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// Find and open the .plist file with the current version name</span>
+</span><span class='line'>  <span class="c1">// Path to the plist (in the application bundle)</span>
+</span><span class='line'>  <span class="n">NSString</span> <span class="o">*</span><span class="n">pathToDataModelVersionInfoPlist</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSBundle</span> <span class="n">mainBundle</span><span class="p">]</span> <span class="nl">pathForResource:</span><span class="s">@&quot;VersionInfo&quot;</span> <span class="nl">ofType:</span><span class="s">@&quot;plist&quot;</span> <span class="nl">inDirectory:</span><span class="s">@&quot;DataModel.momd&quot;</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">dataModelVersionInfo</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSDictionary</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithContentsOfFile:</span><span class="n">pathToDataModelVersionInfoPlist</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">NSString</span> <span class="o">*</span><span class="n">currentModelName</span> <span class="o">=</span> <span class="p">[</span><span class="n">dataModelVersionInfo</span> <span class="nl">objectForKey:</span><span class="s">@&quot;NSManagedObjectModel_CurrentVersionName&quot;</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">NSString</span> <span class="o">*</span><span class="n">modelPath</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSBundle</span> <span class="n">mainBundle</span><span class="p">]</span> <span class="nl">pathForResource:</span><span class="n">currentModelName</span> <span class="nl">ofType:</span><span class="s">@&quot;mom&quot;</span> <span class="nl">inDirectory:</span><span class="s">@&quot;DataModel.momd&quot;</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">NSURL</span> <span class="o">*</span><span class="n">modelURL</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">fileURLWithPath:</span><span class="n">modelPath</span><span class="p">];</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">[[[</span><span class="n">NSManagedObjectModel</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithContentsOfURL:</span><span class="n">modelURL</span><span class="p">]</span> <span class="n">autorelease</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>With this small piece of code, you will read the <code>VersionInfo.plist</code> file maintained by XCode which contains the reference to the current data model. So now, each time you set a new data model version, it will get chosen automatically and migrated without having to update you code!</p>
+
+<p><strong>NB: This has not been tested a lot.</strong> It works with iOS 5 and should be tested on different versions before releasing any code using this trick. It is dependent on a file built and added to the bundle by XCode, so you may have to check with updates that it is not changed or removed.</p>
+
+<h2>iOS documentation references</h2>
+
+<ol>
+<li>iOS x.x Library > Data Management > Core Data Model Versioning and Data Migration Programming Guide > Lightweight Migration</li>
+<li>iOS x.x Library > Data Management > Core Data Model Versioning and Data Migration Programming Guide > Versioning > Model Versions</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/04/22/manually-installing-a-gem-from-a-git-repo/">Manually installing a gem from a git repo</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/">Setup automatic clearing of your Rails sessions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/">Setting up log rotation for your web apps</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/16/linking-local-node-modules-with-npm/">Linking local node modules with npm</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/15/mongodb-cheatsheet/">MongoDB CheatSheet</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/rchampourlier">@rchampourlier</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'rchampourlier',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("softrli", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/softrli" class="twitter-follow-button" data-show-count="true">Follow @softrli</a>
+  
+</section>
+
+
+<section>
+  <h1>My Pinboard</h1>
+  <ul id="pinboard_linkroll">Fetching linkroll&#8230;</ul>
+  <p><a href="http://pinboard.in/u:rchampourlier">My Pinboard Bookmarks &raquo;</a></p>
+</section>
+<script type="text/javascript">
+  var linkroll = 'pinboard_linkroll'; //id target for pinboard list
+  var pinboard_user = "rchampourlier"; //id target for pinboard list
+  var pinboard_count = 3; //id target for pinboard list
+  (function(){
+    var pinboardInit = document.createElement('script');
+    pinboardInit.type = 'text/javascript';
+    pinboardInit.async = true;
+    pinboardInit.src = '/javascripts/pinboard.js';
+    document.getElementsByTagName('head')[0].appendChild(pinboardInit);
+  })();
+</script>
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/rchampourlier?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Romain Champourlier -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'softrli';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

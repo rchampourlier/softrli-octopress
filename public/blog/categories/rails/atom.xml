@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rails | softr.li]]></title>
+  <link href="http://www.softr.li/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="http://www.softr.li/"/>
+  <updated>2012-05-08T12:30:44+02:00</updated>
+  <id>http://www.softr.li/</id>
+  <author>
+    <name><![CDATA[Romain Champourlier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Setup automatic clearing of your Rails sessions]]></title>
+    <link href="http://www.softr.li/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/"/>
+    <updated>2012-04-20T10:12:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions</id>
+    <content type="html"><![CDATA[<p>With every connection to your application of a new user, bot or whatever, Rails will create a new session object.</p>
+
+<p>If you're using <a href="http://api.rubyonrails.org/classes/ActiveRecord/SessionStore.html">ActiveRecord::SessionStore</a> to save your sessions in your database, your database may already be alarmingly growing in size, due to the number of sessions it contains.</p>
+
+<h2>The rake db:sessions:clear task</h2>
+
+<p>If you don't mind a lot about your users lossing their session, you can simply use the provided <code>rake db:sessions:clear</code> task. It will simply delete all sessions in the database. Side-effect: all current sessions are deleted, so signed in users get signed out, and you should hope they had nothing under way!</p>
+
+<h2>A more user-friendly solution</h2>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions">http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Setting up log rotation for your web apps]]></title>
+    <link href="http://www.softr.li/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/"/>
+    <updated>2012-04-20T10:12:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps</id>
+    <content type="html"><![CDATA[<p>If, like me, you simply follow the common tutorials and walthroughs to setup your production environment, you may start wondering after some weeks <strong>where this leak on your server's disk space is coming from...</strong></p>
+
+<p><em>(Well, that was when I was still a young CTO...)</em></p>
+
+<h2>The ugly</h2>
+
+<p>You've installed your <strong>nginx</strong> server, it proxies some well-coded <strong>Rails</strong> applications served by the nice-and-fast <strong>thin</strong> app server. All good.</p>
+
+<p>But you know, these are verbose people. They like to talk. A lot. And as obedient software, they write every character of their chatter. So this is where your leak is coming from.</p>
+
+<p>As a matter of fact, if you don't tell somebody to clean their mess, nobody won't... and you're server will soon die of low-disk-space agony.</p>
+
+<h2>The bad</h2>
+
+<p>You will have to tell <code>logrotate</code> to do some work for these guys to keep their chatter under control.</p>
+
+<p><code>logrotate</code> is the cowboy which will rule the land ;) Tell it which log has to be rotated and it will automatically does the job for you. So now, get into this configuration stage...</p>
+
+<p>The <code>logrotate</code> configuration file should be <code>/etc/logrotate.conf</code>.</p>
+
+<p>You can add your instructions for log rotation by adding the following lines in this file, or you can create a new file under <code>/etc/logrotate.d</code> if you think this is a more organized way (I think). This latter option mimics the way packages configure <code>logrotate</code>. You will find several examples in this directory, so you may just look at them too.</p>
+
+<p><code>
+/path/to/your/rails/applicaton/log/*.log {
+  daily
+  missingok
+  rotate 7
+  compress
+  delaycompress
+  notifempty
+  copytruncate
+}
+</code></p>
+
+<p>If you want to force <code>logrotate</code> to run right now instead of waiting until tomorrow to see if your configuration is OK, you can run this command:</p>
+
+<pre><code>/usr/sbin/logrotate -f /etc/logrotate.conf
+</code></pre>
+
+<p>Else you can just wait a little.</p>
+
+<h2>The good</h2>
+
+<p>If you got through all this useless blabber about bad guys chatting and cowboys, you'll be happy to know that some serious<del>ly boring</del> (no no, just kidding, I don't even know him) guy has written a far more efficient tutorial on the subject, and you can find it <a href="http://www.nullislove.com/2007/09/10/rotating-rails-log-files/">here</a>.</p>
+
+<p>This guide will help you understand how <code>logrotate</code> works and the purpose of each line in the code above.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Adding SSL on some pages of your Rails application]]></title>
+    <link href="http://www.softr.li/blog/2012/03/23/adding-ssl-on-some-pages-of-your-rails-application/"/>
+    <updated>2012-03-23T09:49:00+01:00</updated>
+    <id>http://www.softr.li/blog/2012/03/23/adding-ssl-on-some-pages-of-your-rails-application</id>
+    <content type="html"><![CDATA[<h2>Summary</h2>
+
+<p>This tutorial should help you to setup SSL on your <em>staging</em> and <em>production</em> servers as well as update your Rails application to require SSL for specific controller actions.</p>
+
+<h2>Generate a self-signed certificate to test on your staging server</h2>
+
+<p>We start by creating a self-signed certificate you will be able to use on your test/staging server, before buying a real certificate and configuring your production machine with it.</p>
+
+<p><em>On your server console</em></p>
+
+<pre><code>openssl genrsa -aes256 -out server.key 2048
+openssl req -new -key server.key -out server.csr
+openssl rsa -in server.key.bak -out server.key
+sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+</code></pre>
+
+<p>What does it do?</p>
+
+<ul>
+<li>Generates a private/public key pair</li>
+<li>Creates a certificate request
+
+<ul>
+<li>You <strong>must</strong> fill every requested field unless it is marked optional.</li>
+<li>In France, you should use the name of the "departement" to fill the <em>State or Province Name</em>.</li>
+<li>Use your company name for <em>Organization Name</em>.</li>
+<li>Be sure to fill the chosen website URL for <em>Common Name</em>. <strong>Don't fill your personal name for a website SSL certificate request!</strong></li>
+</ul>
+</li>
+<li>Removed the passphrase from the private key. You have to do this, so that it won't be needed when starting the webserver. Since this is probably done automatically (at server boot or through automatic management tools), you won't be there to enter the passphrase. <strong>Be sure however that your private key is secure (root user access only), and revoke it as soon as you think it was stolen.</strong></li>
+<li>Generates the certificate.</li>
+</ul>
+
+
+<h2>Move the files to the correct place</h2>
+
+<pre><code>sudo mv server.crt /etc/ssl/application_name.crt
+sudo mv server.key /etc/ssl/private/application_name.key
+</code></pre>
+
+<h2>Change the permissions of the files to make them safe</h2>
+
+<pre><code>sudo chown root:ssl-cert /etc/ssl/private/application_name.key
+sudo chmod 0600 /etc/ssl/private/application_name.key
+sudo chmod 0600 /etc/ssl/certs/application_name.crt 
+sudo chown root:ssl-cert /etc/ssl/certs/application_name.crt 
+</code></pre>
+
+<h2>Update the configuration of your webserver to add a SSL host</h2>
+
+<p><em>This tutorial is written for nginx v0.7.65. It's quite old but it's the default package on Ubuntu 10.04.3 LTS. I however recommend you to update it by installing it directly from the source, it's quite easy!</em></p>
+
+<p>Adding the SSL host to your nginx configuration file essentially means to add the following lines:</p>
+
+<pre><code>server {
+    listen &lt;%= app_port_ssl %&gt;;
+    client_max_body_size 500M;
+    server_name &lt;%= server_name %&gt;;
+    ssl                     on;
+    ssl_certificate         /etc/ssl/certs/application_name.crt;
+    ssl_certificate_key     /etc/ssl/private/application_name.key;
+    ssl_session_timeout     5m;
+
+    [...remaining configuration]
+}
+</code></pre>
+
+<p>You have to make some changes for the location you're proxying to Rails too.</p>
+
+<p>In our case, we have this root location:</p>
+
+<pre><code>location / {
+  # Returns file if it exists, else send to app server's location
+  try_files $uri @app_server;
+}
+</code></pre>
+
+<p>Our standard (ie. HTTP) <code>@app_server</code> location is defined like this:</p>
+
+<pre><code>location @app_server {
+  proxy_set_header X-Forwarded-For$proxy_add_x_forwarded_for;
+  proxy_set_header Host $http_host;
+  proxy_pass http://&lt;%= application %&gt;_app_server;
+}
+</code></pre>
+
+<p>The one for SSL is like this:</p>
+
+<pre><code>location @app_server {
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto https;
+  proxy_set_header Host $http_host;
+  proxy_pass http://&lt;%= application %&gt;_app_server;
+  proxy_redirect off;
+  proxy_max_temp_file_size 0;
+}
+</code></pre>
+
+<p>You see some additional proxy directives, in particular <code>proxy_set_header X-Forwarded-Proto https;</code>, they ensure that Rails can correctly detect the request was made through HTTPS, not HTTP.</p>
+
+<p>The remaining configuration may be a copy of your HTTP server configuration, in which case your server will do both HTTP and HTTPS the same way, or a specific configuration if you want to process different locations, perform redirections, etc.</p>
+
+<h2>Update Rails application to require SSL for specific actions</h2>
+
+<p>Our goal is to have only specific controller actions requiring SSL. We don't want everything to be secured, this would unnecessarily increase our server's load.</p>
+
+<p>We assume that our webserver-level configuration (nginx in our case) is not managing HTTP/HTTPS routing (we could do this through webserver rules, however we consider that this is business/app-level related, so this should be done at app-level).</p>
+
+<p><em>This tutorial is made for Rails 3.0.x (tested with 3.0.12)</em></p>
+
+<h3>Install <code>ssl_requirement</code> gem</h3>
+
+<p>Use this fork: <a href="https://github.com/bartt/ssl_requirement">https://github.com/bartt/ssl_requirement</a> and follow the guide.</p>
+
+<p><strong>If you want the short way...</strong></p>
+
+<p>Add to your Gemfile</p>
+
+<pre><code>gem 'bartt-ssl_requirement', '~&gt;1.4.0', :require =&gt; 'ssl_requirement'
+</code></pre>
+
+<h3>Configure Devise for SSL</h3>
+
+<p>Add the following code at the bottom of your <code>Application</code> class definition within <code>config/application.rb</code>:</p>
+
+<pre><code>config.to_prepare do
+  Devise::RegistrationsController.ssl_required :new, :create
+  Devise::SessionsController.ssl_required :new, :create
+end
+</code></pre>
+
+<p>Add to your <code>ApplicationController</code></p>
+
+<pre><code>include ::SslRequirement
+</code></pre>
+
+<p>For any other controller action you want SSL, add this  to your controller class:</p>
+
+<pre><code>ssl_required :action_name
+</code></pre>
+
+<h3>Review routes when SSL is required</h3>
+
+<p>You probably don't want to limit all your secured routes to SSL. In most cases, it's better if you don't, so that the user gets a redirection when he tries to access through <code>http</code> a route with ssl required.</p>
+
+<p>However, you can't do so for <code>POST</code> routes: redirection won't work, since it will redirect to a <code>GET</code>. For these routes, you can add the SSL constraint on the route, so that the user get a <code>404</code> error when he tries to mess with the URL's protocol!</p>
+
+<p>If you're using Devise, you'll probably want to do this for you <code>user_registration</code> and <code>user_session</code> <code>POST</code> routes.</p>
+
+<p>You will have to override Devise's defaults routes for <code>sessions</code> and <code>registrations</code> controllers. For the override, you'll use:</p>
+
+<pre><code>devise_for  :users, 
+  :skip =&gt; [:registrations, :sessions]
+</code></pre>
+
+<p>This simply tells Devise to skip the registrations and sessions routes, as you'll give them yourself to enforce the SSL requirement.</p>
+
+<p>And now, you create these routes by yourself:</p>
+
+<p>``` ruby</p>
+
+<pre><code>devise_scope :user do
+  scope '/users' do
+
+    # Setting up registrations routes manually for https on create
+    get '/cancel',        :to =&gt; 'devise/registrations#cancel', :as =&gt; :cancel_user_registration
+    post '',              :to =&gt; 'devise/registrations#create',
+                          :constraints =&gt; { :protocol =&gt; secured_protocol },
+                          :as =&gt; :user_registration
+    get '/sign_up',       :to =&gt; 'devise/registrations#new', :as =&gt; :new_user_registration
+    get '/edit',          :to =&gt; 'devise/registrations#edit', :as =&gt; :edit_user_registration
+    put '',               :to =&gt; 'devise/registrations#update'
+    delete '',            :to =&gt; 'devise/registrations#destroy'
+
+    # Sessions routes for https on create
+    get '/sign_in',       :to =&gt; 'devise/sessions#new', :as =&gt; :new_user_session
+    post '/sign_in',      :to =&gt; 'devise/sessions#create', :as =&gt; :user_session,
+                          :constraints =&gt; { :protocol =&gt; secured_protocol }
+    delete '/sign_out',   :to =&gt; 'devise/sessions#destroy', :as =&gt; :destroy_user_session
+  end
+end
+</code></pre>
+
+<p>```</p>
+
+<h2>Change your links to go <code>https</code></h2>
+
+<p>This involves using the <code>_url</code> helper instead of the <code>_path</code> one, and adding this option: <code>:protocol =&gt; "https"</code>.</p>
+
+<p>Be sure to change the url of forms matching SSL-enabled routes, or you'll get <code>404</code>s!</p>
+
+<h2>Test</h2>
+
+<p>You should now be able to test this configuration with your browser. You will need to deploy your updated app to a staging machine, unless your development is SSL-capable.</p>
+
+<p>You may encounter some issues with your browser recognizing the issued certificate. The browser may complain it is signed by an unknown authority. This may happen when an unknown intermediate certification authority is used. In this case, you have to modify your certificate file to include the complete chain of certificates. Be sure to insert the certificates from the chain <strong>above</strong> your site's certificate!</p>
+
+<p>An example line to do this:</p>
+
+<p><code>
+cat bundled_certificate_chain.crt &gt;&gt; server.crt
+</code></p>
+
+<p>You can use this service to check your server is sending the expected certificate chain: <a href="http://www.sslshopper.com/ssl-checker.html">http://www.sslshopper.com/ssl-checker.html</a></p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://wiki.nginx.org/HttpSslModule">http://wiki.nginx.org/HttpSslModule</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

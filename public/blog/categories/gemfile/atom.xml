@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: gemfile | softr.li]]></title>
+  <link href="http://www.softr.li/blog/categories/gemfile/atom.xml" rel="self"/>
+  <link href="http://www.softr.li/"/>
+  <updated>2012-05-08T12:30:44+02:00</updated>
+  <id>http://www.softr.li/</id>
+  <author>
+    <name><![CDATA[Romain Champourlier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[How to make your own gems with Jeweler]]></title>
+    <link href="http://www.softr.li/blog/2012/04/14/how-to-make-your-own-gems-with-jeweler/"/>
+    <updated>2012-04-14T10:03:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/04/14/how-to-make-your-own-gems-with-jeweler</id>
+    <content type="html"><![CDATA[<h2>Prerequisites</h2>
+
+<ul>
+<li>You're using Bundler.</li>
+<li>You have <code>gem 'jeweler'</code> in your <code>Gemfile</code>.</li>
+<li>You have run <code>bundle install</code>.</li>
+</ul>
+
+
+<h2>Add the <code>gemspec</code> task to your <code>Rakefile</code></h2>
+
+<p>Add these lines to your <code>Rakefile</code>. This will help Jeweler to build the appropriate <code>gemspec</code> for your gem.</p>
+
+<pre><code>begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gemspec|
+    gemspec.name = "the_name_of_your_gem"
+    gemspec.summary = "A summary for your gem"
+    gemspec.description = "A description for your gem"
+    gemspec.email = "your_name@your_company.com"
+    gemspec.homepage = "http://an_url_for_your_gem.com"
+    gemspec.authors = ["your@email.com"]
+  end
+rescue LoadError
+  puts "Jeweler not available. Install it with: gem install jeweler"
+end
+</code></pre>
+
+<h2>Package the gem</h2>
+
+<p>To package the gem, you just have to run the <code>rake</code> task you added, and another <code>build</code> task.</p>
+
+<pre><code>rake gemspec
+rake build
+</code></pre>
+
+<h2>Include your gem hosted on Github in your Rails application</h2>
+
+<p>Assuming your repository is commited on Github, you can easily include your gem in your Rails project using the following line in your <code>Gemfile</code>:</p>
+
+<pre><code>gem 'your_gem_name', :git =&gt; "path_to_your_gem.git"
+</code></pre>
+
+<p>You can also specify a branch with <code>:branch =&gt; "stable"</code> and a tag with <code>:tag =&gt; "2-stable"</code>.</p>
+
+<h2>Include your gem from a local directory</h2>
+
+<p>You can tell Bundler to get your gem from a local directory using the <code>:path</code> parameter. The path is relative to the directory containing the <code>Gemfile</code>:</p>
+
+<pre><code>gem "rails", :path =&gt; "vendor/rails"
+</code></pre>
+
+<h2>Directly include the library</h2>
+
+<p><em>If you're building a gem, that's probably not your goal, but you can also just include an external lib without needing to package it as a gem. Just use:</em></p>
+
+<pre><code>require 'path_to_gem/lib/gem'
+</code></pre>
+
+<h2>Hubticle tags</h2>
+
+<p>ruby, gem, jeweler, library, module, share, github</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,563 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Adding SSL on some pages of your Rails application - softr.li</title>
+  <meta name="author" content="Romain Champourlier">
+
+  
+  <meta name="description" content="Summary This tutorial should help you to setup SSL on your staging and production servers as well as update your Rails application to require SSL for &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.softr.li/blog/2012/03/23/adding-ssl-on-some-pages-of-your-rails-application">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="softr.li" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA–27796788–1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">softr.li</a></h1>
+  
+    <h2>Seeking and sharing about making IT softer</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.softr.li" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Adding SSL on Some Pages of Your Rails Application</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-23T09:49:00+01:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>Summary</h2>
+
+<p>This tutorial should help you to setup SSL on your <em>staging</em> and <em>production</em> servers as well as update your Rails application to require SSL for specific controller actions.</p>
+
+<h2>Generate a self-signed certificate to test on your staging server</h2>
+
+<p>We start by creating a self-signed certificate you will be able to use on your test/staging server, before buying a real certificate and configuring your production machine with it.</p>
+
+<p><em>On your server console</em></p>
+
+<pre><code>openssl genrsa -aes256 -out server.key 2048
+openssl req -new -key server.key -out server.csr
+openssl rsa -in server.key.bak -out server.key
+sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+</code></pre>
+
+<p>What does it do?</p>
+
+<ul>
+<li>Generates a private/public key pair</li>
+<li>Creates a certificate request
+
+<ul>
+<li>You <strong>must</strong> fill every requested field unless it is marked optional.</li>
+<li>In France, you should use the name of the &#8220;departement&#8221; to fill the <em>State or Province Name</em>.</li>
+<li>Use your company name for <em>Organization Name</em>.</li>
+<li>Be sure to fill the chosen website URL for <em>Common Name</em>. <strong>Don&#8217;t fill your personal name for a website SSL certificate request!</strong></li>
+</ul>
+</li>
+<li>Removed the passphrase from the private key. You have to do this, so that it won&#8217;t be needed when starting the webserver. Since this is probably done automatically (at server boot or through automatic management tools), you won&#8217;t be there to enter the passphrase. <strong>Be sure however that your private key is secure (root user access only), and revoke it as soon as you think it was stolen.</strong></li>
+<li>Generates the certificate.</li>
+</ul>
+
+
+<h2>Move the files to the correct place</h2>
+
+<pre><code>sudo mv server.crt /etc/ssl/application_name.crt
+sudo mv server.key /etc/ssl/private/application_name.key
+</code></pre>
+
+<h2>Change the permissions of the files to make them safe</h2>
+
+<pre><code>sudo chown root:ssl-cert /etc/ssl/private/application_name.key
+sudo chmod 0600 /etc/ssl/private/application_name.key
+sudo chmod 0600 /etc/ssl/certs/application_name.crt 
+sudo chown root:ssl-cert /etc/ssl/certs/application_name.crt 
+</code></pre>
+
+<h2>Update the configuration of your webserver to add a SSL host</h2>
+
+<p><em>This tutorial is written for nginx v0.7.65. It&#8217;s quite old but it&#8217;s the default package on Ubuntu 10.04.3 LTS. I however recommend you to update it by installing it directly from the source, it&#8217;s quite easy!</em></p>
+
+<p>Adding the SSL host to your nginx configuration file essentially means to add the following lines:</p>
+
+<pre><code>server {
+    listen &lt;%= app_port_ssl %&gt;;
+    client_max_body_size 500M;
+    server_name &lt;%= server_name %&gt;;
+    ssl                     on;
+    ssl_certificate         /etc/ssl/certs/application_name.crt;
+    ssl_certificate_key     /etc/ssl/private/application_name.key;
+    ssl_session_timeout     5m;
+
+    [...remaining configuration]
+}
+</code></pre>
+
+<p>You have to make some changes for the location you&#8217;re proxying to Rails too.</p>
+
+<p>In our case, we have this root location:</p>
+
+<pre><code>location / {
+  # Returns file if it exists, else send to app server's location
+  try_files $uri @app_server;
+}
+</code></pre>
+
+<p>Our standard (ie. HTTP) <code>@app_server</code> location is defined like this:</p>
+
+<pre><code>location @app_server {
+  proxy_set_header X-Forwarded-For$proxy_add_x_forwarded_for;
+  proxy_set_header Host $http_host;
+  proxy_pass http://&lt;%= application %&gt;_app_server;
+}
+</code></pre>
+
+<p>The one for SSL is like this:</p>
+
+<pre><code>location @app_server {
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto https;
+  proxy_set_header Host $http_host;
+  proxy_pass http://&lt;%= application %&gt;_app_server;
+  proxy_redirect off;
+  proxy_max_temp_file_size 0;
+}
+</code></pre>
+
+<p>You see some additional proxy directives, in particular <code>proxy_set_header X-Forwarded-Proto https;</code>, they ensure that Rails can correctly detect the request was made through HTTPS, not HTTP.</p>
+
+<p>The remaining configuration may be a copy of your HTTP server configuration, in which case your server will do both HTTP and HTTPS the same way, or a specific configuration if you want to process different locations, perform redirections, etc.</p>
+
+<h2>Update Rails application to require SSL for specific actions</h2>
+
+<p>Our goal is to have only specific controller actions requiring SSL. We don&#8217;t want everything to be secured, this would unnecessarily increase our server&#8217;s load.</p>
+
+<p>We assume that our webserver-level configuration (nginx in our case) is not managing HTTP/HTTPS routing (we could do this through webserver rules, however we consider that this is business/app-level related, so this should be done at app-level).</p>
+
+<p><em>This tutorial is made for Rails 3.0.x (tested with 3.0.12)</em></p>
+
+<h3>Install <code>ssl_requirement</code> gem</h3>
+
+<p>Use this fork: <a href="https://github.com/bartt/ssl_requirement">https://github.com/bartt/ssl_requirement</a> and follow the guide.</p>
+
+<p><strong>If you want the short way&#8230;</strong></p>
+
+<p>Add to your Gemfile</p>
+
+<pre><code>gem 'bartt-ssl_requirement', '~&gt;1.4.0', :require =&gt; 'ssl_requirement'
+</code></pre>
+
+<h3>Configure Devise for SSL</h3>
+
+<p>Add the following code at the bottom of your <code>Application</code> class definition within <code>config/application.rb</code>:</p>
+
+<pre><code>config.to_prepare do
+  Devise::RegistrationsController.ssl_required :new, :create
+  Devise::SessionsController.ssl_required :new, :create
+end
+</code></pre>
+
+<p>Add to your <code>ApplicationController</code></p>
+
+<pre><code>include ::SslRequirement
+</code></pre>
+
+<p>For any other controller action you want SSL, add this  to your controller class:</p>
+
+<pre><code>ssl_required :action_name
+</code></pre>
+
+<h3>Review routes when SSL is required</h3>
+
+<p>You probably don&#8217;t want to limit all your secured routes to SSL. In most cases, it&#8217;s better if you don&#8217;t, so that the user gets a redirection when he tries to access through <code>http</code> a route with ssl required.</p>
+
+<p>However, you can&#8217;t do so for <code>POST</code> routes: redirection won&#8217;t work, since it will redirect to a <code>GET</code>. For these routes, you can add the SSL constraint on the route, so that the user get a <code>404</code> error when he tries to mess with the URL&#8217;s protocol!</p>
+
+<p>If you&#8217;re using Devise, you&#8217;ll probably want to do this for you <code>user_registration</code> and <code>user_session</code> <code>POST</code> routes.</p>
+
+<p>You will have to override Devise&#8217;s defaults routes for <code>sessions</code> and <code>registrations</code> controllers. For the override, you&#8217;ll use:</p>
+
+<pre><code>devise_for  :users, 
+  :skip =&gt; [:registrations, :sessions]
+</code></pre>
+
+<p>This simply tells Devise to skip the registrations and sessions routes, as you&#8217;ll give them yourself to enforce the SSL requirement.</p>
+
+<p>And now, you create these routes by yourself:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">devise_scope</span> <span class="ss">:user</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">scope</span> <span class="s1">&#39;/users&#39;</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Setting up registrations routes manually for https on create</span>
+</span><span class='line'>    <span class="n">get</span> <span class="s1">&#39;/cancel&#39;</span><span class="p">,</span>        <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#cancel&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:cancel_user_registration</span>
+</span><span class='line'>    <span class="n">post</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>              <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#create&#39;</span><span class="p">,</span>
+</span><span class='line'>                          <span class="ss">:constraints</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:protocol</span> <span class="o">=&gt;</span> <span class="n">secured_protocol</span> <span class="p">},</span>
+</span><span class='line'>                          <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:user_registration</span>
+</span><span class='line'>    <span class="n">get</span> <span class="s1">&#39;/sign_up&#39;</span><span class="p">,</span>       <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#new&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:new_user_registration</span>
+</span><span class='line'>    <span class="n">get</span> <span class="s1">&#39;/edit&#39;</span><span class="p">,</span>          <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#edit&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:edit_user_registration</span>
+</span><span class='line'>    <span class="n">put</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>               <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#update&#39;</span>
+</span><span class='line'>    <span class="n">delete</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>            <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#destroy&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Sessions routes for https on create</span>
+</span><span class='line'>    <span class="n">get</span> <span class="s1">&#39;/sign_in&#39;</span><span class="p">,</span>       <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/sessions#new&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:new_user_session</span>
+</span><span class='line'>    <span class="n">post</span> <span class="s1">&#39;/sign_in&#39;</span><span class="p">,</span>      <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/sessions#create&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:user_session</span><span class="p">,</span>
+</span><span class='line'>                          <span class="ss">:constraints</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:protocol</span> <span class="o">=&gt;</span> <span class="n">secured_protocol</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">delete</span> <span class="s1">&#39;/sign_out&#39;</span><span class="p">,</span>   <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/sessions#destroy&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:destroy_user_session</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Change your links to go <code>https</code></h2>
+
+<p>This involves using the <code>_url</code> helper instead of the <code>_path</code> one, and adding this option: <code>:protocol =&gt; "https"</code>.</p>
+
+<p>Be sure to change the url of forms matching SSL-enabled routes, or you&#8217;ll get <code>404</code>s!</p>
+
+<h2>Test</h2>
+
+<p>You should now be able to test this configuration with your browser. You will need to deploy your updated app to a staging machine, unless your development is SSL-capable.</p>
+
+<p>You may encounter some issues with your browser recognizing the issued certificate. The browser may complain it is signed by an unknown authority. This may happen when an unknown intermediate certification authority is used. In this case, you have to modify your certificate file to include the complete chain of certificates. Be sure to insert the certificates from the chain <strong>above</strong> your site&#8217;s certificate!</p>
+
+<p>An example line to do this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">cat</span> <span class="n">bundled_certificate_chain</span><span class="o">.</span><span class="n">crt</span> <span class="o">&gt;&gt;</span> <span class="n">server</span><span class="o">.</span><span class="n">crt</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can use this service to check your server is sending the expected certificate chain: <a href="http://www.sslshopper.com/ssl-checker.html">http://www.sslshopper.com/ssl-checker.html</a></p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://wiki.nginx.org/HttpSslModule">http://wiki.nginx.org/HttpSslModule</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Romain Champourlier</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-23T09:49:00+01:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/nginx/'>nginx</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/ssl/'>ssl</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>, <a class='category' href='/blog/categories/ubuntu/'>ubuntu</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/03/23/adding-ssl-on-some-pages-of-your-rails-application/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/03/23/adding-ssl-on-some-pages-of-your-rails-application/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/01/17/getting-the-correct-object-data-model-for-really-automatic-coredata-lightweight-migration/" title="Previous Post: Getting the correct object data model for really automatic CoreData lightweight migrations">&laquo; Getting the correct object data model for really automatic CoreData lightweight migrations</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/04/10/moving-from-rvm-to-rbenv/" title="Next Post: Moving from RVM to rbenv">Moving from RVM to rbenv &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/04/22/manually-installing-a-gem-from-a-git-repo/">Manually installing a gem from a git repo</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/">Setup automatic clearing of your Rails sessions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/">Setting up log rotation for your web apps</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/16/linking-local-node-modules-with-npm/">Linking local node modules with npm</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/15/mongodb-cheatsheet/">MongoDB CheatSheet</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/rchampourlier">@rchampourlier</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'rchampourlier',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("softrli", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/softrli" class="twitter-follow-button" data-show-count="true">Follow @softrli</a>
+  
+</section>
+
+
+<section>
+  <h1>My Pinboard</h1>
+  <ul id="pinboard_linkroll">Fetching linkroll...</ul>
+  <p><a href="http://pinboard.in/u:rchampourlier">My Pinboard Bookmarks &raquo;</a></p>
+</section>
+<script type="text/javascript">
+  var linkroll = 'pinboard_linkroll'; //id target for pinboard list
+  var pinboard_user = "rchampourlier"; //id target for pinboard list
+  var pinboard_count = 3; //id target for pinboard list
+  (function(){
+    var pinboardInit = document.createElement('script');
+    pinboardInit.type = 'text/javascript';
+    pinboardInit.async = true;
+    pinboardInit.src = '/javascripts/pinboard.js';
+    document.getElementsByTagName('head')[0].appendChild(pinboardInit);
+  })();
+</script>
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/rchampourlier?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Romain Champourlier -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'softrli';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.softr.li/blog/2012/03/23/adding-ssl-on-some-pages-of-your-rails-application/';
+        var disqus_url = 'http://www.softr.li/blog/2012/03/23/adding-ssl-on-some-pages-of-your-rails-application/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
