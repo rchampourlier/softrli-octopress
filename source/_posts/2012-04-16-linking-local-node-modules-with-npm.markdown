@@ -6,7 +6,9 @@ comments: true
 categories: [node, node.js, npm, package, module, link, install]
 
 ---
-... instead of installing from npm repository.
+How to link a **node module** to a **local source directory** instead of installing from npm repository.
+
+<!-- more -->
 
 ## Link a module to a local repo
 

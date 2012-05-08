@@ -6,9 +6,15 @@ comments: true
 categories: [tutorial, log, rotation, logrotate, thin, nginx, rails, humor, sysadmin, unix]
 
 ---
+{% pullquote %}
 If, like me, you simply follow the common tutorials and walthroughs to setup your production environment, you may start wondering after some weeks **where this leak on your server's disk space is coming from...**
 
+{" Just ask yourself this question: did you configure your logs rotation? "}
+
 *(Well, that was when I was still a young CTO...)*
+{% endpullquote %}
+
+<!-- more -->
 
 ## The ugly
 

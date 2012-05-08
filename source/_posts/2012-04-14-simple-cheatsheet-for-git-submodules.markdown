@@ -6,6 +6,10 @@ comments: true
 categories: [git, repo, versioning, submodule, tips'n'tricks, cheatsheet]
 
 ---
+Just a cheatsheet for **git and submodules**.
+
+<!-- more --> 
+
 ## Steps
 
 1. Add the submodule using a `git submodule add...` command (see below for the different options).

@@ -6,6 +6,10 @@ comments: true
 categories: [ruby, gem, package, git, gemfile]
 
 ---
+A really simple walkthrough on how to **package a gem easily** using the **Jeweler** gem.
+
+<!-- more -->
+
 ## Prerequisites
 
 * You're using Bundler.

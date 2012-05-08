@@ -6,6 +6,13 @@ comments: true
 categories: [ios, iphone, tableview, tableviewcell, nib]
 
 ---
+
+If you're using custom table view cells defined within NIB/XIB files for your iOS application, and you're a beginner like me, you may do one of these two mistakes. Just find out what not to do by having a look at this article!
+
+<!-- more --> 
+
+## Context
+
 One of the projects I'm currently working on involves displaying custom UITableViewCells. To be exact, I display a dynamic list of elements which can be either displayed by a `UITableViewCell` **A** or a `UITableViewCell` **B**. Each of these cells is defined in its own NIB file.
 
 * Cell A has 3 subviews: 2 labels and a progress view.

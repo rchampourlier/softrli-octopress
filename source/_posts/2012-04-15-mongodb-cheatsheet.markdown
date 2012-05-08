@@ -6,6 +6,10 @@ comments: true
 categories: [mongo, mongodb, cheatsheet, commands]
 
 ---
+Another cheatsheet, for **useful MongoDB commands** to use inside the `mongo` command-line tool.
+
+<!-- more -->
+
 ## Get a list of handy commands
 
     help

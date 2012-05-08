@@ -8,6 +8,8 @@ categories: [ios, objective-c, coredata, migration]
 ---
 If you're using CoreData for your iOS application, you may have the need sometimes **to update your data model**. If your application is already live (e.g. shipped on the AppStore), you will have to **migrate your existing data when updating the model**.
 
+<!-- more -->
+
 ## Lightweight migration
 
 As long as your migration is not too complicated, **CoreData provides a simple way to do this**, using what they call the **lightweight migration process**. This process is not-that-bad documented in Apple documentation's *(ref 1)*, but... there is a piece of code lacking, and making the whole thing "automatic" was not so easy...

@@ -6,6 +6,15 @@ comments: true
 categories: [sysadmin, ruby, gem, rvm, rbenv, gemset, dev, development]
 
 ---
+
+* Using **rvm** to manage your gemset without really knowing why since now Bundler does it very cleverly?
+* Feeling that the whole rvm system is a bit complicated?
+* Tired of having shell scripts not finding your rvm-managed gems?
+
+It looks like your ready to consider **rbenv**, which is a really lightweight alternative to **rvm**. Lightweight because it *just* manages rubies, and lets Bundler manage the gems.
+
+<!-- more -->
+
 ## Why?
 
 **RVM** is a very useful tool that helps you manage your ruby environment when you need multiple rubies and have tons of gems different for each of your projects.

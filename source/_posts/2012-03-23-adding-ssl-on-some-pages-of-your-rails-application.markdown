@@ -6,9 +6,10 @@ comments: true
 categories: [sysadmin, unix, linux, ubuntu, ssl, rails, nginx]
 
 ---
-## Summary
 
 This tutorial should help you to setup SSL on your *staging* and *production* servers as well as update your Rails application to require SSL for specific controller actions.
+
+<!-- more -->
 
 ## Generate a self-signed certificate to test on your staging server
 

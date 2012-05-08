@@ -6,6 +6,11 @@ comments: true
 categories: [virtualization, virtual box, issue, solution]
 
 ---
+
+Trying to get your cloned VirtualBox on the host network without success? This may help you...
+
+<!-- more -->
+
 If like me, you're using **VirtualBox virtual machines** a lot, eg.:
 
 * to **simulate your production environment** (what we may call *staging*),
