@@ -4,7 +4,7 @@
   <title><![CDATA[Category: objective-c | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/objective-c/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-05-08T12:30:44+02:00</updated>
+  <updated>2012-05-08T12:59:10+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -19,6 +19,9 @@
     <updated>2012-01-17T09:31:00+01:00</updated>
     <id>http://www.softr.li/blog/2012/01/17/getting-the-correct-object-data-model-for-really-automatic-coredata-lightweight-migration</id>
     <content type="html"><![CDATA[<p>If you're using CoreData for your iOS application, you may have the need sometimes <strong>to update your data model</strong>. If your application is already live (e.g. shipped on the AppStore), you will have to <strong>migrate your existing data when updating the model</strong>.</p>
+
+<!-- more -->
+
 
 <h2>Lightweight migration</h2>
 

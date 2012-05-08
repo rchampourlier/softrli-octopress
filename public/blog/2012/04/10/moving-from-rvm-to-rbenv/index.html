@@ -9,7 +9,8 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="Why? RVM is a very useful tool that helps you manage your ruby environment when you need multiple rubies and have tons of gems different for each of &hellip;">
+  <meta name="description" content="Using rvm to manage your gemset without really knowing why since now Bundler does it very cleverly?
+Feeling that the whole rvm system is a bit &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -102,7 +103,19 @@
   </header>
 
 
-<div class="entry-content"><h2>Why?</h2>
+<div class="entry-content"><ul>
+<li>Using <strong>rvm</strong> to manage your gemset without really knowing why since now Bundler does it very cleverly?</li>
+<li>Feeling that the whole rvm system is a bit complicated?</li>
+<li>Tired of having shell scripts not finding your rvm-managed gems?</li>
+</ul>
+
+
+<p>It looks like your ready to consider <strong>rbenv</strong>, which is a really lightweight alternative to <strong>rvm</strong>. Lightweight because it <em>just</em> manages rubies, and lets Bundler manage the gems.</p>
+
+<!-- more -->
+
+
+<h2>Why?</h2>
 
 <p><strong>RVM</strong> is a very useful tool that helps you manage your ruby environment when you need multiple rubies and have tons of gems different for each of your projects.</p>
 
@@ -225,8 +238,6 @@ $ git clone git://github.com/sstephenson/ruby-build.git
   <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/04/10/moving-from-rvm-to-rbenv/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/04/10/moving-from-rvm-to-rbenv/" >Tweet</a>
   
   
-  <div class="g-plusone" data-size="medium"></div>
-  
   
 </div>
 
@@ -252,7 +263,24 @@ $ git clone git://github.com/sstephenson/ruby-build.git
 
 <aside class="sidebar">
   
-    <section>
+    
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("softrli", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/softrli" class="twitter-follow-button" data-show-count="true">Follow @softrli</a>
+  
+</section>
+
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
@@ -299,7 +327,7 @@ $ git clone git://github.com/sstephenson/ruby-build.git
 
         github.showRepos({
             user: 'rchampourlier',
-            count: 0,
+            count: 5,
             skip_forks: true,
             target: '#gh_repos'
         });
@@ -307,53 +335,6 @@ $ git clone git://github.com/sstephenson/ruby-build.git
   </script>
   <script src="/javascripts/github.js" type="text/javascript"> </script>
 </section>
-
-
-<section>
-  <h1>Latest Tweets</h1>
-  <ul id="tweets">
-    <li class="loading">Status updating...</li>
-  </ul>
-  <script type="text/javascript">
-    $.domReady(function(){
-      getTwitterFeed("softrli", 5, false);
-    });
-  </script>
-  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
-  
-    <a href="http://twitter.com/softrli" class="twitter-follow-button" data-show-count="true">Follow @softrli</a>
-  
-</section>
-
-
-<section>
-  <h1>My Pinboard</h1>
-  <ul id="pinboard_linkroll">Fetching linkroll...</ul>
-  <p><a href="http://pinboard.in/u:rchampourlier">My Pinboard Bookmarks &raquo;</a></p>
-</section>
-<script type="text/javascript">
-  var linkroll = 'pinboard_linkroll'; //id target for pinboard list
-  var pinboard_user = "rchampourlier"; //id target for pinboard list
-  var pinboard_count = 3; //id target for pinboard list
-  (function(){
-    var pinboardInit = document.createElement('script');
-    pinboardInit.type = 'text/javascript';
-    pinboardInit.async = true;
-    pinboardInit.src = '/javascripts/pinboard.js';
-    document.getElementsByTagName('head')[0].appendChild(pinboardInit);
-  })();
-</script>
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/rchampourlier?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
 
 
   
@@ -389,14 +370,6 @@ $ git clone git://github.com/sstephenson/ruby-build.git
 
 
 
-
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
 
 
 

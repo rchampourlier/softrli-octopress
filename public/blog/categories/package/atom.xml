@@ -4,7 +4,7 @@
   <title><![CDATA[Category: package | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/package/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-05-08T12:30:44+02:00</updated>
+  <updated>2012-05-08T12:59:10+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -18,7 +18,10 @@
     <link href="http://www.softr.li/blog/2012/04/16/linking-local-node-modules-with-npm/"/>
     <updated>2012-04-16T10:10:00+02:00</updated>
     <id>http://www.softr.li/blog/2012/04/16/linking-local-node-modules-with-npm</id>
-    <content type="html"><![CDATA[<p>... instead of installing from npm repository.</p>
+    <content type="html"><![CDATA[<p>How to link a <strong>node module</strong> to a <strong>local source directory</strong> instead of installing from npm repository.</p>
+
+<!-- more -->
+
 
 <h2>Link a module to a local repo</h2>
 
@@ -50,7 +53,12 @@ npm link module
     <link href="http://www.softr.li/blog/2012/04/14/how-to-make-your-own-gems-with-jeweler/"/>
     <updated>2012-04-14T10:03:00+02:00</updated>
     <id>http://www.softr.li/blog/2012/04/14/how-to-make-your-own-gems-with-jeweler</id>
-    <content type="html"><![CDATA[<h2>Prerequisites</h2>
+    <content type="html"><![CDATA[<p>A really simple walkthrough on how to <strong>package a gem easily</strong> using the <strong>Jeweler</strong> gem.</p>
+
+<!-- more -->
+
+
+<h2>Prerequisites</h2>
 
 <ul>
 <li>You're using Bundler.</li>

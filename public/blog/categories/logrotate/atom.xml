@@ -4,7 +4,7 @@
   <title><![CDATA[Category: logrotate | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/logrotate/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-05-08T12:30:44+02:00</updated>
+  <updated>2012-05-08T12:59:10+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -18,9 +18,16 @@
     <link href="http://www.softr.li/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/"/>
     <updated>2012-04-20T10:12:00+02:00</updated>
     <id>http://www.softr.li/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps</id>
-    <content type="html"><![CDATA[<p>If, like me, you simply follow the common tutorials and walthroughs to setup your production environment, you may start wondering after some weeks <strong>where this leak on your server's disk space is coming from...</strong></p>
+    <content type="html"><![CDATA[<p><span class='pullquote-right' data-pullquote='Just ask yourself this question: did you configure your logs rotation? '>
+If, like me, you simply follow the common tutorials and walthroughs to setup your production environment, you may start wondering after some weeks <strong>where this leak on your server's disk space is coming from...</strong></p>
 
-<p><em>(Well, that was when I was still a young CTO...)</em></p>
+<p>Just ask yourself this question: did you configure your logs rotation?</p>
+
+<p><em>(Well, that was when I was still a young CTO...)</em>
+</span></p>
+
+<!-- more -->
+
 
 <h2>The ugly</h2>
 

@@ -9,7 +9,7 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="Get a list of handy commands help List DBs show dbs Select a DB use mydb Show collections show collections List all documents in a collection db. &hellip;">
+  <meta name="description" content="Another cheatsheet, for useful MongoDB commands to use inside the mongo command-line tool. Get a list of handy commands help List DBs show dbs Select &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -102,7 +102,12 @@
   </header>
 
 
-<div class="entry-content"><h2>Get a list of handy commands</h2>
+<div class="entry-content"><p>Another cheatsheet, for <strong>useful MongoDB commands</strong> to use inside the <code>mongo</code> command-line tool.</p>
+
+<!-- more -->
+
+
+<h2>Get a list of handy commands</h2>
 
 <pre><code>help
 </code></pre>
@@ -185,8 +190,6 @@ db.collectionName.save(object);
   <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/04/15/mongodb-cheatsheet/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/04/15/mongodb-cheatsheet/" >Tweet</a>
   
   
-  <div class="g-plusone" data-size="medium"></div>
-  
   
 </div>
 
@@ -212,7 +215,24 @@ db.collectionName.save(object);
 
 <aside class="sidebar">
   
-    <section>
+    
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("softrli", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/softrli" class="twitter-follow-button" data-show-count="true">Follow @softrli</a>
+  
+</section>
+
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
@@ -259,7 +279,7 @@ db.collectionName.save(object);
 
         github.showRepos({
             user: 'rchampourlier',
-            count: 0,
+            count: 5,
             skip_forks: true,
             target: '#gh_repos'
         });
@@ -267,53 +287,6 @@ db.collectionName.save(object);
   </script>
   <script src="/javascripts/github.js" type="text/javascript"> </script>
 </section>
-
-
-<section>
-  <h1>Latest Tweets</h1>
-  <ul id="tweets">
-    <li class="loading">Status updating...</li>
-  </ul>
-  <script type="text/javascript">
-    $.domReady(function(){
-      getTwitterFeed("softrli", 5, false);
-    });
-  </script>
-  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
-  
-    <a href="http://twitter.com/softrli" class="twitter-follow-button" data-show-count="true">Follow @softrli</a>
-  
-</section>
-
-
-<section>
-  <h1>My Pinboard</h1>
-  <ul id="pinboard_linkroll">Fetching linkroll...</ul>
-  <p><a href="http://pinboard.in/u:rchampourlier">My Pinboard Bookmarks &raquo;</a></p>
-</section>
-<script type="text/javascript">
-  var linkroll = 'pinboard_linkroll'; //id target for pinboard list
-  var pinboard_user = "rchampourlier"; //id target for pinboard list
-  var pinboard_count = 3; //id target for pinboard list
-  (function(){
-    var pinboardInit = document.createElement('script');
-    pinboardInit.type = 'text/javascript';
-    pinboardInit.async = true;
-    pinboardInit.src = '/javascripts/pinboard.js';
-    document.getElementsByTagName('head')[0].appendChild(pinboardInit);
-  })();
-</script>
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/rchampourlier?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
 
 
   
@@ -349,14 +322,6 @@ db.collectionName.save(object);
 
 
 
-
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
 
 
 

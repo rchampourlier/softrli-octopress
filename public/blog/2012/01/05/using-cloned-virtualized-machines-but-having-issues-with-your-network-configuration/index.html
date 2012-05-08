@@ -9,8 +9,7 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="If like me, you&#8217;re using VirtualBox virtual machines a lot, eg.: to simulate your production environment (what we may call staging),
-or more &hellip;">
+  <meta name="description" content="Trying to get your cloned VirtualBox on the host network without success? This may help you&#8230; If like me, you&#8217;re using VirtualBox virtual &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -103,7 +102,12 @@ or more &hellip;">
   </header>
 
 
-<div class="entry-content"><p>If like me, you&#8217;re using <strong>VirtualBox virtual machines</strong> a lot, eg.:</p>
+<div class="entry-content"><p>Trying to get your cloned VirtualBox on the host network without success? This may help you&#8230;</p>
+
+<!-- more -->
+
+
+<p>If like me, you&#8217;re using <strong>VirtualBox virtual machines</strong> a lot, eg.:</p>
 
 <ul>
 <li>to <strong>simulate your production environment</strong> (what we may call <em>staging</em>),</li>
@@ -163,8 +167,6 @@ or more &hellip;">
   <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration/" >Tweet</a>
   
   
-  <div class="g-plusone" data-size="medium"></div>
-  
   
 </div>
 
@@ -190,7 +192,24 @@ or more &hellip;">
 
 <aside class="sidebar">
   
-    <section>
+    
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("softrli", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/softrli" class="twitter-follow-button" data-show-count="true">Follow @softrli</a>
+  
+</section>
+
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
@@ -237,7 +256,7 @@ or more &hellip;">
 
         github.showRepos({
             user: 'rchampourlier',
-            count: 0,
+            count: 5,
             skip_forks: true,
             target: '#gh_repos'
         });
@@ -245,53 +264,6 @@ or more &hellip;">
   </script>
   <script src="/javascripts/github.js" type="text/javascript"> </script>
 </section>
-
-
-<section>
-  <h1>Latest Tweets</h1>
-  <ul id="tweets">
-    <li class="loading">Status updating...</li>
-  </ul>
-  <script type="text/javascript">
-    $.domReady(function(){
-      getTwitterFeed("softrli", 5, false);
-    });
-  </script>
-  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
-  
-    <a href="http://twitter.com/softrli" class="twitter-follow-button" data-show-count="true">Follow @softrli</a>
-  
-</section>
-
-
-<section>
-  <h1>My Pinboard</h1>
-  <ul id="pinboard_linkroll">Fetching linkroll...</ul>
-  <p><a href="http://pinboard.in/u:rchampourlier">My Pinboard Bookmarks &raquo;</a></p>
-</section>
-<script type="text/javascript">
-  var linkroll = 'pinboard_linkroll'; //id target for pinboard list
-  var pinboard_user = "rchampourlier"; //id target for pinboard list
-  var pinboard_count = 3; //id target for pinboard list
-  (function(){
-    var pinboardInit = document.createElement('script');
-    pinboardInit.type = 'text/javascript';
-    pinboardInit.async = true;
-    pinboardInit.src = '/javascripts/pinboard.js';
-    document.getElementsByTagName('head')[0].appendChild(pinboardInit);
-  })();
-</script>
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/rchampourlier?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
 
 
   
@@ -327,14 +299,6 @@ or more &hellip;">
 
 
 
-
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
 
 
 

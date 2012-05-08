@@ -4,7 +4,7 @@
   <title><![CDATA[Category: gemset | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/gemset/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-05-08T12:30:44+02:00</updated>
+  <updated>2012-05-08T12:59:10+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -18,7 +18,19 @@
     <link href="http://www.softr.li/blog/2012/04/10/moving-from-rvm-to-rbenv/"/>
     <updated>2012-04-10T09:56:00+02:00</updated>
     <id>http://www.softr.li/blog/2012/04/10/moving-from-rvm-to-rbenv</id>
-    <content type="html"><![CDATA[<h2>Why?</h2>
+    <content type="html"><![CDATA[<ul>
+<li>Using <strong>rvm</strong> to manage your gemset without really knowing why since now Bundler does it very cleverly?</li>
+<li>Feeling that the whole rvm system is a bit complicated?</li>
+<li>Tired of having shell scripts not finding your rvm-managed gems?</li>
+</ul>
+
+
+<p>It looks like your ready to consider <strong>rbenv</strong>, which is a really lightweight alternative to <strong>rvm</strong>. Lightweight because it <em>just</em> manages rubies, and lets Bundler manage the gems.</p>
+
+<!-- more -->
+
+
+<h2>Why?</h2>
 
 <p><strong>RVM</strong> is a very useful tool that helps you manage your ruby environment when you need multiple rubies and have tons of gems different for each of your projects.</p>
 

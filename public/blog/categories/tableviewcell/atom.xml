@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tableviewcell | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/tableviewcell/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-05-08T12:30:44+02:00</updated>
+  <updated>2012-05-08T12:59:10+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -18,7 +18,16 @@
     <link href="http://www.softr.li/blog/2011/09/14/working-with-custom-table-view-cells-defined-in-nib-files/"/>
     <updated>2011-09-14T08:59:00+02:00</updated>
     <id>http://www.softr.li/blog/2011/09/14/working-with-custom-table-view-cells-defined-in-nib-files</id>
-    <content type="html"><![CDATA[<p>One of the projects I'm currently working on involves displaying custom UITableViewCells. To be exact, I display a dynamic list of elements which can be either displayed by a <code>UITableViewCell</code> <strong>A</strong> or a <code>UITableViewCell</code> <strong>B</strong>. Each of these cells is defined in its own NIB file.</p>
+    <content type="html"><![CDATA[<p>If you're using custom table view cells defined within NIB/XIB files for your iOS application, and you're a beginner like me, you may do one of these two mistakes. Just find out what not to do by having a look at this article!</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<h2>Context</h2>
+
+<p>One of the projects I'm currently working on involves displaying custom UITableViewCells. To be exact, I display a dynamic list of elements which can be either displayed by a <code>UITableViewCell</code> <strong>A</strong> or a <code>UITableViewCell</code> <strong>B</strong>. Each of these cells is defined in its own NIB file.</p>
 
 <ul>
 <li>Cell A has 3 subviews: 2 labels and a progress view.</li>

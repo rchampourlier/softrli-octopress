@@ -4,7 +4,7 @@
   <title><![CDATA[Category: solution | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/solution/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-05-08T12:30:44+02:00</updated>
+  <updated>2012-05-08T12:59:10+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -18,7 +18,12 @@
     <link href="http://www.softr.li/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration/"/>
     <updated>2012-01-05T09:18:00+01:00</updated>
     <id>http://www.softr.li/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration</id>
-    <content type="html"><![CDATA[<p>If like me, you're using <strong>VirtualBox virtual machines</strong> a lot, eg.:</p>
+    <content type="html"><![CDATA[<p>Trying to get your cloned VirtualBox on the host network without success? This may help you...</p>
+
+<!-- more -->
+
+
+<p>If like me, you're using <strong>VirtualBox virtual machines</strong> a lot, eg.:</p>
 
 <ul>
 <li>to <strong>simulate your production environment</strong> (what we may call <em>staging</em>),</li>

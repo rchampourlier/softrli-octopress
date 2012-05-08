@@ -4,7 +4,7 @@
   <title><![CDATA[Category: git | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-05-08T12:30:44+02:00</updated>
+  <updated>2012-05-08T12:59:10+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -18,7 +18,12 @@
     <link href="http://www.softr.li/blog/2012/04/14/how-to-make-your-own-gems-with-jeweler/"/>
     <updated>2012-04-14T10:03:00+02:00</updated>
     <id>http://www.softr.li/blog/2012/04/14/how-to-make-your-own-gems-with-jeweler</id>
-    <content type="html"><![CDATA[<h2>Prerequisites</h2>
+    <content type="html"><![CDATA[<p>A really simple walkthrough on how to <strong>package a gem easily</strong> using the <strong>Jeweler</strong> gem.</p>
+
+<!-- more -->
+
+
+<h2>Prerequisites</h2>
 
 <ul>
 <li>You're using Bundler.</li>
@@ -88,7 +93,14 @@ rake build
     <link href="http://www.softr.li/blog/2012/04/14/simple-cheatsheet-for-git-submodules/"/>
     <updated>2012-04-14T10:01:00+02:00</updated>
     <id>http://www.softr.li/blog/2012/04/14/simple-cheatsheet-for-git-submodules</id>
-    <content type="html"><![CDATA[<h2>Steps</h2>
+    <content type="html"><![CDATA[<p>Just a cheatsheet for <strong>git and submodules</strong>.</p>
+
+<!-- more -->
+
+
+<p></p>
+
+<h2>Steps</h2>
 
 <ol>
 <li>Add the submodule using a <code>git submodule add...</code> command (see below for the different options).</li>
