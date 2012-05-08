@@ -4,7 +4,7 @@ title: "Setup automatic clearing of your Rails sessions"
 date: 2012-04-20 10:12
 comments: true
 published: false
-categories: [rails, rubyonrails, sessions, session store, database, db, cleaning, cron, sysadmin, tips'n'tricks]
+categories: [rails, rubyonrails, session, database, db, maintenance, cron, sysadmin, tips'n'tricks]
 
 ---
 With every connection to your application of a new user, bot or whatever, Rails will create a new session object.
