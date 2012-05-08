@@ -137,57 +137,6 @@ gem install ./&lt;the gem &hellip;">
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/">Setup Automatic Clearing of Your Rails Sessions</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-20T10:12:00+02:00" pubdate data-updated="true">Apr 20<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>With every connection to your application of a new user, bot or whatever, Rails will create a new session object.</p>
-
-<p>If you&#8217;re using <a href="http://api.rubyonrails.org/classes/ActiveRecord/SessionStore.html">ActiveRecord::SessionStore</a> to save your sessions in your database, your database may already be alarmingly growing in size, due to the number of sessions it contains.</p>
-
-<h2>The rake db:sessions:clear task</h2>
-
-<p>If you don&#8217;t mind a lot about your users lossing their session, you can simply use the provided <code>rake db:sessions:clear</code> task. It will simply delete all sessions in the database. Side-effect: all current sessions are deleted, so signed in users get signed out, and you should hope they had nothing under way!</p>
-
-<h2>A more user-friendly solution</h2>
-
-<h2>References</h2>
-
-<ul>
-<li><a href="http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions">http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions</a></li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
       <h1 class="entry-title"><a href="/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/">Setting Up Log Rotation for Your Web Apps</a></h1>
     
     
@@ -524,6 +473,47 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration/">Using Cloned Virtualized Machines but Having Issues With Your Network Configuration?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-05T09:18:00+01:00" pubdate data-updated="true">Jan 5<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Trying to get your cloned VirtualBox on the host network without success? This may help you&#8230;</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -560,10 +550,6 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
       </li>
     
       <li class="post">
-        <a href="/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/">Setup automatic clearing of your Rails sessions</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/">Setting up log rotation for your web apps</a>
       </li>
     
@@ -573,6 +559,10 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
     
       <li class="post">
         <a href="/blog/2012/04/15/mongodb-cheatsheet/">MongoDB CheatSheet</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/14/how-to-make-your-own-gems-with-jeweler/">How to make your own gems with Jeweler</a>
       </li>
     
   </ul>
