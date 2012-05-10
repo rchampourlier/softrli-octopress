@@ -4,7 +4,7 @@
   <title><![CDATA[softr.li]]></title>
   <link href="http://www.softr.li/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-05-10T13:11:40+02:00</updated>
+  <updated>2012-05-10T13:29:07+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -90,7 +90,47 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>I think you should have passed the first issues. The rest should be customization now! Have fun!</strong></p>
+<h2>Finishing touch</h2>
+
+<h3>Grey titles for the non-selected items</h3>
+
+<p>Update the lines 170 to 175 to have this in <code>TabBarKit/Classes/TBKTabBar.m</code>:</p>
+
+<figure class='code'><figcaption><span>TabBarKit/Classes/TBKTabBar.m:170-175</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">for</span> <span class="p">(</span><span class="n">TBKTabBarItem</span> <span class="o">*</span><span class="n">tab</span> <span class="k">in</span> <span class="n">self</span><span class="p">.</span><span class="n">items</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">currentBounds</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="n">self</span><span class="p">.</span><span class="n">tabMargin</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">tab</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">currentBounds</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">currentBounds</span><span class="p">.</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="n">currentBounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">[</span><span class="n">self</span> <span class="nl">addSubview:</span><span class="n">tab</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">tab</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">grayColor</span><span class="p">];</span> <span class="c1">// added line</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Update the <code>setSelected:</code> method in <code>TabBarKit/Classes/TBKTabBarItem.m:213-217</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">([</span><span class="n">self</span><span class="p">.</span><span class="n">layer</span><span class="p">.</span><span class="n">sublayers</span> <span class="nl">containsObject:</span><span class="n">self</span><span class="p">.</span><span class="n">selectionLayer</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>      <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">selectionLayer</span> <span class="n">removeFromSuperlayer</span><span class="p">];</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>   <span class="n">self</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">grayColor</span><span class="p">];</span> <span class="c1">// added line</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Your tab bar should already look great! The rest is customization, and it&#8217;s up to you! Have fun!</strong></p>
 ]]></content>
   </entry>
   
