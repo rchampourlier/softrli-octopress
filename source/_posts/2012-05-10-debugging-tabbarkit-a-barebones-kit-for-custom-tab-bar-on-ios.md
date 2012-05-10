@@ -61,4 +61,31 @@ If you set the title for both `UIControlStateNormal` and `UIControlStateSelected
 [self setTitle:self.controllerTitle forState:(UIControlStateNormal)];
 ```
 
-**I think you should have passed the first issues. The rest should be customization now! Have fun!**
+## Finishing touch
+
+### Grey titles for the non-selected items
+
+Update the lines 170 to 175 to have this in `TabBarKit/Classes/TBKTabBar.m`:
+
+```objc TabBarKit/Classes/TBKTabBar.m:170-175
+for (TBKTabBarItem *tab in self.items) {
+	currentBounds.origin.x += self.tabMargin;
+	tab.frame = currentBounds;
+	currentBounds.origin.x += currentBounds.size.width;
+	[self addSubview:tab];
+	tab.titleLabel.textColor = [UIColor grayColor]; // added line
+}
+```
+
+Update the `setSelected:` method in `TabBarKit/Classes/TBKTabBarItem.m:213-217`:
+
+```objc 
+else {
+	if ([self.layer.sublayers containsObject:self.selectionLayer]) {
+		[self.selectionLayer removeFromSuperlayer];
+	}
+   self.titleLabel.textColor = [UIColor grayColor]; // added line
+}
+```
+
+**Your tab bar should already look great! The rest is customization, and it's up to you! Have fun!**
