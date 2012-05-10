@@ -1,0 +1,389 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Debugging TabBarKit, a barebones kit for custom tab bar on iOS - softr.li</title>
+  <meta name="author" content="Romain Champourlier">
+
+  
+  <meta name="description" content="For our Cultimots application, I wanted to customize the application&#8217;s tab bar. I looked a little on Google, cocoacontrols.com, Github, but I &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.softr.li/blog/2012/05/10/debugging-tabbarkit-a-barebones-kit-for-custom-tab-bar-on-ios">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="softr.li" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA–27796788–1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">softr.li</a></h1>
+  
+    <h2>Seeking and sharing about making IT softer</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.softr.li" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Debugging TabBarKit, a Barebones Kit for Custom Tab Bar on iOS</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-10T12:36:00+02:00" pubdate data-updated="true">May 10<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>For our <a href="http://itunes.apple.com/fr/app/cultimots-un-jeu-culture-vocabulaire/id483710651?l=fr&amp;ls=1&amp;mt=8">Cultimots</a> application, I wanted to customize the application&#8217;s tab bar. I looked a little on Google, <a href="http://cocoacontrols.com/">cocoacontrols.com</a>, Github, but I didn&#8217;t want to use a full-featured solution which may not remain configurable for what I add in mind.</p>
+
+<p>I finally went for <strong>TabBarKit</strong>, which is quite barebones, <strong>reproducing the basic features of <code>UITabBar</code></strong> while letting me <strong>play with the code to get my own thing</strong>.</p>
+
+<p>On this way I encountered several time-consuming issues due to the non-existent documentation of TabBarKit and some bugs in the shared code. Since I already customized the code to fit my own project <strong>I won&#8217;t share the updated source code</strong>, I will however share the issues I met and the solutions I found. Hope this will make your path faster than mine!</p>
+
+<!--more -->
+
+
+<h3>Confusion between tab bar style and tab bar item selection style</h3>
+
+<p>There is a confusion between the tab bar&#8217;s style, which is a <code>TBKTabBarStyle</code>, and the tab bar item selection&#8217;s style, which is a <code>TBKTabBarItemSelectionStyle</code>.</p>
+
+<p>This confusion is explicit in these lines:</p>
+
+<figure class='code'><figcaption><span>TabBarKit/Classes/TBKTabBarController.m:119</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="n">TBKTabBarItem</span> <span class="o">*</span><span class="n">tabItem</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">TBKTabBarItem</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithImageName:</span><span class="n">controller</span><span class="p">.</span><span class="n">tabImageName</span> <span class="nl">style:</span><span class="n">self</span><span class="p">.</span><span class="n">tabBarStyle</span> <span class="nl">tag:</span><span class="n">tagIndex</span> <span class="nl">title:</span><span class="n">controller</span><span class="p">.</span><span class="n">title</span><span class="p">]</span> <span class="n">autorelease</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>TabBarKit/Classes/TBKTabBarItem.m:170</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="o">-</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span> <span class="nl">initWithImageName:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">anImageName</span> <span class="nl">style:</span><span class="p">(</span><span class="n">TBKTabBarItemSelectionStyle</span><span class="p">)</span><span class="n">aStyle</span> <span class="nl">tag:</span><span class="p">(</span><span class="n">NSInteger</span><span class="p">)</span><span class="n">aTag</span> <span class="nl">title:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">aTitle</span> <span class="p">{</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The tab bar item <code>init</code> method expects <code>aStyle</code> to be a <code>TBKTabBarItemSelectionStyle</code> but the controller provides its own style, which is a <code>TBKTabBarStyle</code>. This is OK in the source code because in fact the both style are <code>enum</code>s with matching integer values. If you add yours, just be sure to clean this mess.</p>
+
+<h2>Enabling titles</h2>
+
+<p>In the source code from the Github repo, titles are disabled. To restore them, you will have to uncomment some lines from <code>TabBarKit/Classes/TBKTabBarItem.m</code>:</p>
+
+<figure class='code'><figcaption><span>TabBarKit/Classes/TBKTabBarItem.m:178-188`</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">controllerTitle</span> <span class="o">&amp;&amp;</span> <span class="n">self</span><span class="p">.</span><span class="n">selectionStyle</span> <span class="o">==</span> <span class="n">TBKTabBarItemDefaultSelectionStyle</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="cm">/*</span>
+</span><span class='line'><span class="cm">     self.displayTitle = YES;</span>
+</span><span class='line'><span class="cm">     self.titleLabel.font = [UIFont boldSystemFontOfSize:10.0];</span>
+</span><span class='line'><span class="cm">     self.titleLabel.textAlignment = UITextAlignmentCenter;</span>
+</span><span class='line'><span class="cm">     self.titleLabel.contentMode = UIViewContentModeLeft;</span>
+</span><span class='line'><span class="cm">     self.imageEdgeInsets = UIEdgeInsetsMake(0, 22, 11, 0);</span>
+</span><span class='line'><span class="cm">     self.titleEdgeInsets = UIEdgeInsetsMake(0, -35, 2, 0);</span>
+</span><span class='line'><span class="cm">     [self setTitle:self.controllerTitle forState:(UIControlStateNormal | UIControlStateSelected)];</span>
+</span><span class='line'><span class="cm">     */</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There is also a bug on this line:</p>
+
+<figure class='code'><figcaption><span>TabBarKit/Classes/TBKTabBarItem.m:186</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">self</span> <span class="nl">setTitle:</span><span class="n">self</span><span class="p">.</span><span class="n">controllerTitle</span> <span class="nl">forState:</span><span class="p">(</span><span class="n">UIControlStateNormal</span> <span class="o">|</span> <span class="n">UIControlStateSelected</span><span class="p">)];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you set the title for both <code>UIControlStateNormal</code> and <code>UIControlStateSelected</code>, it won&#8217;t show up for the tab bar items which are not selected, and their layout will get broken. Just replace the line by this:</p>
+
+<figure class='code'><figcaption><span>TabBarKit/Classes/TBKTabBarItem.m:186</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="p">[</span><span class="n">self</span> <span class="nl">setTitle:</span><span class="n">self</span><span class="p">.</span><span class="n">controllerTitle</span> <span class="nl">forState:</span><span class="p">(</span><span class="n">UIControlStateNormal</span><span class="p">)];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>I think you should have passed the first issues. The rest should be customization now! Have fun!</strong></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Romain Champourlier</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-10T12:36:00+02:00" pubdate data-updated="true">May 10<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/cocoa/'>cocoa</a>, <a class='category' href='/blog/categories/custom-ui/'>custom ui</a>, <a class='category' href='/blog/categories/ios/'>ios</a>, <a class='category' href='/blog/categories/objective-c/'>objective-c</a>, <a class='category' href='/blog/categories/ui/'>ui</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/05/10/debugging-tabbarkit-a-barebones-kit-for-custom-tab-bar-on-ios/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/05/10/debugging-tabbarkit-a-barebones-kit-for-custom-tab-bar-on-ios/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/04/22/manually-installing-a-gem-from-a-git-repo/" title="Previous Post: Manually installing a gem from a git repo">&laquo; Manually installing a gem from a git repo</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+<section>
+  <h1>About Me</h1>
+  <div id="twitter-profile" style="margin-top:0.5em;">
+    <strong><p>Romain Champourlier</p></strong>
+    <p>The geeky-tech-dev blog of Romain Champourlier, French engineer and entrepreneur.</p>
+  </div>
+  <script type="text/javascript">
+    $.domReady(function(){
+        var container = $('#twitter-profile'),
+            user = "softrli";
+            
+        $.ajax({
+            url: "http://api.twitter.com/1/users/show.json?include_entities=false&screen_name="+user+"&callback=?"
+          , type: 'jsonp'
+          , error: function (err) { $('#twitter-profile').addClass('error');  }
+          , success: function(data) {
+              container.html('<img class="left" src="http://api.twitter.com/1/users/profile_image/'+user+'.json?size=bigger" alt="@'+user+'"><p><strong>'+data.name+'</strong><br/>('+data.location+')</p><p>'+data.description+'</p>');
+            }
+        })
+      });
+  </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("softrli", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/softrli" class="twitter-follow-button" data-show-count="true">Follow @softrli</a>
+  
+</section>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/05/10/debugging-tabbarkit-a-barebones-kit-for-custom-tab-bar-on-ios/">Debugging TabBarKit, a barebones kit for custom tab bar on iOS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/22/manually-installing-a-gem-from-a-git-repo/">Manually installing a gem from a git repo</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/">Setting up log rotation for your web apps</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/16/linking-local-node-modules-with-npm/">Linking local node modules with npm</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/15/mongodb-cheatsheet/">MongoDB CheatSheet</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/rchampourlier">@rchampourlier</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'rchampourlier',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Romain Champourlier -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'softrli';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.softr.li/blog/2012/05/10/debugging-tabbarkit-a-barebones-kit-for-custom-tab-bar-on-ios/';
+        var disqus_url = 'http://www.softr.li/blog/2012/05/10/debugging-tabbarkit-a-barebones-kit-for-custom-tab-bar-on-ios/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
