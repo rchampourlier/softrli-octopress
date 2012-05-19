@@ -3,7 +3,7 @@ layout: post
 title: "Setting up log rotation for your web apps"
 date: 2012-04-20 10:12
 comments: true
-categories: [tutorial, log, rotation, logrotate, thin, nginx, rails, humor, sysadmin, unix]
+categories: [sysadmin, maintenance, unix]
 
 ---
 {% pullquote %}

@@ -3,7 +3,7 @@ layout: post
 title: "Manually installing a gem from a git repo"
 date: 2012-04-22 10:16
 comments: true
-categories: [gem, ruby, cheatsheet]
+categories: [development, ruby, notetomyself]
 
 ---
 ```

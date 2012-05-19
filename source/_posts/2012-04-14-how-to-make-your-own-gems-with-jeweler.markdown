@@ -3,7 +3,7 @@ layout: post
 title: "How to make your own gems with Jeweler"
 date: 2012-04-14 10:03
 comments: true
-categories: [ruby, gem, package, git, gemfile]
+categories: [development, ruby]
 
 ---
 A really simple walkthrough on how to **package a gem easily** using the **Jeweler** gem.

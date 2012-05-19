@@ -3,7 +3,7 @@ layout: post
 title: "Simple cheatsheet for git submodules"
 date: 2012-04-14 10:01
 comments: true
-categories: [git, repo, versioning, submodule, tips'n'tricks, cheatsheet]
+categories: [development, git, cheatsheet]
 
 ---
 Just a cheatsheet for **git and submodules**.

@@ -3,7 +3,7 @@ layout: post
 title: "Linking local node modules with npm"
 date: 2012-04-16 10:10
 comments: true
-categories: [node, node.js, npm, package, module, link, install]
+categories: [development, nodejs, notetomyself]
 
 ---
 How to link a **node module** to a **local source directory** instead of installing from npm repository.

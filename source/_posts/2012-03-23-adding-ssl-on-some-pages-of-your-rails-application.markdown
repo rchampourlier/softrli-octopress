@@ -3,7 +3,7 @@ layout: post
 title: "Adding SSL on some pages of your Rails application"
 date: 2012-03-23 09:49
 comments: true
-categories: [sysadmin, unix, linux, ubuntu, ssl, rails, nginx]
+categories: [development, sysadmin, rubyonrails, unix]
 
 ---
 

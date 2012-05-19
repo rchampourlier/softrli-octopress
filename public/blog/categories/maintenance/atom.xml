@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: maintenance | softr.li]]></title>
+  <link href="http://www.softr.li/blog/categories/maintenance/atom.xml" rel="self"/>
+  <link href="http://www.softr.li/"/>
+  <updated>2012-05-19T11:59:07+02:00</updated>
+  <id>http://www.softr.li/</id>
+  <author>
+    <name><![CDATA[Romain Champourlier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Organization for provisioning your environments (from dev to prod) with Chef]]></title>
+    <link href="http://www.softr.li/blog/2012/05/19/organization-for-provisioning-your-environments-from-dev-to-prod-with-chef/"/>
+    <updated>2012-05-19T11:56:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/05/19/organization-for-provisioning-your-environments-from-dev-to-prod-with-chef</id>
+    <content type="html"><![CDATA[<p>When you start developping a project with a team, you may start facing issues requiring you to share the same development environment. I just discovered <a href="www.vagrantup.com">Vagrant</a> and it's the perfect solution for doing this.</p>
+
+<p>Vagrant is nice, but it stills requires you to provision your machine with the needed language stacks, services, etc. This is why it's provided with a way to hook into Chef or Puppet.</p>
+
+<p><em>I'll go with Chef because I had already given it a try sometime ago, and config files are written in Ruby, which I know.</em></p>
+
+<p>Since you're going to build recipes and/or cookbooks <strong>to provision your development machine, what about going a little further and using Chef to provision your staging/production machines too?</strong></p>
+
+<!-- more -->
+
+
+<p>There will be differences between your development and staging/production setups. However, you will have to install the same databases, maybe some background processors and some other services, so most of the provisioning that you will prepare for your development machine can be reused to provision your staging/production machines too.</p>
+
+<h3>Purpose</h3>
+
+<p>The purpose of this tutorial <strong>is not to be a complete walkthrough</strong> for doing this, since this would involve explaining how to build Chef recipes/cookbooks, running Chef-Solo, etc. It only intends to let you imagine what you could do to ease your provisioning process, knowing the tools exist and they can be used like this. Plus I propose a simple organization for your configuration files that may help you with it.</p>
+
+<h3>Tools</h3>
+
+<h4>Chef</h4>
+
+<p>Chef is a configuration manager which will read a recipe and use cookbooks to perform operations on a given machine (or node).</p>
+
+<p>It has several architectures:</p>
+
+<ul>
+<li><strong>Chef Client/Server</strong>: the node performing the operations is the Chef Client and the operations to be performed are determined thanks to a Chef Server. This solution provides some advantages because the server can remember some information on the state of each node. Opscode provides an <a href="http://www.opscode.com/hosted-chef/">Hosted Chef Server</a> for free up to 5 nodes.</li>
+<li><strong>Chef Solo</strong>: the node performing the operations is running Chef Solo and the operations to be performed are defined by local files (or a <code>tgz</code> which can be downloaded from somewhere). It's the fast way, and should be sufficient for provisioning your development machines and a few staging/production machines.</li>
+</ul>
+
+
+<p>For the installation of any of the two solutions, please refer to <a href="http://www.opscode.com/chef/">Opscode's documentation</a>. For your Vagrant machines, no installation needed, everything is already <a href="http://vagrantup.com/docs/getting-started/provisioning.html">hooked in</a>.</p>
+
+<h4>Puppet</h4>
+
+<p>An alternative for Chef is Puppet, which can be hooked into Vagrant too. I won't detail it since I never tried it...</p>
+
+<h4>Librarian</h4>
+
+<p><a href="https://github.com/applicationsonline/librarian">Librarian</a> is a useful tool which will help you bundle your cookbooks.</p>
+
+<p>To build your recipe and provisioning configuration, you will rely on cookbooks, most of them defined and shared by the community. You will find many on Github, the main repositories being provided by <a href="https://github.com/opscode-cookbooks/">Opscode</a>.</p>
+
+<p>With Librarian you build a <code>Cheffile</code> and the principle is almost the same as Bundler for gems: you list the required cookbooks, you can specify their location and the version you want to use, and Librarian will gather them for you, ensuring the correct version of the cookbook is fetched, so that you won't get a broken version if it gets updated.</p>
+
+<p>Once you've created the <code>Cheffile</code>, it's almost as simple as:</p>
+
+<p><code>
+gem install librarian
+librarian-chef install
+</code></p>
+
+<h3>Organization</h3>
+
+<p>How to organize all this for the provisioning of machines related to your project? Here's my approach, starting with the files-tree:</p>
+
+<p>```
++ project
+  + machines</p>
+
+<pre><code>+ cookbooks
+  ...
+  &lt;the cookbooks directories generated by Librarian&gt;
+  ...
++ cookbooks_local
+  + project
+    + recipes
+      - default.rb
+      - development.rb
+      - staging.rb
+      - production.rb
+    - metadata.json
++ operations
+  - provision_development.json
+  - provision_staging.json
+  - provision_production.json
++ roles
+  - base.json
+  - databases.json
+  - maintenance.json
+  - ruby.json
+- Cheffile
+- Cheffile.lock
+- solo.rb
+</code></pre>
+
+<p>```</p>
+
+<h4><code>cookbooks</code></h4>
+
+<p>This is the directory of cookbooks generated by Librarian according to the content of your <code>Cheffile</code>.</p>
+
+<p>Please notice the <code>Cheffile.lock</code> file which will keep the references to the cookbooks versions you have actually installed. This allows you to restore the <code>cookbooks</code> directory with the same versions of the cookbooks even if you did not specified particular versions of the cookbooks. This way, you don't need to commit your <code>cookbooks</code> directory with your versioning system.</p>
+
+<h4><code>cookbooks_local</code></h4>
+
+<p>This directory contains the cookbooks you maintain yourself and that you will use to setup your own environments.</p>
+
+<p>Inside, I have a <code>project</code> cookbook containing recipes for any of the different environments I have to setup: development, staging, production.</p>
+
+<p>The best way to build this cookbook is to look at others, and customize as needed. I have a <code>metadata.json</code> which describes the cookbook. I'm not sure it's required, but I think it's better to have it.</p>
+
+<h4><code>operations</code></h4>
+
+<p>When you want Chef to perform operations on a node, you provide it with a <em>run list</em> and some <em>attributes</em>. For Chef Client/Server, this is defined on the server. For Chef Solo, you generally provide the <code>chef-solo</code> command with a JSON file (often named <code>dna.json</code>).</p>
+
+<p>Here instead of one <code>dna.json</code> file, I keep several files allowing me to run different sets of operations. For example here is the content of my <code>provision_development.json</code> file:</p>
+
+<p>```javascript
+{
+  "run_list": [</p>
+
+<pre><code>"role[base]",
+"role[ruby]",
+"role[databases]",
+"recipe[project::development]"
+</code></pre>
+
+<p>  ],</p>
+
+<p>  "ruby_stack": {</p>
+
+<pre><code>"rubies": ["1.9.2-p290"],
+"global": "1.9.2-p290",
+"users": "vagrant"
+</code></pre>
+
+<p>  },</p>
+
+<p>  "postgresql": {</p>
+
+<pre><code>"password": {
+  "postgres": "password"
+}
+</code></pre>
+
+<p>  }
+}
+<code>``
+This file provides Chef-Solo with a run list, which will run several roles (defined in the different JSON files under</code>roles` and described in the next paragraph), recipes, and define the attributes that may be required by the different recipes.</p>
+
+<p>Why several configuration files? Because for my production environment, I will want to run another role: <code>role[maintenance]</code>  which will provision a set of tools to help me with maintenance tasks, and use another recipe for the project's specific provisioning: <code>recipe[project::production]</code>.</p>
+
+<h4><code>roles</code></h4>
+
+<p>The roles are a simple concept allowing you to bundle a set of recipes together.</p>
+
+<p>Here is our <code>base.json</code> role file:</p>
+
+<p>```
+{
+  "name": "base",
+  "description": "Base role applied to all nodes.",
+  "chef_type": "role",
+  "json_class": "Chef::Role",</p>
+
+<p>  "run_list": [</p>
+
+<pre><code>"recipe[apt]",
+"recipe[build-essential]",
+"recipe[git]"
+</code></pre>
+
+<p>  ]
+}
+```</p>
+
+<p>As you can see, it allows us to group several recipes depending on the role of the machine:</p>
+
+<ul>
+<li><code>base</code> will be provisioned on all nodes,</li>
+<li><code>ruby</code> will be provisioned for nodes requiring it,</li>
+<li><code>databases</code> will be provisioned for nodes acting as databases servers,</li>
+<li>etc.</li>
+</ul>
+
+
+<h4>Cheffile</h4>
+
+<p>That's the file used by Librarian to get the required cookbooks. It takes this form:</p>
+
+<p>```
+site "http://community.opscode.com/api/v1"</p>
+
+<p>cookbook "apt"
+cookbook 'build-essential'
+cookbook 'git'
+...
+cookbook 'ruby_build',
+  :git => 'https://github.com/fnichol/chef-ruby_build.git',
+  :ref => 'v0.6.2'</p>
+
+<p>```</p>
+
+<p>The first line starting with <code>site</code> allows you to get the cookbooks from Opscode community easily. You can also specify a location (git, local), for the cookbooks not available on this community. Just check <a href="https://github.com/applicationsonline/librarian">Librarian's documentation</a>.</p>
+
+<h4><code>solo.rb</code></h4>
+
+<p>That's the configuration file we use to run Chef-Solo. Here is the content for this configuration:</p>
+
+<p>```</p>
+
+<h1>chef-solo -c ./solo.rb -j ./operations/operation.json</h1>
+
+<p>file_cache_path "/tmp/chef"
+cookbook_path [File.expand_path('../cookbooks', <strong>FILE</strong>), File.expand_path('../cookbooks_local', <strong>FILE</strong>)]
+role_path "#{File.expand_path('../roles', <strong>FILE</strong>)}"
+log_level :info
+log_location STDOUT
+ssl_verify_mode :verify_none</p>
+
+<p>```</p>
+
+<p>Notice the <code>cookbook_path</code> which is provided with an Array containing both the <code>cookbooks</code> and the <code>cookbooks_local</code> directories.</p>
+
+<h3>Time to run</h3>
+
+<p>Assuming you have Chef-Solo installed on the machine you want to run the operations on, you should be good with running:</p>
+
+<p><code>
+cd &lt;your-project&gt;
+cd machines
+[sudo] chef-solo -c ./solo.rb -j ./operations/&lt;operation&gt;.json
+</code></p>
+
+<p>Be sure to have installed the cookbooks before however (see the Librarian paragraph if you don't now what to do).</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Setting up log rotation for your web apps]]></title>
+    <link href="http://www.softr.li/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/"/>
+    <updated>2012-04-20T10:12:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps</id>
+    <content type="html"><![CDATA[<p><span class='pullquote-right' data-pullquote='Just ask yourself this question: did you configure your logs rotation? '>
+If, like me, you simply follow the common tutorials and walthroughs to setup your production environment, you may start wondering after some weeks <strong>where this leak on your server's disk space is coming from...</strong></p>
+
+<p>Just ask yourself this question: did you configure your logs rotation?</p>
+
+<p><em>(Well, that was when I was still a young CTO...)</em>
+</span></p>
+
+<!-- more -->
+
+
+<h2>The ugly</h2>
+
+<p>You've installed your <strong>nginx</strong> server, it proxies some well-coded <strong>Rails</strong> applications served by the nice-and-fast <strong>thin</strong> app server. All good.</p>
+
+<p>But you know, these are verbose people. They like to talk. A lot. And as obedient software, they write every character of their chatter. So this is where your leak is coming from.</p>
+
+<p>As a matter of fact, if you don't tell somebody to clean their mess, nobody won't... and you're server will soon die of low-disk-space agony.</p>
+
+<h2>The bad</h2>
+
+<p>You will have to tell <code>logrotate</code> to do some work for these guys to keep their chatter under control.</p>
+
+<p><code>logrotate</code> is the cowboy which will rule the land ;) Tell it which log has to be rotated and it will automatically does the job for you. So now, get into this configuration stage...</p>
+
+<p>The <code>logrotate</code> configuration file should be <code>/etc/logrotate.conf</code>.</p>
+
+<p>You can add your instructions for log rotation by adding the following lines in this file, or you can create a new file under <code>/etc/logrotate.d</code> if you think this is a more organized way (I think). This latter option mimics the way packages configure <code>logrotate</code>. You will find several examples in this directory, so you may just look at them too.</p>
+
+<p><code>
+/path/to/your/rails/applicaton/log/*.log {
+  daily
+  missingok
+  rotate 7
+  compress
+  delaycompress
+  notifempty
+  copytruncate
+}
+</code></p>
+
+<p>If you want to force <code>logrotate</code> to run right now instead of waiting until tomorrow to see if your configuration is OK, you can run this command:</p>
+
+<pre><code>/usr/sbin/logrotate -f /etc/logrotate.conf
+</code></pre>
+
+<p>Else you can just wait a little.</p>
+
+<h2>The good</h2>
+
+<p>If you got through all this useless blabber about bad guys chatting and cowboys, you'll be happy to know that some serious<del>ly boring</del> (no no, just kidding, I don't even know him) guy has written a far more efficient tutorial on the subject, and you can find it <a href="http://www.nullislove.com/2007/09/10/rotating-rails-log-files/">here</a>.</p>
+
+<p>This guide will help you understand how <code>logrotate</code> works and the purpose of each line in the code above.</p>
+]]></content>
+  </entry>
+  
+</feed>

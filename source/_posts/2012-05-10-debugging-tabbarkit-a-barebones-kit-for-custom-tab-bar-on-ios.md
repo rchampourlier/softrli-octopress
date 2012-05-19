@@ -3,7 +3,7 @@ layout: post
 title: "Debugging TabBarKit, a barebones kit for custom tab bar on iOS"
 date: 2012-05-10 12:36
 comments: true
-categories: [ios, cocoa, objective-c, custom ui, ui]
+categories: [development, ios]
 
 ---
 

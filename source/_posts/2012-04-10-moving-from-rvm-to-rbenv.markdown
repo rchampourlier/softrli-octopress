@@ -3,7 +3,7 @@ layout: post
 title: "Moving from RVM to rbenv"
 date: 2012-04-10 09:56
 comments: true
-categories: [sysadmin, ruby, gem, rvm, rbenv, gemset, dev, development]
+categories: [development, sysadmin, ruby, unix]
 
 ---
 

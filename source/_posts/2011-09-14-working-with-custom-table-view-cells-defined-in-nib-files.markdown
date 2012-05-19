@@ -3,7 +3,7 @@ layout: post
 title: "Working with custom table view cells defined in NIB files"
 date: 2011-09-14 08:59
 comments: true
-categories: [ios, iphone, tableview, tableviewcell, nib]
+categories: [development, ios]
 
 ---
 

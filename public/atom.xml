@@ -4,7 +4,7 @@
   <title><![CDATA[softr.li]]></title>
   <link href="http://www.softr.li/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-05-10T13:29:07+02:00</updated>
+  <updated>2012-05-19T11:59:07+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,299 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Organization for provisioning your environments (from dev to prod) with Chef]]></title>
+    <link href="http://www.softr.li/blog/2012/05/19/organization-for-provisioning-your-environments-from-dev-to-prod-with-chef/"/>
+    <updated>2012-05-19T11:56:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/05/19/organization-for-provisioning-your-environments-from-dev-to-prod-with-chef</id>
+    <content type="html"><![CDATA[<p>When you start developping a project with a team, you may start facing issues requiring you to share the same development environment. I just discovered <a href="www.vagrantup.com">Vagrant</a> and it&#8217;s the perfect solution for doing this.</p>
+
+<p>Vagrant is nice, but it stills requires you to provision your machine with the needed language stacks, services, etc. This is why it&#8217;s provided with a way to hook into Chef or Puppet.</p>
+
+<p><em>I&#8217;ll go with Chef because I had already given it a try sometime ago, and config files are written in Ruby, which I know.</em></p>
+
+<p>Since you&#8217;re going to build recipes and/or cookbooks <strong>to provision your development machine, what about going a little further and using Chef to provision your staging/production machines too?</strong></p>
+
+<!-- more -->
+
+
+<p>There will be differences between your development and staging/production setups. However, you will have to install the same databases, maybe some background processors and some other services, so most of the provisioning that you will prepare for your development machine can be reused to provision your staging/production machines too.</p>
+
+<h3>Purpose</h3>
+
+<p>The purpose of this tutorial <strong>is not to be a complete walkthrough</strong> for doing this, since this would involve explaining how to build Chef recipes/cookbooks, running Chef-Solo, etc. It only intends to let you imagine what you could do to ease your provisioning process, knowing the tools exist and they can be used like this. Plus I propose a simple organization for your configuration files that may help you with it.</p>
+
+<h3>Tools</h3>
+
+<h4>Chef</h4>
+
+<p>Chef is a configuration manager which will read a recipe and use cookbooks to perform operations on a given machine (or node).</p>
+
+<p>It has several architectures:</p>
+
+<ul>
+<li><strong>Chef Client/Server</strong>: the node performing the operations is the Chef Client and the operations to be performed are determined thanks to a Chef Server. This solution provides some advantages because the server can remember some information on the state of each node. Opscode provides an <a href="http://www.opscode.com/hosted-chef/">Hosted Chef Server</a> for free up to 5 nodes.</li>
+<li><strong>Chef Solo</strong>: the node performing the operations is running Chef Solo and the operations to be performed are defined by local files (or a <code>tgz</code> which can be downloaded from somewhere). It&#8217;s the fast way, and should be sufficient for provisioning your development machines and a few staging/production machines.</li>
+</ul>
+
+
+<p>For the installation of any of the two solutions, please refer to <a href="http://www.opscode.com/chef/">Opscode&#8217;s documentation</a>. For your Vagrant machines, no installation needed, everything is already <a href="http://vagrantup.com/docs/getting-started/provisioning.html">hooked in</a>.</p>
+
+<h4>Puppet</h4>
+
+<p>An alternative for Chef is Puppet, which can be hooked into Vagrant too. I won&#8217;t detail it since I never tried it&#8230;</p>
+
+<h4>Librarian</h4>
+
+<p><a href="https://github.com/applicationsonline/librarian">Librarian</a> is a useful tool which will help you bundle your cookbooks.</p>
+
+<p>To build your recipe and provisioning configuration, you will rely on cookbooks, most of them defined and shared by the community. You will find many on Github, the main repositories being provided by <a href="https://github.com/opscode-cookbooks/">Opscode</a>.</p>
+
+<p>With Librarian you build a <code>Cheffile</code> and the principle is almost the same as Bundler for gems: you list the required cookbooks, you can specify their location and the version you want to use, and Librarian will gather them for you, ensuring the correct version of the cookbook is fetched, so that you won&#8217;t get a broken version if it gets updated.</p>
+
+<p>Once you&#8217;ve created the <code>Cheffile</code>, it&#8217;s almost as simple as:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install librarian
+</span><span class='line'>librarian-chef install</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Organization</h3>
+
+<p>How to organize all this for the provisioning of machines related to your project? Here&#8217;s my approach, starting with the files-tree:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>+ project
+</span><span class='line'>  + machines
+</span><span class='line'>    + cookbooks
+</span><span class='line'>      ...
+</span><span class='line'>      &lt;the cookbooks directories generated by Librarian&gt;
+</span><span class='line'>      ...
+</span><span class='line'>      + cookbooks_local
+</span><span class='line'>        + project
+</span><span class='line'>          + recipes
+</span><span class='line'>            - default.rb
+</span><span class='line'>            - development.rb
+</span><span class='line'>            - staging.rb
+</span><span class='line'>            - production.rb
+</span><span class='line'>          - metadata.json
+</span><span class='line'>      + operations
+</span><span class='line'>        - provision_development.json
+</span><span class='line'>        - provision_staging.json
+</span><span class='line'>        - provision_production.json
+</span><span class='line'>      + roles
+</span><span class='line'>        - base.json
+</span><span class='line'>        - databases.json
+</span><span class='line'>        - maintenance.json
+</span><span class='line'>        - ruby.json
+</span><span class='line'>      - Cheffile
+</span><span class='line'>      - Cheffile.lock
+</span><span class='line'>      - solo.rb</span></code></pre></td></tr></table></div></figure>
+
+
+<h4><code>cookbooks</code></h4>
+
+<p>This is the directory of cookbooks generated by Librarian according to the content of your <code>Cheffile</code>.</p>
+
+<p>Please notice the <code>Cheffile.lock</code> file which will keep the references to the cookbooks versions you have actually installed. This allows you to restore the <code>cookbooks</code> directory with the same versions of the cookbooks even if you did not specified particular versions of the cookbooks. This way, you don&#8217;t need to commit your <code>cookbooks</code> directory with your versioning system.</p>
+
+<h4><code>cookbooks_local</code></h4>
+
+<p>This directory contains the cookbooks you maintain yourself and that you will use to setup your own environments.</p>
+
+<p>Inside, I have a <code>project</code> cookbook containing recipes for any of the different environments I have to setup: development, staging, production.</p>
+
+<p>The best way to build this cookbook is to look at others, and customize as needed. I have a <code>metadata.json</code> which describes the cookbook. I&#8217;m not sure it&#8217;s required, but I think it&#8217;s better to have it.</p>
+
+<h4><code>operations</code></h4>
+
+<p>When you want Chef to perform operations on a node, you provide it with a <em>run list</em> and some <em>attributes</em>. For Chef Client/Server, this is defined on the server. For Chef Solo, you generally provide the <code>chef-solo</code> command with a JSON file (often named <code>dna.json</code>).</p>
+
+<p>Here instead of one <code>dna.json</code> file, I keep several files allowing me to run different sets of operations. For example here is the content of my <code>provision_development.json</code> file:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;run_list&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s2">&quot;role[base]&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;role[ruby]&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;role[databases]&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;recipe[project::development]&quot;</span>
+</span><span class='line'>  <span class="p">],</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="s2">&quot;ruby_stack&quot;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s2">&quot;rubies&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;1.9.2-p290&quot;</span><span class="p">],</span>
+</span><span class='line'>    <span class="s2">&quot;global&quot;</span><span class="o">:</span> <span class="s2">&quot;1.9.2-p290&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;users&quot;</span><span class="o">:</span> <span class="s2">&quot;vagrant&quot;</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="s2">&quot;postgresql&quot;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s2">&quot;password&quot;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;postgres&quot;</span><span class="o">:</span> <span class="s2">&quot;password&quot;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This file provides Chef-Solo with a run list, which will run several roles (defined in the different JSON files under <code>roles</code> and described in the next paragraph), recipes, and define the attributes that may be required by the different recipes.</p>
+
+<p>Why several configuration files? Because for my production environment, I will want to run another role: <code>role[maintenance]</code>  which will provision a set of tools to help me with maintenance tasks, and use another recipe for the project&#8217;s specific provisioning: <code>recipe[project::production]</code>.</p>
+
+<h4><code>roles</code></h4>
+
+<p>The roles are a simple concept allowing you to bundle a set of recipes together.</p>
+
+<p>Here is our <code>base.json</code> role file:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;base&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;description&quot;</span><span class="o">:</span> <span class="s2">&quot;Base role applied to all nodes.&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;chef_type&quot;</span><span class="o">:</span> <span class="s2">&quot;role&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;json_class&quot;</span><span class="o">:</span> <span class="s2">&quot;Chef::Role&quot;</span><span class="p">,</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="s2">&quot;run_list&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s2">&quot;recipe[apt]&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;recipe[build-essential]&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;recipe[git]&quot;</span>
+</span><span class='line'>  <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, it allows us to group several recipes depending on the role of the machine:</p>
+
+<ul>
+<li><code>base</code> will be provisioned on all nodes,</li>
+<li><code>ruby</code> will be provisioned for nodes requiring it,</li>
+<li><code>databases</code> will be provisioned for nodes acting as databases servers,</li>
+<li>etc.</li>
+</ul>
+
+
+<h4>Cheffile</h4>
+
+<p>That&#8217;s the file used by Librarian to get the required cookbooks. It takes this form:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">site</span> <span class="s2">&quot;http://community.opscode.com/api/v1&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">cookbook</span> <span class="s2">&quot;apt&quot;</span>
+</span><span class='line'><span class="nx">cookbook</span> <span class="s1">&#39;build-essential&#39;</span>
+</span><span class='line'><span class="nx">cookbook</span> <span class="s1">&#39;git&#39;</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="nx">cookbook</span> <span class="s1">&#39;ruby_build&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="o">:</span><span class="nx">git</span> <span class="o">=&gt;</span> <span class="s1">&#39;https://github.com/fnichol/chef-ruby_build.git&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="o">:</span><span class="nx">ref</span> <span class="o">=&gt;</span> <span class="s1">&#39;v0.6.2&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The first line starting with <code>site</code> allows you to get the cookbooks from Opscode community easily. You can also specify a location (git, local), for the cookbooks not available on this community. Just check <a href="https://github.com/applicationsonline/librarian">Librarian&#8217;s documentation</a>.</p>
+
+<h4><code>solo.rb</code></h4>
+
+<p>That&#8217;s the configuration file we use to run Chef-Solo. Here is the content for this configuration:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span> <span class="nx">chef</span><span class="o">-</span><span class="nx">solo</span> <span class="o">-</span><span class="nx">c</span> <span class="p">.</span><span class="o">/</span><span class="nx">solo</span><span class="p">.</span><span class="nx">rb</span> <span class="o">-</span><span class="nx">j</span> <span class="p">.</span><span class="o">/</span><span class="nx">operations</span><span class="o">/</span><span class="nx">operation</span><span class="p">.</span><span class="nx">json</span>
+</span><span class='line'><span class="nx">file_cache_path</span> <span class="s2">&quot;/tmp/chef&quot;</span>
+</span><span class='line'><span class="nx">cookbook_path</span> <span class="p">[</span><span class="nx">File</span><span class="p">.</span><span class="nx">expand_path</span><span class="p">(</span><span class="s1">&#39;../cookbooks&#39;</span><span class="p">,</span> <span class="nx">__FILE__</span><span class="p">),</span> <span class="nx">File</span><span class="p">.</span><span class="nx">expand_path</span><span class="p">(</span><span class="s1">&#39;../cookbooks_local&#39;</span><span class="p">,</span> <span class="nx">__FILE__</span><span class="p">)]</span>
+</span><span class='line'><span class="nx">role_path</span> <span class="s2">&quot;#{File.expand_path(&#39;../roles&#39;, __FILE__)}&quot;</span>
+</span><span class='line'><span class="nx">log_level</span> <span class="o">:</span><span class="nx">info</span>
+</span><span class='line'><span class="nx">log_location</span> <span class="nx">STDOUT</span>
+</span><span class='line'><span class="nx">ssl_verify_mode</span> <span class="o">:</span><span class="nx">verify_none</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice the <code>cookbook_path</code> which is provided with an Array containing both the <code>cookbooks</code> and the <code>cookbooks_local</code> directories.</p>
+
+<h3>Time to run</h3>
+
+<p>Assuming you have Chef-Solo installed on the machine you want to run the operations on, you should be good with running:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">cd</span> <span class="o">&lt;</span><span class="nx">your</span><span class="o">-</span><span class="nx">project</span><span class="o">&gt;</span>
+</span><span class='line'><span class="nx">cd</span> <span class="nx">machines</span>
+</span><span class='line'><span class="p">[</span><span class="nx">sudo</span><span class="p">]</span> <span class="nx">chef</span><span class="o">-</span><span class="nx">solo</span> <span class="o">-</span><span class="nx">c</span> <span class="p">.</span><span class="o">/</span><span class="nx">solo</span><span class="p">.</span><span class="nx">rb</span> <span class="o">-</span><span class="nx">j</span> <span class="p">.</span><span class="o">/</span><span class="nx">operations</span><span class="o">/&lt;</span><span class="nx">operation</span><span class="o">&gt;</span><span class="p">.</span><span class="nx">json</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Be sure to have installed the cookbooks before however (see the Librarian paragraph if you don&#8217;t now what to do).</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Debugging TabBarKit, a barebones kit for custom tab bar on iOS]]></title>

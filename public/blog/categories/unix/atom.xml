@@ -4,7 +4,7 @@
   <title><![CDATA[Category: unix | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/unix/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-05-10T13:29:07+02:00</updated>
+  <updated>2012-05-19T11:59:07+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,240 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Organization for provisioning your environments (from dev to prod) with Chef]]></title>
+    <link href="http://www.softr.li/blog/2012/05/19/organization-for-provisioning-your-environments-from-dev-to-prod-with-chef/"/>
+    <updated>2012-05-19T11:56:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/05/19/organization-for-provisioning-your-environments-from-dev-to-prod-with-chef</id>
+    <content type="html"><![CDATA[<p>When you start developping a project with a team, you may start facing issues requiring you to share the same development environment. I just discovered <a href="www.vagrantup.com">Vagrant</a> and it's the perfect solution for doing this.</p>
+
+<p>Vagrant is nice, but it stills requires you to provision your machine with the needed language stacks, services, etc. This is why it's provided with a way to hook into Chef or Puppet.</p>
+
+<p><em>I'll go with Chef because I had already given it a try sometime ago, and config files are written in Ruby, which I know.</em></p>
+
+<p>Since you're going to build recipes and/or cookbooks <strong>to provision your development machine, what about going a little further and using Chef to provision your staging/production machines too?</strong></p>
+
+<!-- more -->
+
+
+<p>There will be differences between your development and staging/production setups. However, you will have to install the same databases, maybe some background processors and some other services, so most of the provisioning that you will prepare for your development machine can be reused to provision your staging/production machines too.</p>
+
+<h3>Purpose</h3>
+
+<p>The purpose of this tutorial <strong>is not to be a complete walkthrough</strong> for doing this, since this would involve explaining how to build Chef recipes/cookbooks, running Chef-Solo, etc. It only intends to let you imagine what you could do to ease your provisioning process, knowing the tools exist and they can be used like this. Plus I propose a simple organization for your configuration files that may help you with it.</p>
+
+<h3>Tools</h3>
+
+<h4>Chef</h4>
+
+<p>Chef is a configuration manager which will read a recipe and use cookbooks to perform operations on a given machine (or node).</p>
+
+<p>It has several architectures:</p>
+
+<ul>
+<li><strong>Chef Client/Server</strong>: the node performing the operations is the Chef Client and the operations to be performed are determined thanks to a Chef Server. This solution provides some advantages because the server can remember some information on the state of each node. Opscode provides an <a href="http://www.opscode.com/hosted-chef/">Hosted Chef Server</a> for free up to 5 nodes.</li>
+<li><strong>Chef Solo</strong>: the node performing the operations is running Chef Solo and the operations to be performed are defined by local files (or a <code>tgz</code> which can be downloaded from somewhere). It's the fast way, and should be sufficient for provisioning your development machines and a few staging/production machines.</li>
+</ul>
+
+
+<p>For the installation of any of the two solutions, please refer to <a href="http://www.opscode.com/chef/">Opscode's documentation</a>. For your Vagrant machines, no installation needed, everything is already <a href="http://vagrantup.com/docs/getting-started/provisioning.html">hooked in</a>.</p>
+
+<h4>Puppet</h4>
+
+<p>An alternative for Chef is Puppet, which can be hooked into Vagrant too. I won't detail it since I never tried it...</p>
+
+<h4>Librarian</h4>
+
+<p><a href="https://github.com/applicationsonline/librarian">Librarian</a> is a useful tool which will help you bundle your cookbooks.</p>
+
+<p>To build your recipe and provisioning configuration, you will rely on cookbooks, most of them defined and shared by the community. You will find many on Github, the main repositories being provided by <a href="https://github.com/opscode-cookbooks/">Opscode</a>.</p>
+
+<p>With Librarian you build a <code>Cheffile</code> and the principle is almost the same as Bundler for gems: you list the required cookbooks, you can specify their location and the version you want to use, and Librarian will gather them for you, ensuring the correct version of the cookbook is fetched, so that you won't get a broken version if it gets updated.</p>
+
+<p>Once you've created the <code>Cheffile</code>, it's almost as simple as:</p>
+
+<p><code>
+gem install librarian
+librarian-chef install
+</code></p>
+
+<h3>Organization</h3>
+
+<p>How to organize all this for the provisioning of machines related to your project? Here's my approach, starting with the files-tree:</p>
+
+<p>```
++ project
+  + machines</p>
+
+<pre><code>+ cookbooks
+  ...
+  &lt;the cookbooks directories generated by Librarian&gt;
+  ...
++ cookbooks_local
+  + project
+    + recipes
+      - default.rb
+      - development.rb
+      - staging.rb
+      - production.rb
+    - metadata.json
++ operations
+  - provision_development.json
+  - provision_staging.json
+  - provision_production.json
++ roles
+  - base.json
+  - databases.json
+  - maintenance.json
+  - ruby.json
+- Cheffile
+- Cheffile.lock
+- solo.rb
+</code></pre>
+
+<p>```</p>
+
+<h4><code>cookbooks</code></h4>
+
+<p>This is the directory of cookbooks generated by Librarian according to the content of your <code>Cheffile</code>.</p>
+
+<p>Please notice the <code>Cheffile.lock</code> file which will keep the references to the cookbooks versions you have actually installed. This allows you to restore the <code>cookbooks</code> directory with the same versions of the cookbooks even if you did not specified particular versions of the cookbooks. This way, you don't need to commit your <code>cookbooks</code> directory with your versioning system.</p>
+
+<h4><code>cookbooks_local</code></h4>
+
+<p>This directory contains the cookbooks you maintain yourself and that you will use to setup your own environments.</p>
+
+<p>Inside, I have a <code>project</code> cookbook containing recipes for any of the different environments I have to setup: development, staging, production.</p>
+
+<p>The best way to build this cookbook is to look at others, and customize as needed. I have a <code>metadata.json</code> which describes the cookbook. I'm not sure it's required, but I think it's better to have it.</p>
+
+<h4><code>operations</code></h4>
+
+<p>When you want Chef to perform operations on a node, you provide it with a <em>run list</em> and some <em>attributes</em>. For Chef Client/Server, this is defined on the server. For Chef Solo, you generally provide the <code>chef-solo</code> command with a JSON file (often named <code>dna.json</code>).</p>
+
+<p>Here instead of one <code>dna.json</code> file, I keep several files allowing me to run different sets of operations. For example here is the content of my <code>provision_development.json</code> file:</p>
+
+<p>```javascript
+{
+  "run_list": [</p>
+
+<pre><code>"role[base]",
+"role[ruby]",
+"role[databases]",
+"recipe[project::development]"
+</code></pre>
+
+<p>  ],</p>
+
+<p>  "ruby_stack": {</p>
+
+<pre><code>"rubies": ["1.9.2-p290"],
+"global": "1.9.2-p290",
+"users": "vagrant"
+</code></pre>
+
+<p>  },</p>
+
+<p>  "postgresql": {</p>
+
+<pre><code>"password": {
+  "postgres": "password"
+}
+</code></pre>
+
+<p>  }
+}
+<code>``
+This file provides Chef-Solo with a run list, which will run several roles (defined in the different JSON files under</code>roles` and described in the next paragraph), recipes, and define the attributes that may be required by the different recipes.</p>
+
+<p>Why several configuration files? Because for my production environment, I will want to run another role: <code>role[maintenance]</code>  which will provision a set of tools to help me with maintenance tasks, and use another recipe for the project's specific provisioning: <code>recipe[project::production]</code>.</p>
+
+<h4><code>roles</code></h4>
+
+<p>The roles are a simple concept allowing you to bundle a set of recipes together.</p>
+
+<p>Here is our <code>base.json</code> role file:</p>
+
+<p>```
+{
+  "name": "base",
+  "description": "Base role applied to all nodes.",
+  "chef_type": "role",
+  "json_class": "Chef::Role",</p>
+
+<p>  "run_list": [</p>
+
+<pre><code>"recipe[apt]",
+"recipe[build-essential]",
+"recipe[git]"
+</code></pre>
+
+<p>  ]
+}
+```</p>
+
+<p>As you can see, it allows us to group several recipes depending on the role of the machine:</p>
+
+<ul>
+<li><code>base</code> will be provisioned on all nodes,</li>
+<li><code>ruby</code> will be provisioned for nodes requiring it,</li>
+<li><code>databases</code> will be provisioned for nodes acting as databases servers,</li>
+<li>etc.</li>
+</ul>
+
+
+<h4>Cheffile</h4>
+
+<p>That's the file used by Librarian to get the required cookbooks. It takes this form:</p>
+
+<p>```
+site "http://community.opscode.com/api/v1"</p>
+
+<p>cookbook "apt"
+cookbook 'build-essential'
+cookbook 'git'
+...
+cookbook 'ruby_build',
+  :git => 'https://github.com/fnichol/chef-ruby_build.git',
+  :ref => 'v0.6.2'</p>
+
+<p>```</p>
+
+<p>The first line starting with <code>site</code> allows you to get the cookbooks from Opscode community easily. You can also specify a location (git, local), for the cookbooks not available on this community. Just check <a href="https://github.com/applicationsonline/librarian">Librarian's documentation</a>.</p>
+
+<h4><code>solo.rb</code></h4>
+
+<p>That's the configuration file we use to run Chef-Solo. Here is the content for this configuration:</p>
+
+<p>```</p>
+
+<h1>chef-solo -c ./solo.rb -j ./operations/operation.json</h1>
+
+<p>file_cache_path "/tmp/chef"
+cookbook_path [File.expand_path('../cookbooks', <strong>FILE</strong>), File.expand_path('../cookbooks_local', <strong>FILE</strong>)]
+role_path "#{File.expand_path('../roles', <strong>FILE</strong>)}"
+log_level :info
+log_location STDOUT
+ssl_verify_mode :verify_none</p>
+
+<p>```</p>
+
+<p>Notice the <code>cookbook_path</code> which is provided with an Array containing both the <code>cookbooks</code> and the <code>cookbooks_local</code> directories.</p>
+
+<h3>Time to run</h3>
+
+<p>Assuming you have Chef-Solo installed on the machine you want to run the operations on, you should be good with running:</p>
+
+<p><code>
+cd &lt;your-project&gt;
+cd machines
+[sudo] chef-solo -c ./solo.rb -j ./operations/&lt;operation&gt;.json
+</code></p>
+
+<p>Be sure to have installed the cookbooks before however (see the Librarian paragraph if you don't now what to do).</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Setting up log rotation for your web apps]]></title>
@@ -71,6 +305,110 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
 <p>If you got through all this useless blabber about bad guys chatting and cowboys, you'll be happy to know that some serious<del>ly boring</del> (no no, just kidding, I don't even know him) guy has written a far more efficient tutorial on the subject, and you can find it <a href="http://www.nullislove.com/2007/09/10/rotating-rails-log-files/">here</a>.</p>
 
 <p>This guide will help you understand how <code>logrotate</code> works and the purpose of each line in the code above.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Moving from RVM to rbenv]]></title>
+    <link href="http://www.softr.li/blog/2012/04/10/moving-from-rvm-to-rbenv/"/>
+    <updated>2012-04-10T09:56:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/04/10/moving-from-rvm-to-rbenv</id>
+    <content type="html"><![CDATA[<ul>
+<li>Using <strong>rvm</strong> to manage your gemset without really knowing why since now Bundler does it very cleverly?</li>
+<li>Feeling that the whole rvm system is a bit complicated?</li>
+<li>Tired of having shell scripts not finding your rvm-managed gems?</li>
+</ul>
+
+
+<p>It looks like your ready to consider <strong>rbenv</strong>, which is a really lightweight alternative to <strong>rvm</strong>. Lightweight because it <em>just</em> manages rubies, and lets Bundler manage the gems.</p>
+
+<!-- more -->
+
+
+<h2>Why?</h2>
+
+<p><strong>RVM</strong> is a very useful tool that helps you manage your ruby environment when you need multiple rubies and have tons of gems different for each of your projects.</p>
+
+<p>I used <strong>RVM</strong> a long time on my development machine, however I did not bother to keep it on my production environment. Launching ruby applications through other ruby tools (e.g. God) or <code>crontab</code> was causing me headaches (loading RVM path, bundle not found, etc.). Since the gems were not managed by RVM, thanks to the excellent <a href="http://gembundler.com/">Bundler</a>, it was a lot of pain for a poor service.</p>
+
+<p>On the other hand, <strong>rbenv</strong> is really simple and powerful, but it only manages rubies, not gems. But again, we have <strong>Bundler</strong>, so it's all that we need.</p>
+
+<p>I will not say that using <strong>rbenv</strong> on a production server is painless, you still have to do some work to load some rbenv-things in your environment, but it's a lot more clear and easy than with <strong>RVM</strong>...</p>
+
+<h2>Uninstall RVM</h2>
+
+<p>Start with the RVM auto-uninstall command:</p>
+
+<pre><code>rvm implode
+</code></pre>
+
+<p>Check your filesystem for other <code>rvm</code> files which may remain: <code>.rvmrc</code> files, maybe <code>/etc/rvmrc</code>. Use <code>find / -name 'rvm' -print</code> or <code>locate rvm</code> for example.</p>
+
+<h2>Install rbenv with ruby-build plugin</h2>
+
+<p>Install <strong>rbenv</strong> by following <a href="https://github.com/sstephenson/rbenv#section_2.1">the project's installation tutorial using GitHub checkout</a>. <strong>Read the following before doing the install!</strong></p>
+
+<p>Be sure to adjust the file to which you append your environments changes (steps 2 and 3) to the one your using on your system (<code>.bash_profile</code> in the tutorial, <code>.profile</code> on my Mac system, but you may have <code>.bashrc</code> too).</p>
+
+<p><strong>Stop at the end of step 3</strong>, <strong>restart your term</strong> (close and reopen, sure to work while step 4 <code>exec $SHELL</code> did nothing for me) and do the following to have a simple way of installing rubies:</p>
+
+<pre><code>$ mkdir -p ~/.rbenv/plugins
+$ cd ~/.rbenv/plugins
+$ git clone git://github.com/sstephenson/ruby-build.git
+</code></pre>
+
+<p>If you've done this after step 4, you can just use this command to install the ruby you need, e.g. <code>1.9.2-p290</code>:</p>
+
+<pre><code>rbenv install 1.9.2-p290
+</code></pre>
+
+<p>Don't forget to do step 6, <code>rbenv rehash</code>.</p>
+
+<h2>Define rbenv's default ruby</h2>
+
+<p>Create the <code>~/.rbenv/default</code> file with the following content, adjusted to your desired ruby:</p>
+
+<pre><code>ruby-1.9.2-p290
+</code></pre>
+
+<h2>Configure Bundler to manage gemsets</h2>
+
+<p>As a replacement to <strong>RVM</strong>'s gemsets feature, we will use <strong>Bundler</strong>. We will thus ask it to systematically install the gems inside the project's <code>vendor/bundle</code> directory, instead of using the system's default path.</p>
+
+<p>To do this, create the <code>~/.bundle/config</code> file and add this content:</p>
+
+<pre><code>---
+   BUNDLE_PATH: vendor/bundle
+</code></pre>
+
+<p>You can check the configuration is OK by <code>cd</code>-ing into one of your projects' directory (assuming it's using <strong>Bundle</strong> and so you have a <strong>Gemfile</strong>), and running <code>bundle config</code>. If the configuration is OK, you should have this showed:</p>
+
+<pre><code>path
+  Set for the current user (/Users/&lt;your_name&gt;/.bundle/config): "vendor/bundle"
+</code></pre>
+
+<h2>Using (and aliasing) bundle exec</h2>
+
+<p>Using Bundler to manage your gemsets will now require you to use <code>bundle exec</code> for <strong>every</strong> ruby command you run, even <code>rails server</code> or <code>rails console</code> (they don't need <code>bundle exec</code> to load Bundle, however you need Bundler to find them!).</p>
+
+<p>A nice thing to do is to alias the <code>bundle exec</code> command to something shorter. I use <code>be</code>. Add this to your <code>~/.bash_profile</code>, <code>~/.profile</code> or whatever file you use:</p>
+
+<pre><code>alias be='bundle exec'
+</code></pre>
+
+<p>So now you can run: <code>be rails console</code> instead of <code>bundle exec rails console</code>.</p>
+
+<h2>The end</h2>
+
+<p>That's it, you're done!</p>
+
+<h2>References / credits</h2>
+
+<p>This walkthrough is based on <a href="http://snippets.aktagon.com/snippets/532-How-to-migrate-from-rvm-to-rbenv">this article</a> I used a lot myself, but I finally rewrote it to include some more details on the <strong>rbenv</strong> installation process.</p>
+
+<h2>Hubticle tags</h2>
+
+<p>ruby, RVM, rbenv, gem, gemset, development, environment, bundle</p>
 ]]></content>
   </entry>
   

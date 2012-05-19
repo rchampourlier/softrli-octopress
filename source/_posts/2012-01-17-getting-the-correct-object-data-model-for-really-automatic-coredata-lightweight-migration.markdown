@@ -3,7 +3,7 @@ layout: post
 title: "Getting the correct object data model for really automatic CoreData lightweight migrations"
 date: 2012-01-17 09:31
 comments: true
-categories: [ios, objective-c, coredata, migration]
+categories: [development, ios]
 
 ---
 If you're using CoreData for your iOS application, you may have the need sometimes **to update your data model**. If your application is already live (e.g. shipped on the AppStore), you will have to **migrate your existing data when updating the model**.

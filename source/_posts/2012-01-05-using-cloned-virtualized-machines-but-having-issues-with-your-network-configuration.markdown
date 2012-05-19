@@ -3,7 +3,7 @@ layout: post
 title: "Using cloned virtualized machines but having issues with your network configuration?"
 date: 2012-01-05 09:18
 comments: true
-categories: [virtualization, virtual box, issue, solution]
+categories: [notetomyself]
 
 ---
 

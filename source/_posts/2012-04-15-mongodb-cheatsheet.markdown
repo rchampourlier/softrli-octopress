@@ -3,7 +3,7 @@ layout: post
 title: "MongoDB CheatSheet"
 date: 2012-04-15 10:05
 comments: true
-categories: [mongo, mongodb, cheatsheet, commands]
+categories: [development, database, mongodb, cheatsheet]
 
 ---
 Another cheatsheet, for **useful MongoDB commands** to use inside the `mongo` command-line tool.
