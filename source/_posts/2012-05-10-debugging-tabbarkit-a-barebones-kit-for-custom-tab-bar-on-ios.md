@@ -80,11 +80,12 @@ for (TBKTabBarItem *tab in self.items) {
 Update the `setSelected:` method in `TabBarKit/Classes/TBKTabBarItem.m:213-217`:
 
 ```objc 
-else {
-	if ([self.layer.sublayers containsObject:self.selectionLayer]) {
-		[self.selectionLayer removeFromSuperlayer];
+	else {
+		if ([self.layer.sublayers containsObject:self.selectionLayer]) {
+			[self.selectionLayer removeFromSuperlayer];
+		}
+    self.titleLabel.textColor = [UIColor grayColor]; // added line
 	}
-   self.titleLabel.textColor = [UIColor grayColor]; // added line
 }
 ```
 
