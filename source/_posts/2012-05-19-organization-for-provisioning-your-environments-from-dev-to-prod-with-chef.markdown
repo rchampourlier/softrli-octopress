@@ -3,7 +3,7 @@ layout: post
 title: "Organization for provisioning your environments (from dev to prod) with Chef"
 date: 2012-05-19 11:56
 comments: true
-categories: [sysadmin, maintenance, unix]
+categories: [chef, sysadmin, maintenance, unix, vagrant]
 
 ---
 
