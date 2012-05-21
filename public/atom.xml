@@ -4,7 +4,7 @@
   <title><![CDATA[softr.li]]></title>
   <link href="http://www.softr.li/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-05-20T10:00:59+02:00</updated>
+  <updated>2012-05-22T00:49:05+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,75 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Chef recipe to install a PostgreSQL server on a machine configured with en_US locales]]></title>
+    <link href="http://www.softr.li/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/"/>
+    <updated>2012-05-22T00:00:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales</id>
+    <content type="html"><![CDATA[<p>If you have tried to install a PostgreSQL server on a Vagrant box and you&#8217;re not an english-native, you may have faced an UTF8 issue:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE DATABASE db_mydb OWNER my_user ENCODING 'UTF8' TEMPLATE template1;
+</span><span class='line'>createdb: database creation failed: ERROR:  encoding UTF8 does not match locale en_US
+</span><span class='line'>DETAIL:  The chosen LC_CTYPE setting requires encoding LATIN1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is due to your Vagrant base box being configured with <code>en_US</code> locales. When the PostgreSQL server is installed, it is configured according to these locales, and gets an <code>en_US</code> config which is not compatible with <code>UTF8</code> encoding databases.</p>
+
+<!-- more -->
+
+
+<p>Manually, you would change your server&#8217;s locales before running the PostgreSQL installation.</p>
+
+<p>To do this using Chef, this will take you 2 additional steps.</p>
+
+<h3>1. Configure the machine&#8217;s locales permanently</h3>
+
+<p>An approach which worked for me is to add a <code>/etc/profile.d/lang.sh</code> file which will configure your shell with the appropriate locale-related environment variables. Here is the template script:</p>
+
+<figure class='code'><figcaption><span>lang.sh</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">export </span><span class="nv">LANGUAGE</span><span class="o">=</span><span class="s2">&quot;en_US.UTF-8&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">LANG</span><span class="o">=</span><span class="s2">&quot;en_US.UTF-8&quot;</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">LC_ALL</span><span class="o">=</span><span class="s2">&quot;en_US.UTF-8&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once this is done, you need to run some commands on the server to prepare the locale files:</p>
+
+<figure class='code'><figcaption><span>lang.sh</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>locale-gen en_US.UTF-8
+</span><span class='line'>dpkg-reconfigure locales
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&#8217;ve build a small cookbook as part of my <a href="https://github.com/rchampourlier/vagrant-stacks">vagrant-stacks</a> repo, you can find it <a href="https://github.com/rchampourlier/vagrant-stacks/tree/master/cookbooks_local/set_locale">there</a>.</p>
+
+<h3>2. Install the PostgreSQL server with the appropriate environment variables</h3>
+
+<p>After running the locale configuration from your Chef recipe, you may want to continue with the PostgreSQL install. However, even if we&#8217;ve added the <code>lang.sh</code> initialization script, it hadn&#8217;t the chance to be loaded yet. So the required environment variables are not set yet.</p>
+
+<p>To ensure these environment variables get loaded when we run our <code>postgresql::server</code> recipe, we will encapsulate this call in a small recipe:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;LANGUAGE&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;LANG&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;LC_ALL&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;en_US.UTF-8&quot;</span>
+</span><span class='line'><span class="n">include_recipe</span> <span class="s2">&quot;postgresql::server&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can find this mini-recipe <a href="https://github.com/rchampourlier/vagrant-stacks/tree/master/cookbooks_local/postgresql_server_utf8">here</a> again in my vagrant-stacks repo!</p>
+
+<p><strong>That should be all!</strong></p>
+
+<p><em>If I forgot some step or you can&#8217;t manage to get this working, do not hesitate to write a comment. I&#8217;ll do my best to answer!</em></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[vagrant-stacks, a provision-on-demand tool for Vagrant!]]></title>

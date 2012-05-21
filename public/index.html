@@ -9,7 +9,9 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="Vagrant is really an excellent tool for building and using virtual machines for your development environment. It ease the maintenance and allows to &hellip;">
+  <meta name="description" content="If you have tried to install a PostgreSQL server on a Vagrant box and you&#8217;re not an english-native, you may have faced an UTF8 issue: 1
+2
+3 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +78,57 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/">Chef Recipe to Install a PostgreSQL Server on a Machine Configured With en_US Locales</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-22T00:00:00+02:00" pubdate data-updated="true">May 22<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>If you have tried to install a PostgreSQL server on a Vagrant box and you&#8217;re not an english-native, you may have faced an UTF8 issue:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE DATABASE db_mydb OWNER my_user ENCODING 'UTF8' TEMPLATE template1;
+</span><span class='line'>createdb: database creation failed: ERROR:  encoding UTF8 does not match locale en_US
+</span><span class='line'>DETAIL:  The chosen LC_CTYPE setting requires encoding LATIN1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is due to your Vagrant base box being configured with <code>en_US</code> locales. When the PostgreSQL server is installed, it is configured according to these locales, and gets an <code>en_US</code> config which is not compatible with <code>UTF8</code> encoding databases.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -480,47 +533,6 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/14/simple-cheatsheet-for-git-submodules/">Simple Cheatsheet for Git Submodules</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-14T10:01:00+02:00" pubdate data-updated="true">Apr 14<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Just a cheatsheet for <strong>git and submodules</strong>.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/04/14/simple-cheatsheet-for-git-submodules/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -577,6 +589,10 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/">Chef recipe to install a PostgreSQL server on a machine configured with en_US locales</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/05/20/vagrant-stacks-a-provision-on-demand-tool-for-vagrant/">vagrant-stacks, a provision-on-demand tool for Vagrant!</a>
       </li>
     
@@ -590,10 +606,6 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
     
       <li class="post">
         <a href="/blog/2012/04/22/manually-installing-a-gem-from-a-git-repo/">Manually installing a gem from a git repo</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/">Setup automatic clearing of your Rails sessions</a>
       </li>
     
   </ul>
