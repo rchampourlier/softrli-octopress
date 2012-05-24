@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ios | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-05-22T00:49:05+02:00</updated>
+  <updated>2012-05-24T17:27:18+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,23 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Forked TabBarKit]]></title>
+    <link href="http://www.softr.li/blog/2012/05/24/forked-tabbarkit/"/>
+    <updated>2012-05-24T16:52:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/05/24/forked-tabbarkit</id>
+    <content type="html"><![CDATA[<p>I have had to rewrite some parts of TBKTabBarController since I needed to be able to programmatically select a tab. This is normally possible by setting the <code>selectedIndex</code> or the <code>selectedViewController</code> property of the tab bar controller, but this was not working with TabBarKit.</p>
+
+<p>I investigated and detected this behavior was not implemented, so I decided to complete it myself.</p>
+
+<p>Along the way, I discovered there were some issues with the <code>containerView</code> being mixed up with the <code>TBKTabBarController</code>'s view, so I also corrected these bugs.</p>
+
+<p>I've forked the repository and updated it with my corrected code, so have a look to this <a href="https://github.com/rchampourlier/TabBarKit">repo</a> if you need this.</p>
+
+<p>Oh, I also added a <code>TBKTabBarStyleTwiceHeight</code> I use to double the size of the tab bar on iPad, so you get this for free too ;)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Debugging TabBarKit, a barebones kit for custom tab bar on iOS]]></title>

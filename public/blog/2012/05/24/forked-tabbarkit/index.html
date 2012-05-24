@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: ios - softr.li</title>
+  <title>Forked TabBarKit - softr.li</title>
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="Category: ios">
+  <meta name="description" content="I have had to rewrite some parts of TBKTabBarController since I needed to be able to programmatically select a tab. This is normally possible by &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.softr.liblog/categories/ios">
+  <link rel="canonical" href="http://www.softr.li/blog/2012/05/24/forked-tabbarkit">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -75,81 +75,99 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Ios</h1>
+    
+      <h1 class="entry-title">Forked TabBarKit</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-24T16:52:00+02:00" pubdate data-updated="true">May 24<span>th</span>, 2012</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>I have had to rewrite some parts of TBKTabBarController since I needed to be able to programmatically select a tab. This is normally possible by setting the <code>selectedIndex</code> or the <code>selectedViewController</code> property of the tab bar controller, but this was not working with TabBarKit.</p>
 
-  
-  <h2>2012</h2>
+<p>I investigated and detected this behavior was not implemented, so I decided to complete it myself.</p>
 
-<article>
-  
-<h1><a href="/blog/2012/05/24/forked-tabbarkit/">Forked TabBarKit</a></h1>
-<time datetime="2012-05-24T16:52:00+02:00" pubdate><span class='month'>May</span> <span class='day'>24</span> <span class='year'>2012</span></time>
+<p>Along the way, I discovered there were some issues with the <code>containerView</code> being mixed up with the <code>TBKTabBarController</code>&#8217;s view, so I also corrected these bugs.</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/ios/'>ios</a>, <a class='category' href='/blog/categories/opensource/'>opensource</a></span>
-</footer>
+<p>I&#8217;ve forked the repository and updated it with my corrected code, so have a look to this <a href="https://github.com/rchampourlier/TabBarKit">repo</a> if you need this.</p>
 
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/05/10/debugging-tabbarkit-a-barebones-kit-for-custom-tab-bar-on-ios/">Debugging TabBarKit, a barebones kit for custom tab bar on iOS</a></h1>
-<time datetime="2012-05-10T12:36:00+02:00" pubdate><span class='month'>May</span> <span class='day'>10</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/ios/'>ios</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2012/01/17/getting-the-correct-object-data-model-for-really-automatic-coredata-lightweight-migration/">Getting the correct object data model for really automatic CoreData lightweight migrations</a></h1>
-<time datetime="2012-01-17T09:31:00+01:00" pubdate><span class='month'>Jan</span> <span class='day'>17</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/ios/'>ios</a></span>
-</footer>
-
-
-</article>
-
-
-
-  
-  <h2>2011</h2>
-
-<article>
-  
-<h1><a href="/blog/2011/09/14/working-with-custom-table-view-cells-defined-in-nib-files/">Working with custom table view cells defined in NIB files</a></h1>
-<time datetime="2011-09-14T08:59:00+02:00" pubdate><span class='month'>Sep</span> <span class='day'>14</span> <span class='year'>2011</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/ios/'>ios</a></span>
-</footer>
-
-
-</article>
-
+<p>Oh, I also added a <code>TBKTabBarStyleTwiceHeight</code> I use to double the size of the tab bar on iPad, so you get this for free too ;)</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Romain Champourlier</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-24T16:52:00+02:00" pubdate data-updated="true">May 24<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/ios/'>ios</a>, <a class='category' href='/blog/categories/opensource/'>opensource</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/05/24/forked-tabbarkit/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/05/24/forked-tabbarkit/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/" title="Previous Post: Chef recipe to install a PostgreSQL server on a machine configured with en_US locales">&laquo; Chef recipe to install a PostgreSQL server on a machine configured with en_US locales</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -271,7 +289,10 @@
       var disqus_shortname = 'softrli';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.softr.li/blog/2012/05/24/forked-tabbarkit/';
+        var disqus_url = 'http://www.softr.li/blog/2012/05/24/forked-tabbarkit/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

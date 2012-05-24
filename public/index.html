@@ -9,9 +9,7 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="If you have tried to install a PostgreSQL server on a Vagrant box and you&#8217;re not an english-native, you may have faced an UTF8 issue: 1
-2
-3 &hellip;">
+  <meta name="description" content="I have had to rewrite some parts of TBKTabBarController since I needed to be able to programmatically select a tab. This is normally possible by &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +76,50 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/24/forked-tabbarkit/">Forked TabBarKit</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-24T16:52:00+02:00" pubdate data-updated="true">May 24<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have had to rewrite some parts of TBKTabBarController since I needed to be able to programmatically select a tab. This is normally possible by setting the <code>selectedIndex</code> or the <code>selectedViewController</code> property of the tab bar controller, but this was not working with TabBarKit.</p>
+
+<p>I investigated and detected this behavior was not implemented, so I decided to complete it myself.</p>
+
+<p>Along the way, I discovered there were some issues with the <code>containerView</code> being mixed up with the <code>TBKTabBarController</code>&#8217;s view, so I also corrected these bugs.</p>
+
+<p>I&#8217;ve forked the repository and updated it with my corrected code, so have a look to this <a href="https://github.com/rchampourlier/TabBarKit">repo</a> if you need this.</p>
+
+<p>Oh, I also added a <code>TBKTabBarStyleTwiceHeight</code> I use to double the size of the tab bar on iPad, so you get this for free too ;)</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -317,57 +359,6 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/">Setup Automatic Clearing of Your Rails Sessions</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-20T10:12:00+02:00" pubdate data-updated="true">Apr 20<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>With every connection to your application of a new user, bot or whatever, Rails will create a new session object.</p>
-
-<p>If you&#8217;re using <a href="http://api.rubyonrails.org/classes/ActiveRecord/SessionStore.html">ActiveRecord::SessionStore</a> to save your sessions in your database, your database may already be alarmingly growing in size, due to the number of sessions it contains.</p>
-
-<h2>The rake db:sessions:clear task</h2>
-
-<p>If you don&#8217;t mind a lot about your users lossing their session, you can simply use the provided <code>rake db:sessions:clear</code> task. It will simply delete all sessions in the database. Side-effect: all current sessions are deleted, so signed in users get signed out, and you should hope they had nothing under way!</p>
-
-<h2>A more user-friendly solution</h2>
-
-<h2>References</h2>
-
-<ul>
-<li><a href="http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions">http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions</a></li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
       <h1 class="entry-title"><a href="/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/">Setting Up Log Rotation for Your Web Apps</a></h1>
     
     
@@ -589,6 +580,10 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/05/24/forked-tabbarkit/">Forked TabBarKit</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/">Chef recipe to install a PostgreSQL server on a machine configured with en_US locales</a>
       </li>
     
@@ -602,10 +597,6 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
     
       <li class="post">
         <a href="/blog/2012/05/10/debugging-tabbarkit-a-barebones-kit-for-custom-tab-bar-on-ios/">Debugging TabBarKit, a barebones kit for custom tab bar on iOS</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/22/manually-installing-a-gem-from-a-git-repo/">Manually installing a gem from a git repo</a>
       </li>
     
   </ul>
