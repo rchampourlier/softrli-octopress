@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>vagrant-stacks, a provision-on-demand tool for Vagrant! - softr.li</title>
+  <title>AppleScript to automate the setup of your development space - softr.li</title>
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="Vagrant is really an excellent tool for building and using virtual machines for your development environment. It ease the maintenance and allows to &hellip;">
+  <meta name="description" content="Today is Saturday, and like every week-end, I&#8217;m getting a little lazy. Say you&#8217;re working on a Rails project on MacOS X. If you&#8217;re &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.softr.li/blog/2012/05/20/vagrant-stacks-a-provision-on-demand-tool-for-vagrant">
+  <link rel="canonical" href="http://www.softr.li/blog/2012/05/26/applescript-to-automate-the-setup-of-your-development-space">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -79,7 +79,7 @@
   
   <header>
     
-      <h1 class="entry-title">Vagrant-stacks, a Provision-on-demand Tool for Vagrant!</h1>
+      <h1 class="entry-title">AppleScript to Automate the Setup of Your Development Space</h1>
     
     
       <p class="meta">
@@ -95,22 +95,111 @@
   
 
 
-<time datetime="2012-05-20T09:42:00+02:00" pubdate data-updated="true">May 20<span>th</span>, 2012</time>
+<time datetime="2012-05-26T16:34:00+02:00" pubdate data-updated="true">May 26<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><a href="http://www.vagrantup.com">Vagrant</a> is really an excellent tool for building and using virtual machines for your development environment. It <strong>ease the maintenance</strong> and allows to <strong>share the same environment within the whole team</strong>.</p>
+<div class="entry-content"><p>Today is Saturday, and like every week-end, I&#8217;m getting a little lazy.</p>
 
-<p>However, <strong>Vagrant itself only provides you with barebones boxes</strong>.  You still have to work for provisioning the box, <strong>which requires that you build a Chef recipe</strong> (or Puppet, but I&#8217;m using Chef so I will only refer to this one).</p>
+<p>Say you&#8217;re working on a Rails project on MacOS X. If you&#8217;re like me, you like to have a terminal window for your project with several tabs:</p>
 
-<p><strong>Instead of using a packaged box</strong> (e.g. from <a href="[http://vagrantbox.es">vagrantbox.es</a>) which you may <strong>not trust or feal comfortable with</strong>, you can use <a href="https://github.com/rchampourlier/vagrant-stacks">this repo</a> to <strong>build and package your Vagrant box by yourself</strong>. It provides the tools and some configurations which will enable you to build a provisioned box without writing the recipe! The advantage of this approach over packaged boxes is that you can <strong>review how the box is built and provisioned</strong>. You can even refine the configurations and build new ones by forking the repo and submitting pull requests!</p>
+<ul>
+<li>one for typing various commands,</li>
+<li>one with your <code>spork</code> process,</li>
+<li>one with your <code>rails console</code>,</li>
+<li>and one with your <code>rails server</code>.</li>
+</ul>
 
-<p>It already provides a configuration for a <strong>Ruby 1.9.2-p290 stack, managed with rbenv and Bundler, plus a PostgreSQL 8.4 database and MongoDB</strong>.</p>
 
-<p>So feel free to <strong>try and share new configurations</strong>! Enjoy!</p>
+<p>Starting all this little world already involves some keystrokes and typing, even more if you&#8217;re using Vagrant (which <a href="http://www.softr.li/blog/categories/vagrant/">I&#8217;m using for a week</a> and is really awesome).</p>
+
+<p>So why not use the simple tools provided by Apple to have this setup with a single action?</p>
+
+<!-- more -->
+
+
+<h2>The AppleScript</h2>
+
+<p>AppleScript is the scripting solution provided by Apple and it&#8217;s perfect for what we want to do. It&#8217;s quite simple, and it allows you to script the Terminal application.</p>
+
+<p>Here is the script:</p>
+
+<div><script src='https://gist.github.com/2794125.js?file='></script>
+<noscript><pre><code>-- This script enables you to use MacOS X AppleScript to open a terminal
+-- window and several tabs to:
+--   - load a vagrant box with vagrant up
+--   - ssh in the box on each tab
+--   - run specific commands within the vagrant box on different tabs
+--
+-- For example, open 4 tabs, each within the vagrant box, one with spork,
+-- one with a Rails console and the last one with the rails server.
+--
+-- It assumes when you ssh into the vagrant box you automatically cd into
+-- the project's directory (by having a `cd /vagrant` within your
+-- `~/.bashrc` on the box for example).
+--
+-- It also uses a `dev-project` alias on the host which cd in the appropriate
+-- project's directory, but you can just replace it by a `cd ...` command.
+
+using terms from application &quot;Terminal&quot;
+  tell application &quot;Terminal&quot;
+    activate
+    
+    -- open the terminal's window, set its dimensions   
+    set tab1 to do script
+    do script &quot;dev-project&quot; in tab1
+    do script &quot;vagrant up&quot; in tab1
+    repeat
+      delay 0.5
+      if busy of tab1 is false then exit repeat
+    end repeat
+    
+    -- tab 1: ssh in vagrant
+    do script &quot;vagrant ssh&quot; in tab1
+    delay 0.5
+    
+    -- tab 2: ssh in vagrant and run spork
+    tell application &quot;System Events&quot; to keystroke &quot;t&quot; using command down &amp; return
+    set tab2 to tab 2 of currentWindow
+    do script &quot;dev-project&quot; in tab2
+    do script &quot;vagrant ssh&quot; in tab2
+    do script &quot;bundle exec spork&quot; in tab2
+    delay 0.5
+    
+    -- tab 3: ssh in vagrant and run rails console
+    tell application &quot;System Events&quot; to keystroke &quot;t&quot; using command down &amp; return
+    set tab3 to tab 3 of currentWindow
+    do script &quot;dev-project&quot; in tab3
+    do script &quot;vagrant ssh&quot; in tab3
+    do script &quot;bundle exec rails console&quot; in tab3
+    delay 0.5
+    
+    -- tab 4: ssh in vagrant and run spork
+    tell application &quot;System Events&quot; to keystroke &quot;t&quot; using command down &amp; return
+    set tab4 to tab 4 of currentWindow
+    do script &quot;dev-project&quot; in tab4
+    do script &quot;vagrant ssh&quot; in tab4
+    do script &quot;bundle exec rails server&quot; in tab4
+  end tell
+end using terms from</code></pre></noscript></div>
+
+
+<p>It&#8217;s intended for my use, so it relies on some aliases I&#8217;ve defined on my host machine. But it&#8217;s quite simple to read and comes with some comments, so I&#8217;m sure you will have no difficulty to adapt it to your needs.</p>
+
+<h2>Access the script</h2>
+
+<p>You can run this script from a Terminal window by using <code>osascript path/to/the/script.scpt</code>, but I prefer to have it in the script menu.</p>
+
+<p>You can activate the script menu from the script editor&#8217;s preferences. Then just have a look in the menu to open the user&#8217;s scripts directory and put your script file in it.</p>
+
+<hr />
+
+<p><em>If you need any help, just ask!</em></p>
+
+<p><em>If you&#8217;re aware of a better solution to setup a development environment like this, don&#8217;t hesitate to tell me! I&#8217;m pretty sure there are some other ways I don&#8217;t know yet&#8230;</em></p>
 </div>
 
 
@@ -133,12 +222,12 @@
   
 
 
-<time datetime="2012-05-20T09:42:00+02:00" pubdate data-updated="true">May 20<span>th</span>, 2012</time>
+<time datetime="2012-05-26T16:34:00+02:00" pubdate data-updated="true">May 26<span>th</span>, 2012</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/chef/'>chef</a>, <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/maintenance/'>maintenance</a>, <a class='category' href='/blog/categories/opensource/'>opensource</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>, <a class='category' href='/blog/categories/unix/'>unix</a>, <a class='category' href='/blog/categories/vagrant/'>vagrant</a>
+    <a class='category' href='/blog/categories/applescript/'>applescript</a>, <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/mac/'>mac</a>
   
 </span>
 
@@ -147,7 +236,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/05/20/vagrant-stacks-a-provision-on-demand-tool-for-vagrant/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/05/20/vagrant-stacks-a-provision-on-demand-tool-for-vagrant/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/05/26/applescript-to-automate-the-setup-of-your-development-space/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/05/26/applescript-to-automate-the-setup-of-your-development-space/" >Tweet</a>
   
   
   
@@ -156,10 +245,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/05/19/organization-for-provisioning-your-environments-from-dev-to-prod-with-chef/" title="Previous Post: Organization for provisioning your environments (from dev to prod) with Chef">&laquo; Organization for provisioning your environments (from dev to prod) with Chef</a>
+        <a class="basic-alignment left" href="/blog/2012/05/24/forked-tabbarkit/" title="Previous Post: Forked TabBarKit">&laquo; Forked TabBarKit</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/" title="Next Post: Chef recipe to install a PostgreSQL server on a machine configured with en_US locales">Chef recipe to install a PostgreSQL server on a machine configured with en_US locales &raquo;</a>
       
     </p>
   </footer>
@@ -292,8 +379,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.softr.li/blog/2012/05/20/vagrant-stacks-a-provision-on-demand-tool-for-vagrant/';
-        var disqus_url = 'http://www.softr.li/blog/2012/05/20/vagrant-stacks-a-provision-on-demand-tool-for-vagrant/';
+        var disqus_identifier = 'http://www.softr.li/blog/2012/05/26/applescript-to-automate-the-setup-of-your-development-space/';
+        var disqus_url = 'http://www.softr.li/blog/2012/05/26/applescript-to-automate-the-setup-of-your-development-space/';
         var disqus_script = 'embed.js';
       
     (function () {

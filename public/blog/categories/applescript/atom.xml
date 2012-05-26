@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: applescript | softr.li]]></title>
+  <link href="http://www.softr.li/blog/categories/applescript/atom.xml" rel="self"/>
+  <link href="http://www.softr.li/"/>
+  <updated>2012-05-26T16:56:40+02:00</updated>
+  <id>http://www.softr.li/</id>
+  <author>
+    <name><![CDATA[Romain Champourlier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[AppleScript to automate the setup of your development space]]></title>
+    <link href="http://www.softr.li/blog/2012/05/26/applescript-to-automate-the-setup-of-your-development-space/"/>
+    <updated>2012-05-26T16:34:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/05/26/applescript-to-automate-the-setup-of-your-development-space</id>
+    <content type="html"><![CDATA[<p>Today is Saturday, and like every week-end, I'm getting a little lazy.</p>
+
+<p>Say you're working on a Rails project on MacOS X. If you're like me, you like to have a terminal window for your project with several tabs:</p>
+
+<ul>
+<li>one for typing various commands,</li>
+<li>one with your <code>spork</code> process,</li>
+<li>one with your <code>rails console</code>,</li>
+<li>and one with your <code>rails server</code>.</li>
+</ul>
+
+
+<p>Starting all this little world already involves some keystrokes and typing, even more if you're using Vagrant (which <a href="http://www.softr.li/blog/categories/vagrant/">I'm using for a week</a> and is really awesome).</p>
+
+<p>So why not use the simple tools provided by Apple to have this setup with a single action?</p>
+
+<!-- more -->
+
+
+<h2>The AppleScript</h2>
+
+<p>AppleScript is the scripting solution provided by Apple and it's perfect for what we want to do. It's quite simple, and it allows you to script the Terminal application.</p>
+
+<p>Here is the script:</p>
+
+<p><div><script src='https://gist.github.com/2794125.js?file='></script>
+<noscript><pre><code>-- This script enables you to use MacOS X AppleScript to open a terminal
+-- window and several tabs to:
+--   - load a vagrant box with vagrant up
+--   - ssh in the box on each tab
+--   - run specific commands within the vagrant box on different tabs
+--
+-- For example, open 4 tabs, each within the vagrant box, one with spork,
+-- one with a Rails console and the last one with the rails server.
+--
+-- It assumes when you ssh into the vagrant box you automatically cd into
+-- the project's directory (by having a `cd /vagrant` within your
+-- `~/.bashrc` on the box for example).
+--
+-- It also uses a `dev-project` alias on the host which cd in the appropriate
+-- project's directory, but you can just replace it by a `cd ...` command.
+
+using terms from application &quot;Terminal&quot;
+  tell application &quot;Terminal&quot;
+    activate
+    
+    -- open the terminal's window, set its dimensions   
+    set tab1 to do script
+    do script &quot;dev-project&quot; in tab1
+    do script &quot;vagrant up&quot; in tab1
+    repeat
+      delay 0.5
+      if busy of tab1 is false then exit repeat
+    end repeat
+    
+    -- tab 1: ssh in vagrant
+    do script &quot;vagrant ssh&quot; in tab1
+    delay 0.5
+    
+    -- tab 2: ssh in vagrant and run spork
+    tell application &quot;System Events&quot; to keystroke &quot;t&quot; using command down &amp; return
+    set tab2 to tab 2 of currentWindow
+    do script &quot;dev-project&quot; in tab2
+    do script &quot;vagrant ssh&quot; in tab2
+    do script &quot;bundle exec spork&quot; in tab2
+    delay 0.5
+    
+    -- tab 3: ssh in vagrant and run rails console
+    tell application &quot;System Events&quot; to keystroke &quot;t&quot; using command down &amp; return
+    set tab3 to tab 3 of currentWindow
+    do script &quot;dev-project&quot; in tab3
+    do script &quot;vagrant ssh&quot; in tab3
+    do script &quot;bundle exec rails console&quot; in tab3
+    delay 0.5
+    
+    -- tab 4: ssh in vagrant and run spork
+    tell application &quot;System Events&quot; to keystroke &quot;t&quot; using command down &amp; return
+    set tab4 to tab 4 of currentWindow
+    do script &quot;dev-project&quot; in tab4
+    do script &quot;vagrant ssh&quot; in tab4
+    do script &quot;bundle exec rails server&quot; in tab4
+  end tell
+end using terms from</code></pre></noscript></div>
+</p>
+
+<p>It's intended for my use, so it relies on some aliases I've defined on my host machine. But it's quite simple to read and comes with some comments, so I'm sure you will have no difficulty to adapt it to your needs.</p>
+
+<h2>Access the script</h2>
+
+<p>You can run this script from a Terminal window by using <code>osascript path/to/the/script.scpt</code>, but I prefer to have it in the script menu.</p>
+
+<p>You can activate the script menu from the script editor's preferences. Then just have a look in the menu to open the user's scripts directory and put your script file in it.</p>
+
+<hr />
+
+<p><em>If you need any help, just ask!</em></p>
+
+<p><em>If you're aware of a better solution to setup a development environment like this, don't hesitate to tell me! I'm pretty sure there are some other ways I don't know yet...</em></p>
+]]></content>
+  </entry>
+  
+</feed>
