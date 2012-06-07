@@ -9,7 +9,7 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="Today is Saturday, and like every week-end, I&#8217;m getting a little lazy. Say you&#8217;re working on a Rails project on MacOS X. If you&#8217;re &hellip;">
+  <meta name="description" content="Bootstrap is a real gift from Twitter. It provides a good deal of packaged, well-designed and simple to use UI components for any web application. I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,51 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app/">How to Use Bootstrap Within Your Rails 3.1+ App</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-07T12:00:00+02:00" pubdate data-updated="true">Jun 7<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://twitter.github.com/bootstrap">Bootstrap</a> is a real gift from Twitter. It provides a good deal of packaged, well-designed and simple to use UI components for any web application.</p>
+
+<p>I wanted to use it for quite some time, but I hadn&#8217;t found the time nor the project to apply it on. I recently updated an administration web-app for one of my project, and I felt it was the good time.</p>
+
+<p>So here are my first feedbacks and tips on how to integrated Bootstrap with Rails (I&#8217;m on Rails 3.2.5, it&#8217;s the lowest-effort path if you&#8217;re using Formtastic too).</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -414,6 +459,57 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/">Setup Automatic Clearing of Your Rails Sessions</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-20T10:12:00+02:00" pubdate data-updated="true">Apr 20<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>With every connection to your application of a new user, bot or whatever, Rails will create a new session object.</p>
+
+<p>If you&#8217;re using <a href="http://api.rubyonrails.org/classes/ActiveRecord/SessionStore.html">ActiveRecord::SessionStore</a> to save your sessions in your database, your database may already be alarmingly growing in size, due to the number of sessions it contains.</p>
+
+<h2>The rake db:sessions:clear task</h2>
+
+<p>If you don&#8217;t mind a lot about your users lossing their session, you can simply use the provided <code>rake db:sessions:clear</code> task. It will simply delete all sessions in the database. Side-effect: all current sessions are deleted, so signed in users get signed out, and you should hope they had nothing under way!</p>
+
+<h2>A more user-friendly solution</h2>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions">http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/">Setting Up Log Rotation for Your Web Apps</a></h1>
     
     
@@ -450,88 +546,6 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
   
     <footer>
       <a rel="full-article" href="/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/16/linking-local-node-modules-with-npm/">Linking Local Node Modules With Npm</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-16T10:10:00+02:00" pubdate data-updated="true">Apr 16<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>How to link a <strong>node module</strong> to a <strong>local source directory</strong> instead of installing from npm repository.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/04/16/linking-local-node-modules-with-npm/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/15/mongodb-cheatsheet/">MongoDB CheatSheet</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-15T10:05:00+02:00" pubdate data-updated="true">Apr 15<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Another cheatsheet, for <strong>useful MongoDB commands</strong> to use inside the <code>mongo</code> command-line tool.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/04/15/mongodb-cheatsheet/">Read on &rarr;</a>
     </footer>
   
 
@@ -594,6 +608,10 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app/">How to use Bootstrap within your Rails 3.1+ app</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/05/26/applescript-to-automate-the-setup-of-your-development-space/">AppleScript to automate the setup of your development space</a>
       </li>
     
@@ -607,10 +625,6 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
     
       <li class="post">
         <a href="/blog/2012/05/20/vagrant-stacks-a-provision-on-demand-tool-for-vagrant/">vagrant-stacks, a provision-on-demand tool for Vagrant!</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/05/19/organization-for-provisioning-your-environments-from-dev-to-prod-with-chef/">Organization for provisioning your environments (from dev to prod) with Chef</a>
       </li>
     
   </ul>

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: mongodb - softr.li</title>
+  <title>Setup automatic clearing of your Rails sessions - softr.li</title>
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="Category: mongodb">
+  <meta name="description" content="With every connection to your application of a new user, bot or whatever, Rails will create a new session object. If you&#8217;re using ActiveRecord &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.softr.liblog/categories/mongodb">
+  <link rel="canonical" href="http://www.softr.li/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -75,36 +75,108 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Mongodb</h1>
+    
+      <h1 class="entry-title">Setup Automatic Clearing of Your Rails Sessions</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-20T10:12:00+02:00" pubdate data-updated="true">Apr 20<span>th</span>, 2012</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>With every connection to your application of a new user, bot or whatever, Rails will create a new session object.</p>
 
-  
-  <h2>2012</h2>
+<p>If you&#8217;re using <a href="http://api.rubyonrails.org/classes/ActiveRecord/SessionStore.html">ActiveRecord::SessionStore</a> to save your sessions in your database, your database may already be alarmingly growing in size, due to the number of sessions it contains.</p>
 
-<article>
-  
-<h1><a href="/blog/2012/04/15/mongodb-cheatsheet/">MongoDB CheatSheet</a></h1>
-<time datetime="2012-04-15T10:05:00+02:00" pubdate><span class='month'>Apr</span> <span class='day'>15</span> <span class='year'>2012</span></time>
+<h2>The rake db:sessions:clear task</h2>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/cheatsheet/'>cheatsheet</a>, <a class='category' href='/blog/categories/database/'>database</a>, <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/mongodb/'>mongodb</a></span>
-</footer>
+<p>If you don&#8217;t mind a lot about your users lossing their session, you can simply use the provided <code>rake db:sessions:clear</code> task. It will simply delete all sessions in the database. Side-effect: all current sessions are deleted, so signed in users get signed out, and you should hope they had nothing under way!</p>
 
+<h2>A more user-friendly solution</h2>
 
-</article>
+<h2>References</h2>
+
+<ul>
+<li><a href="http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions">http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions</a></li>
+</ul>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Romain Champourlier</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-20T10:12:00+02:00" pubdate data-updated="true">Apr 20<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/database/'>database</a>, <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/maintenance/'>maintenance</a>, <a class='category' href='/blog/categories/rubyonrails/'>rubyonrails</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/" title="Previous Post: Setting up log rotation for your web apps">&laquo; Setting up log rotation for your web apps</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/04/22/manually-installing-a-gem-from-a-git-repo/" title="Next Post: Manually installing a gem from a git repo">Manually installing a gem from a git repo &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -226,7 +298,10 @@
       var disqus_shortname = 'softrli';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.softr.li/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/';
+        var disqus_url = 'http://www.softr.li/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

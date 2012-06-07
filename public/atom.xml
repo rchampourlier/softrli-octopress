@@ -4,7 +4,7 @@
   <title><![CDATA[softr.li]]></title>
   <link href="http://www.softr.li/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-05-26T16:56:40+02:00</updated>
+  <updated>2012-06-07T12:17:20+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,100 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to use Bootstrap within your Rails 3.1+ app]]></title>
+    <link href="http://www.softr.li/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app/"/>
+    <updated>2012-06-07T12:00:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app</id>
+    <content type="html"><![CDATA[<p><a href="http://twitter.github.com/bootstrap">Bootstrap</a> is a real gift from Twitter. It provides a good deal of packaged, well-designed and simple to use UI components for any web application.</p>
+
+<p>I wanted to use it for quite some time, but I hadn&#8217;t found the time nor the project to apply it on. I recently updated an administration web-app for one of my project, and I felt it was the good time.</p>
+
+<p>So here are my first feedbacks and tips on how to integrated Bootstrap with Rails (I&#8217;m on Rails 3.2.5, it&#8217;s the lowest-effort path if you&#8217;re using Formtastic too).</p>
+
+<!-- more -->
+
+
+<h3>First, where do I put the files?</h3>
+
+<p>Say you want to use <a href="http://twitter.github.com/bootstrap">Twitter Bootstrap</a> within your Rails 3.1+ (ie. asset pipeline featured) application.</p>
+
+<p>After some tests I couldn&#8217;t find a simple way to <strong>keep the whole bootstrap directory packaged and get it accessed correctly by the asset pipeline</strong>. So the best way I found yet is to <strong>explode it into the appropriate directories</strong>:</p>
+
+<ul>
+<li>CSS files goes into <code>vendor/assets/stylesheets</code></li>
+<li>JS files goes into <code>vendor/assets/javascripts</code></li>
+<li>image files goes into <code>vendor/assets/images</code></li>
+</ul>
+
+
+<p>So this way I can simply require Bootstrap CSS through this <code>application.css</code> file:</p>
+
+<figure class='code'><figcaption><span>app/assets/application.css</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="c">/*</span>
+</span><span class='line'><span class="c"> * This is a manifest file that&#39;ll automatically include all the stylesheets available in this directory</span>
+</span><span class='line'><span class="c"> * and any sub-directories. You&#39;re free to add application-wide styles to this file and they&#39;ll appear at</span>
+</span><span class='line'><span class="c"> * the top of the compiled file, but it&#39;s generally better to create a new file per style scope.</span>
+</span><span class='line'><span class="c"> *= require_self</span>
+</span><span class='line'><span class="c"> *= require_tree . </span>
+</span><span class='line'><span class="c"> *= require bootstrap</span>
+</span><span class='line'><span class="c">*/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If this does not work, be sure to <strong>restart your development server</strong> as changing location of assets may not be taken into account until restart&#8230;</p>
+
+<h3>This breaks my tasty forms!</h3>
+
+<p>Are you using <a href="https://github.com/justinfrench/formtastic">Formtastic</a>? I am, this is one of the things I like to have with every Rails project. However, Formtastic and Bootstrap do not naturally go together well.</p>
+
+<p>To make them love each other, we have to add a gem which will tweak the way Formtastic builds the forms to make them Bootstrap-proof. This is the intent of <a href="https://github.com/rchampourlier/formtastic-bootstrap">formtastic-bootstrap</a>.</p>
+
+<p>You can add this to your Gemfile, that should be all:</p>
+
+<figure class='code'><figcaption><span>app/assets/application.css</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nt">gem</span> <span class="s1">&#39;formtastic-bootstrap&#39;</span><span class="o">,</span> <span class="nd">:git</span> <span class="o">=&gt;</span> <span class="s1">&#39;https://github.com/rchampourlier/formtastic-bootstrap.git&#39;</span><span class="o">,</span> <span class="nd">:branch</span> <span class="o">=&gt;</span> <span class="s1">&#39;bootstrap2-rails3-2-formtastic-2-2-1&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>This assumes your on Rails 3.2 and Formtastic 2.2.1, as the branch name indicates.</em></p>
+
+<p>I&#8217;ve sent you to my own fork which is forking an already long chain of forks. The <a href="https://github.com/mjbellantoni/formtastic-bootstrap">original repo</a> seems not to be maintained anymore. My fork provides a <code>bootstrap2-rails3-2-formtastic-2-2-1</code> branch which should work for Rails 3.2 and the current version of Formtastic, the 2.2.1 (some changes were to be taken into account from 2.2.0).</p>
+
+<p><em>My fork does not take all 2.2.1 changes into account. You may have issues with <code>time_select</code> inputs&#8230;</em></p>
+
+<h3>My flash messages aren&#8217;t that nice!</h3>
+
+<p>To style your Rails&#8217; flash messages using the nice Bootstrap&#8217;s alert style, you can have a look to this <a href="https://gist.github.com/2887844">gist</a>:</p>
+
+<div><script src='https://gist.github.com/2887844.js?file='></script>
+<noscript><pre><code>- if flash
+  - flash.each do |level, message|
+    %div{:class =&gt; &quot;alert #{flash_level(level)}&quot;}
+      %button.close{:&quot;data-dismiss&quot; =&gt; 'alert'}= &quot;×&quot;
+      = message</code></pre></noscript></div>
+
+
+<p>Just replace your current way of displaying the flashes in your template with this, and you&#8217;re done!</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">=</span> <span class="n">render</span> <span class="ss">:partial</span> <span class="o">=&gt;</span> <span class="s1">&#39;layouts/flash&#39;</span><span class="p">,</span> <span class="ss">:locals</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:flash</span> <span class="o">=&gt;</span> <span class="n">flash</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p><em>I hope this helps, do not hesitate if you see mistakes or some parts which require additional details!</em></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[AppleScript to automate the setup of your development space]]></title>
@@ -653,6 +747,30 @@ end using terms from</code></pre></noscript></div>
 </span><span class='line'>cd gem_name
 </span><span class='line'>gem build gem_name.gemspec
 </span><span class='line'>gem install ./&lt;the gem that was compiled&gt;</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Setup automatic clearing of your Rails sessions]]></title>
+    <link href="http://www.softr.li/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/"/>
+    <updated>2012-04-20T10:12:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions</id>
+    <content type="html"><![CDATA[<p>With every connection to your application of a new user, bot or whatever, Rails will create a new session object.</p>
+
+<p>If you&#8217;re using <a href="http://api.rubyonrails.org/classes/ActiveRecord/SessionStore.html">ActiveRecord::SessionStore</a> to save your sessions in your database, your database may already be alarmingly growing in size, due to the number of sessions it contains.</p>
+
+<h2>The rake db:sessions:clear task</h2>
+
+<p>If you don&#8217;t mind a lot about your users lossing their session, you can simply use the provided <code>rake db:sessions:clear</code> task. It will simply delete all sessions in the database. Side-effect: all current sessions are deleted, so signed in users get signed out, and you should hope they had nothing under way!</p>
+
+<h2>A more user-friendly solution</h2>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions">http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions</a></li>
+</ul>
 
 ]]></content>
   </entry>

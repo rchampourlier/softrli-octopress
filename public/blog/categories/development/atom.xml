@@ -4,7 +4,7 @@
   <title><![CDATA[Category: development | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/development/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-05-26T16:56:40+02:00</updated>
+  <updated>2012-06-07T12:17:20+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,89 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to use Bootstrap within your Rails 3.1+ app]]></title>
+    <link href="http://www.softr.li/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app/"/>
+    <updated>2012-06-07T12:00:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app</id>
+    <content type="html"><![CDATA[<p><a href="http://twitter.github.com/bootstrap">Bootstrap</a> is a real gift from Twitter. It provides a good deal of packaged, well-designed and simple to use UI components for any web application.</p>
+
+<p>I wanted to use it for quite some time, but I hadn't found the time nor the project to apply it on. I recently updated an administration web-app for one of my project, and I felt it was the good time.</p>
+
+<p>So here are my first feedbacks and tips on how to integrated Bootstrap with Rails (I'm on Rails 3.2.5, it's the lowest-effort path if you're using Formtastic too).</p>
+
+<!-- more -->
+
+
+<h3>First, where do I put the files?</h3>
+
+<p>Say you want to use <a href="http://twitter.github.com/bootstrap">Twitter Bootstrap</a> within your Rails 3.1+ (ie. asset pipeline featured) application.</p>
+
+<p>After some tests I couldn't find a simple way to <strong>keep the whole bootstrap directory packaged and get it accessed correctly by the asset pipeline</strong>. So the best way I found yet is to <strong>explode it into the appropriate directories</strong>:</p>
+
+<ul>
+<li>CSS files goes into <code>vendor/assets/stylesheets</code></li>
+<li>JS files goes into <code>vendor/assets/javascripts</code></li>
+<li>image files goes into <code>vendor/assets/images</code></li>
+</ul>
+
+
+<p>So this way I can simply require Bootstrap CSS through this <code>application.css</code> file:</p>
+
+<p><code>css app/assets/application.css
+/*
+ * This is a manifest file that'll automatically include all the stylesheets available in this directory
+ * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
+ * the top of the compiled file, but it's generally better to create a new file per style scope.
+ *= require_self
+ *= require_tree .
+ *= require bootstrap
+*/
+</code></p>
+
+<p>If this does not work, be sure to <strong>restart your development server</strong> as changing location of assets may not be taken into account until restart...</p>
+
+<h3>This breaks my tasty forms!</h3>
+
+<p>Are you using <a href="https://github.com/justinfrench/formtastic">Formtastic</a>? I am, this is one of the things I like to have with every Rails project. However, Formtastic and Bootstrap do not naturally go together well.</p>
+
+<p>To make them love each other, we have to add a gem which will tweak the way Formtastic builds the forms to make them Bootstrap-proof. This is the intent of <a href="https://github.com/rchampourlier/formtastic-bootstrap">formtastic-bootstrap</a>.</p>
+
+<p>You can add this to your Gemfile, that should be all:</p>
+
+<p><code>
+gem 'formtastic-bootstrap', :git =&gt; 'https://github.com/rchampourlier/formtastic-bootstrap.git', :branch =&gt; 'bootstrap2-rails3-2-formtastic-2-2-1'
+</code>
+<em>This assumes your on Rails 3.2 and Formtastic 2.2.1, as the branch name indicates.</em></p>
+
+<p>I've sent you to my own fork which is forking an already long chain of forks. The <a href="https://github.com/mjbellantoni/formtastic-bootstrap">original repo</a> seems not to be maintained anymore. My fork provides a <code>bootstrap2-rails3-2-formtastic-2-2-1</code> branch which should work for Rails 3.2 and the current version of Formtastic, the 2.2.1 (some changes were to be taken into account from 2.2.0).</p>
+
+<p><em>My fork does not take all 2.2.1 changes into account. You may have issues with <code>time_select</code> inputs...</em></p>
+
+<h3>My flash messages aren't that nice!</h3>
+
+<p>To style your Rails' flash messages using the nice Bootstrap's alert style, you can have a look to this <a href="https://gist.github.com/2887844">gist</a>:</p>
+
+<p><div><script src='https://gist.github.com/2887844.js?file='></script>
+<noscript><pre><code>- if flash
+  - flash.each do |level, message|
+    %div{:class =&gt; &quot;alert #{flash_level(level)}&quot;}
+      %button.close{:&quot;data-dismiss&quot; =&gt; 'alert'}= &quot;×&quot;
+      = message</code></pre></noscript></div>
+</p>
+
+<p>Just replace your current way of displaying the flashes in your template with this, and you're done!</p>
+
+<p><code>ruby
+= render :partial =&gt; 'layouts/flash', :locals =&gt; { :flash =&gt; flash }
+</code></p>
+
+<hr />
+
+<p><em>I hope this helps, do not hesitate if you see mistakes or some parts which require additional details!</em></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[AppleScript to automate the setup of your development space]]></title>
@@ -251,21 +334,6 @@ self.titleLabel.textColor = [UIColor grayColor]; // added line
 ```</p>
 
 <p><strong>Your tab bar should already look great! The rest is customization, and it's up to you! Have fun!</strong></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Manually installing a gem from a git repo]]></title>
-    <link href="http://www.softr.li/blog/2012/04/22/manually-installing-a-gem-from-a-git-repo/"/>
-    <updated>2012-04-22T10:16:00+02:00</updated>
-    <id>http://www.softr.li/blog/2012/04/22/manually-installing-a-gem-from-a-git-repo</id>
-    <content type="html"><![CDATA[<p><code>
-gem uninstall gem_name
-git clone git://github.com/repo_name/gem_name.git
-cd gem_name
-gem build gem_name.gemspec
-gem install ./&lt;the gem that was compiled&gt;
-</code></p>
 ]]></content>
   </entry>
   
