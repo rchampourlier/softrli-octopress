@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: xcode | softr.li]]></title>
+  <link href="http://www.softr.li/blog/categories/xcode/atom.xml" rel="self"/>
+  <link href="http://www.softr.li/"/>
+  <updated>2012-06-11T11:37:13+02:00</updated>
+  <id>http://www.softr.li/</id>
+  <author>
+    <name><![CDATA[Romain Champourlier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[XCode failing when building for archiving because of a missing library link]]></title>
+    <link href="http://www.softr.li/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/"/>
+    <updated>2012-06-11T11:07:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link</id>
+    <content type="html"><![CDATA[<h3>The issue</h3>
+
+<p>You may be using opensource libraries within your iOS project. (<em>If you don't, you should, it's a great time-saver. Check <a href="http://pinterest.com/rchampourlier/best-ios-controls/">here</a> for some starters.</em>)</p>
+
+<p>As you may know, XCode may sometimes become really painful when dealing with the <strong>compilation and linking of external libraries</strong>. It may just work fine when compiling for development, but when you want it compiled for distribution, XCode may just not agree anymore.</p>
+
+<p>I just faced such an issue this morning. This time, I met the <code>ld: library not found for...</code> error:</p>
+
+<p><img src="/images/2012-06-11-screenshot-1.png"></p>
+
+<!-- more -->
+
+
+<p>Googling a little, I found these two StackOverflow answers, but they could not help me. You can give a try, this may still contain the answer to your own issue.</p>
+
+<h3>The solution</h3>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/5584317/compile-build-or-archive-problems-with-xcode-4-and-dependancies">Compile, Build or Archive problems with Xcode 4 (and dependancies)</a></li>
+<li><a href="http://stackoverflow.com/questions/6004919/missing-library-link-error-when-doing-product-build-for-archiving-in-xcode-4">Missing Library link error when doing Product > Build For Archiving in Xcode 4</a></li>
+</ul>
+
+
+<p>I checked where the generated could be, and looking at the logs of the build process, I could find the directory's path: <code>/Users/me/Library/Developer/Xcode/DerivedData/.../</code></p>
+
+<p>Checking the content of this directory, I discovered that my issue was that the library was indeed not build for the <code>Distribution-iphoneos</code> configuration:</p>
+
+<p><img src="/images/2012-06-11-screenshot-2.png"></p>
+
+<p>Correcting the issue was as simple as going to the library's project settings and adding the <code>Distribution</code> configuration:</p>
+
+<p><img src="/images/2012-06-11-screenshot-3.png"></p>
+
+<h3>The conclusion</h3>
+
+<p>Be sure to check that the libraries you include within your XCode project have all the necessary configurations setup!</p>
+]]></content>
+  </entry>
+  
+</feed>

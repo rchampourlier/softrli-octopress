@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: notetomyself - softr.li</title>
+  <title>XCode failing when building for archiving because of a missing library link - softr.li</title>
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="Category: notetomyself">
+  <meta name="description" content="The issue You may be using opensource libraries within your iOS project. (If you don&#8217;t, you should, it&#8217;s a great time-saver. Check here &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.softr.liblog/categories/notetomyself">
+  <link rel="canonical" href="http://www.softr.li/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -75,64 +75,126 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Notetomyself</h1>
+    
+      <h1 class="entry-title">XCode Failing When Building for Archiving Because of a Missing Library Link</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-11T11:07:00+02:00" pubdate data-updated="true">Jun 11<span>th</span>, 2012</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><h3>The issue</h3>
 
-  
-  <h2>2012</h2>
+<p>You may be using opensource libraries within your iOS project. (<em>If you don&#8217;t, you should, it&#8217;s a great time-saver. Check <a href="http://pinterest.com/rchampourlier/best-ios-controls/">here</a> for some starters.</em>)</p>
 
-<article>
-  
-<h1><a href="/blog/2012/04/22/manually-installing-a-gem-from-a-git-repo/">Manually installing a gem from a git repo</a></h1>
-<time datetime="2012-04-22T10:16:00+02:00" pubdate><span class='month'>Apr</span> <span class='day'>22</span> <span class='year'>2012</span></time>
+<p>As you may know, XCode may sometimes become really painful when dealing with the <strong>compilation and linking of external libraries</strong>. It may just work fine when compiling for development, but when you want it compiled for distribution, XCode may just not agree anymore.</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/notetomyself/'>notetomyself</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
+<p>I just faced such an issue this morning. This time, I met the <code>ld: library not found for...</code> error:</p>
 
+<p><img src="/images/2012-06-11-screenshot-1.png"></p>
 
-</article>
+<!-- more -->
 
 
+<p>Googling a little, I found these two StackOverflow answers, but they could not help me. You can give a try, this may still contain the answer to your own issue.</p>
 
-<article>
-  
-<h1><a href="/blog/2012/04/16/linking-local-node-modules-with-npm/">Linking local node modules with npm</a></h1>
-<time datetime="2012-04-16T10:10:00+02:00" pubdate><span class='month'>Apr</span> <span class='day'>16</span> <span class='year'>2012</span></time>
+<h3>The solution</h3>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/nodejs/'>nodejs</a>, <a class='category' href='/blog/categories/notetomyself/'>notetomyself</a></span>
-</footer>
-
-
-</article>
+<ul>
+<li><a href="http://stackoverflow.com/questions/5584317/compile-build-or-archive-problems-with-xcode-4-and-dependancies">Compile, Build or Archive problems with Xcode 4 (and dependancies)</a></li>
+<li><a href="http://stackoverflow.com/questions/6004919/missing-library-link-error-when-doing-product-build-for-archiving-in-xcode-4">Missing Library link error when doing Product > Build For Archiving in Xcode 4</a></li>
+</ul>
 
 
+<p>I checked where the generated could be, and looking at the logs of the build process, I could find the directory&#8217;s path: <code>/Users/me/Library/Developer/Xcode/DerivedData/.../</code></p>
 
-<article>
-  
-<h1><a href="/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration/">Using cloned virtualized machines but having issues with your network configuration?</a></h1>
-<time datetime="2012-01-05T09:18:00+01:00" pubdate><span class='month'>Jan</span> <span class='day'>05</span> <span class='year'>2012</span></time>
+<p>Checking the content of this directory, I discovered that my issue was that the library was indeed not build for the <code>Distribution-iphoneos</code> configuration:</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/notetomyself/'>notetomyself</a></span>
-</footer>
+<p><img src="/images/2012-06-11-screenshot-2.png"></p>
 
+<p>Correcting the issue was as simple as going to the library&#8217;s project settings and adding the <code>Distribution</code> configuration:</p>
 
-</article>
+<p><img src="/images/2012-06-11-screenshot-3.png"></p>
 
+<h3>The conclusion</h3>
+
+<p>Be sure to check that the libraries you include within your XCode project have all the necessary configurations setup!</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Romain Champourlier</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-11T11:07:00+02:00" pubdate data-updated="true">Jun 11<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/ios/'>ios</a>, <a class='category' href='/blog/categories/xcode/'>xcode</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app/" title="Previous Post: How to use Bootstrap within your Rails 3.1+ app">&laquo; How to use Bootstrap within your Rails 3.1+ app</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -254,7 +316,10 @@
       var disqus_shortname = 'softrli';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.softr.li/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/';
+        var disqus_url = 'http://www.softr.li/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
