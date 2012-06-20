@@ -9,7 +9,7 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="The issue You may be using opensource libraries within your iOS project. (If you don&#8217;t, you should, it&#8217;s a great time-saver. Check here &hellip;">
+  <meta name="description" content="I&#8217;m looking for an HTML5 Canvas library which I could use to build an interactive and animated UI control. So my requirements are essentially: &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,58 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/">Which HTML5 Canvas Javascript Library Should I Use?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-20T12:35:00+02:00" pubdate data-updated="true">Jun 20<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;m looking for an HTML5 Canvas library which I could use to build an interactive and animated UI control. So my requirements are essentially:</p>
+
+<ul>
+<li>well <strong>documented</strong>, <strong>supported</strong> and <strong>maintained</strong> library, because I want to be able to reuse it in later projects,</li>
+<li>easing the process of creating <strong>complex graphical objects</strong> (my control is going to be quite complex, a lot more than a simple button), if possible supporting groups and layers,</li>
+<li>helping me with the handling of <strong>user interactions</strong>,</li>
+<li>supporting <strong>touch devices</strong>,</li>
+<li>providing tools for <strong>animating</strong> the graphical content.</li>
+</ul>
+
+
+<p>I&#8217;ve searched for the appropriate library, so I will share with you the results of my search. After a list of most of the available libraries, I investigated the following shortlist of libraries: <strong>EaselJS</strong>, <strong>fabric.js</strong>, <strong>Paper.js</strong>, <strong>processing.js</strong> and <strong>Kinetic.js</strong>. I hope this can help you with your own choice!</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -503,57 +555,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/">Setup Automatic Clearing of Your Rails Sessions</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-20T10:12:00+02:00" pubdate data-updated="true">Apr 20<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>With every connection to your application of a new user, bot or whatever, Rails will create a new session object.</p>
-
-<p>If you&#8217;re using <a href="http://api.rubyonrails.org/classes/ActiveRecord/SessionStore.html">ActiveRecord::SessionStore</a> to save your sessions in your database, your database may already be alarmingly growing in size, due to the number of sessions it contains.</p>
-
-<h2>The rake db:sessions:clear task</h2>
-
-<p>If you don&#8217;t mind a lot about your users lossing their session, you can simply use the provided <code>rake db:sessions:clear</code> task. It will simply delete all sessions in the database. Side-effect: all current sessions are deleted, so signed in users get signed out, and you should hope they had nothing under way!</p>
-
-<h2>A more user-friendly solution</h2>
-
-<h2>References</h2>
-
-<ul>
-<li><a href="http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions">http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions</a></li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -610,6 +611,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/">Which HTML5 Canvas Javascript library should I use?</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/">XCode failing when building for archiving because of a missing library link</a>
       </li>
     
@@ -623,10 +628,6 @@
     
       <li class="post">
         <a href="/blog/2012/05/24/forked-tabbarkit/">Forked TabBarKit</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/">Chef recipe to install a PostgreSQL server on a machine configured with en_US locales</a>
       </li>
     
   </ul>

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Using cloned virtualized machines but having issues with your network configuration? - softr.li</title>
+  <title>Category: html5 - softr.li</title>
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="Trying to get your cloned VirtualBox on the host network without success? This may help you&#8230; If like me, you&#8217;re using VirtualBox virtual &hellip;">
+  <meta name="description" content="Category: html5">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.softr.li/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration">
+  <link rel="canonical" href="http://www.softr.liblog/categories/html5">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -75,118 +75,36 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">Using Cloned Virtualized Machines but Having Issues With Your Network Configuration?</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-05T09:18:00+01:00" pubdate data-updated="true">Jan 5<span>th</span>, 2012</time>
-        
-      </p>
+    <h1 class="entry-title">Category: Html5</h1>
     
   </header>
-
-
-<div class="entry-content"><p>Trying to get your cloned VirtualBox on the host network without success? This may help you&#8230;</p>
-
-<!-- more -->
-
-
-<p>If like me, you&#8217;re using <strong>VirtualBox virtual machines</strong> a lot, eg.:</p>
-
-<ul>
-<li>to <strong>simulate your production environment</strong> (what we may call <em>staging</em>),</li>
-<li>or more lately in my case, to <strong>run a PostgreSQL database</strong> and thus stop using SQLite to do your Rails developments and just use the production&#8217;s server&#8230;</li>
-</ul>
-
-
-<p>&#8230;then you may have wanted to clone some of your virtual machines once you installed the barebone server, and you may thus have faced <strong>an issue with the network of the cloned machine not working anymore.</strong></p>
-
-<p><strong>The solution to the problem is quite simple, but it needs to be found!</strong></p>
-
-<p>This one is working well with my images under <strong> Ubuntu 10.04.3 LTS</strong>. You can find some help <a href="http://blog.computerant.com/2010/01/02/virtualbox-cloning-ubuntu/">on this other post</a>, or if you want the shortest way:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo mv /etc/udev/rules.d/70-persistent-net.rules /etc/udev/rules.d/70-persistent-net.rules.broken
-</span><span class='line'>sudo shutdown now -r</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This should restart your machine&#8230; and restore your network! Have fun ;)</p>
-</div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">Romain Champourlier</span></span>
-
-      
-
-
-
-
-
+  <div id="blog-archives" class="category">
 
 
 
   
+  <h2>2012</h2>
+
+<article>
+  
+<h1><a href="/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/">Which HTML5 Canvas Javascript library should I use?</a></h1>
+<time datetime="2012-06-20T12:35:00+02:00" pubdate><span class='month'>Jun</span> <span class='day'>20</span> <span class='year'>2012</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/canvas/'>canvas</a>, <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/html5/'>html5</a>, <a class='category' href='/blog/categories/webdev/'>webdev</a></span>
+</footer>
 
 
-<time datetime="2012-01-05T09:18:00+01:00" pubdate data-updated="true">Jan 5<span>th</span>, 2012</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/notetomyself/'>notetomyself</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration/" >Tweet</a>
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2011/09/14/working-with-custom-table-view-cells-defined-in-nib-files/" title="Previous Post: Working with custom table view cells defined in NIB files">&laquo; Working with custom table view cells defined in NIB files</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2012/01/17/getting-the-correct-object-data-model-for-really-automatic-coredata-lightweight-migration/" title="Next Post: Getting the correct object data model for really automatic CoreData lightweight migrations">Getting the correct object data model for really automatic CoreData lightweight migrations &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-  </section>
+
+  
+</article>
 
 </div>
 
@@ -308,10 +226,7 @@
       var disqus_shortname = 'softrli';
       
         
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.softr.li/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration/';
-        var disqus_url = 'http://www.softr.li/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration/';
-        var disqus_script = 'embed.js';
+        var disqus_script = 'count.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

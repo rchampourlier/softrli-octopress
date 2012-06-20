@@ -22,7 +22,7 @@
         <loc>
             http://www.softr.li/blog/2012/03/23/adding-ssl-on-some-pages-of-your-rails-application/
         </loc>
-        <lastmod>2012-05-19T11:55:15+02:00</lastmod>
+        <lastmod>2012-06-15T20:42:28+02:00</lastmod>
     </url>
     <url>
         <loc>http://www.softr.li/blog/2012/04/10/moving-from-rvm-to-rbenv/</loc>
@@ -47,12 +47,6 @@
     <url>
         <loc>http://www.softr.li/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/</loc>
         <lastmod>2012-05-10T15:30:43+02:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://www.softr.li/blog/2012/04/20/setup-automatic-clearing-of-your-rails-sessions/
-        </loc>
-        <lastmod>2012-05-24T17:18:19+02:00</lastmod>
     </url>
     <url>
         <loc>http://www.softr.li/blog/2012/04/22/manually-installing-a-gem-from-a-git-repo/</loc>
@@ -105,11 +99,17 @@
         <lastmod>2012-06-11T11:37:04+02:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://www.softr.li/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/
+        </loc>
+        <lastmod>2012-06-20T12:39:02+02:00</lastmod>
+    </url>
+    <url>
         <loc>http://www.softr.li/blog/archives/</loc>
-        <lastmod>2012-06-11T11:37:04+02:00</lastmod>
+        <lastmod>2012-06-20T12:39:02+02:00</lastmod>
     </url>
     <url>
         <loc>http://www.softr.li/</loc>
-        <lastmod>2012-06-11T11:37:04+02:00</lastmod>
+        <lastmod>2012-06-20T12:39:02+02:00</lastmod>
     </url>
 </urlset>

@@ -111,17 +111,20 @@
 
 <p>We start by creating a self-signed certificate you will be able to use on your test/staging server, before buying a real certificate and configuring your production machine with it.</p>
 
+<h3>The terminal commands</h3>
+
 <p><em>On your server console</em></p>
 
-<pre><code>openssl genrsa -aes256 -out server.key 2048
-openssl req -new -key server.key -out server.csr
-openssl rsa -in server.key.bak -out server.key
-sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+<pre><code>openssl genrsa -aes256 -out server.key 2048 # step 1
+openssl req -new -key server.key -out server.csr # step 2
+mv server.key server.key.bak # step 3
+openssl rsa -in server.key.bak -out server.key # step 4
+sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt # step 5
 </code></pre>
 
-<p>What does it do?</p>
+<h3>What does it do?</h3>
 
-<ul>
+<ol>
 <li>Generates a private/public key pair</li>
 <li>Creates a certificate request
 
@@ -129,13 +132,33 @@ sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.
 <li>You <strong>must</strong> fill every requested field unless it is marked optional.</li>
 <li>In France, you should use the name of the &#8220;departement&#8221; to fill the <em>State or Province Name</em>.</li>
 <li>Use your company name for <em>Organization Name</em>.</li>
-<li>Be sure to fill the chosen website URL for <em>Common Name</em>. <strong>Don&#8217;t fill your personal name for a website SSL certificate request!</strong></li>
+<li>Be sure to fill the chosen website domain name for <em>Common Name</em>. <strong>Don&#8217;t fill your personal name for a website SSL certificate request!</strong></li>
 </ul>
 </li>
-<li>Removed the passphrase from the private key. You have to do this, so that it won&#8217;t be needed when starting the webserver. Since this is probably done automatically (at server boot or through automatic management tools), you won&#8217;t be there to enter the passphrase. <strong>Be sure however that your private key is secure (root user access only), and revoke it as soon as you think it was stolen.</strong></li>
-<li>Generates the certificate.</li>
+<li>Copies the passphrase-protected private key to <code>server.key.bak</code>.</li>
+<li>Removes the passphrase from the private key. You have to do this, so that it won&#8217;t be needed when starting the webserver. Since this is probably done automatically (at server boot or through automatic management tools), you won&#8217;t be there to enter the passphrase. <strong>Be sure however that your private key is secure (root user access only), and revoke it as soon as you think it was compromised.</strong> <em>If you didn&#8217;t remove it, <code>server.key.bak</code> contains your passphrase-protected key, while <code>server.key</code> is the passphrase-free one.</em></li>
+<li>Generates the self-signed certificate.</li>
+</ol>
+
+
+<h3>How to fill, a French example</h3>
+
+<ul>
+<li>Country Name: FR</li>
+<li>State or Province Name: Paris</li>
+<li>Locality Name: Paris</li>
+<li>Organization Name: Avdice</li>
+<li>Organizational Unit Name: IT Service</li>
+<li>Common Name: www.website.com</li>
+<li>Email Address: mail@website.com</li>
 </ul>
 
+
+<p><em>Nothing for challenge password and optional company name.</em></p>
+
+<h2>Generate the Certificate Signing Request to get a real SSL certificate for your production server</h2>
+
+<p>The process is exactly the same as the one above, except you do not do step 5. You will buy a certificate from a provider, send it the CSR file you&#8217;ve created thanks to the steps 1 and 2, and it will provide you with the certificate.</p>
 
 <h2>Move the files to the correct place</h2>
 
@@ -311,9 +334,15 @@ end
 
 <p>Be sure to change the url of forms matching SSL-enabled routes, or you&#8217;ll get <code>404</code>s!</p>
 
-<h2>Test</h2>
+<h2>Testing</h2>
 
 <p>You should now be able to test this configuration with your browser. You will need to deploy your updated app to a staging machine, unless your development is SSL-capable.</p>
+
+<h3>With a self-signed SSL certificate (on staging)</h3>
+
+<p>The browser <strong>will</strong> complain that the certificate is not valid. It&#8217;s normal, since it is not signed by a valid certificate authority. <strong>You are indeed the certificate authority</strong> (remember, it&#8217;s self-signed), and <strong>you are not known by the browser as a valid certificate authority!</strong></p>
+
+<h3>With a true SSL certificate (on production)</h3>
 
 <p>You may encounter some issues with your browser recognizing the issued certificate. The browser may complain it is signed by an unknown authority. This may happen when an unknown intermediate certification authority is used. In this case, you have to modify your certificate file to include the complete chain of certificates. Be sure to insert the certificates from the chain <strong>above</strong> your site&#8217;s certificate!</p>
 
@@ -359,7 +388,7 @@ end
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/rubyonrails/'>rubyonrails</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
+    <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/nginx/'>nginx</a>, <a class='category' href='/blog/categories/rubyonrails/'>rubyonrails</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
   
 </span>
 
@@ -442,6 +471,10 @@ end
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/">Which HTML5 Canvas Javascript library should I use?</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/">XCode failing when building for archiving because of a missing library link</a>
       </li>
     
@@ -455,10 +488,6 @@ end
     
       <li class="post">
         <a href="/blog/2012/05/24/forked-tabbarkit/">Forked TabBarKit</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/">Chef recipe to install a PostgreSQL server on a machine configured with en_US locales</a>
       </li>
     
   </ul>

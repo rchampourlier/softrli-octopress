@@ -1,0 +1,616 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Which HTML5 Canvas Javascript library should I use? - softr.li</title>
+  <meta name="author" content="Romain Champourlier">
+
+  
+  <meta name="description" content="I&#8217;m looking for an HTML5 Canvas library which I could use to build an interactive and animated UI control. So my requirements are essentially: &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.softr.li/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="softr.li" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA–27796788–1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">softr.li</a></h1>
+  
+    <h2>Seeking and sharing about making IT softer</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.softr.li" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Which HTML5 Canvas Javascript Library Should I Use?</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-20T12:35:00+02:00" pubdate data-updated="true">Jun 20<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&#8217;m looking for an HTML5 Canvas library which I could use to build an interactive and animated UI control. So my requirements are essentially:</p>
+
+<ul>
+<li>well <strong>documented</strong>, <strong>supported</strong> and <strong>maintained</strong> library, because I want to be able to reuse it in later projects,</li>
+<li>easing the process of creating <strong>complex graphical objects</strong> (my control is going to be quite complex, a lot more than a simple button), if possible supporting groups and layers,</li>
+<li>helping me with the handling of <strong>user interactions</strong>,</li>
+<li>supporting <strong>touch devices</strong>,</li>
+<li>providing tools for <strong>animating</strong> the graphical content.</li>
+</ul>
+
+
+<p>I&#8217;ve searched for the appropriate library, so I will share with you the results of my search. After a list of most of the available libraries, I investigated the following shortlist of libraries: <strong>EaselJS</strong>, <strong>fabric.js</strong>, <strong>Paper.js</strong>, <strong>processing.js</strong> and <strong>Kinetic.js</strong>. I hope this can help you with your own choice!</p>
+
+<!-- more -->
+
+
+<h3>Found libraries</h3>
+
+<p>Here is the list of what seems to be the main still-maintained Canvas libraries.</p>
+
+<ul>
+<li><a href="https://github.com/hyperandroid/CAAT">CAAT</a></li>
+<li><a href="http://www.createjs.com/#!/EaselJS">EaselJS</a></li>
+<li><a href="http://fabricjs.com/">Fabric.js</a></li>
+<li><a href="http://guryjs.org/">Gury</a></li>
+<li><a href="http://jcscript.com/">JcanvaScript</a></li>
+<li><a href="http://www.kineticjs.com/">Kinetic.js</a></li>
+<li><a href="http://ocanvas.org/">oCanvas</a></li>
+<li><a href="http://paperjs.org/">Paper.js</a></li>
+<li><a href="http://processingjs.org/">processing.js</a></li>
+</ul>
+
+
+<p>Here are some other libraries I have not investigated, either because they weren&#8217;t on Github or seemed abandoned:</p>
+
+<ul>
+<li><a href="http://code.google.com/p/cakejs/">cakejs</a></li>
+<li><a href="https://github.com/lamberta/doodle-js">Doodle-js</a></li>
+<li><a href="https://canvastoolkit.codeplex.com/">CanvasToolkit</a></li>
+<li><a href="http://mootools.net/forge/p/mootools_canvas_lib">Mootools Canvas lib</a></li>
+</ul>
+
+
+<h3>The Github comparison</h3>
+
+<table>
+<thead>
+<tr>
+<th>Library       </th>
+<th> Watch </th>
+<th> Fork </th>
+<th> Issues</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CAAT          </td>
+<td> 336   </td>
+<td> 42   </td>
+<td> 17</td>
+</tr>
+<tr>
+<td>EaselJS       </td>
+<td> 1,440 </td>
+<td> 203  </td>
+<td> 90    </td>
+</tr>
+<tr>
+<td>fabric.js     </td>
+<td> 1,059 </td>
+<td> 101  </td>
+<td> 38    </td>
+</tr>
+<tr>
+<td>gury          </td>
+<td> 348   </td>
+<td> 19   </td>
+<td> 9     </td>
+</tr>
+<tr>
+<td>jCanvaScript  </td>
+<td> 80    </td>
+<td> 5    </td>
+<td> 2     </td>
+</tr>
+<tr>
+<td>Kinetic.js    </td>
+<td> 267   </td>
+<td> 41   </td>
+<td> 7    </td>
+</tr>
+<tr>
+<td>oCanvas       </td>
+<td> 194   </td>
+<td> 20   </td>
+<td> 6 </td>
+</tr>
+<tr>
+<td>Paper.js      </td>
+<td> 1,706 </td>
+<td> 111  </td>
+<td> 30</td>
+</tr>
+<tr>
+<td>processing.js </td>
+<td> 1,276 </td>
+<td> 206  </td>
+<td> N/A</td>
+</tr>
+</tbody>
+</table>
+
+
+<h3>The minified size comparison</h3>
+
+<table>
+<thead>
+<tr>
+<th>Library       </th>
+<th> Size (kb)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CAAT          </td>
+<td> 210</td>
+</tr>
+<tr>
+<td>EaselJS       </td>
+<td> 44</td>
+</tr>
+<tr>
+<td>fabric.js     </td>
+<td> 133</td>
+</tr>
+<tr>
+<td>gury          </td>
+<td> 11</td>
+</tr>
+<tr>
+<td>Kinetic.js    </td>
+<td> 53</td>
+</tr>
+<tr>
+<td>oCanvas       </td>
+<td> 18</td>
+</tr>
+</tbody>
+</table>
+
+
+<p><em>No minified version was available in the Github repo for jCanvaScript, Paper.js and processing.js.</em></p>
+
+<h3>The Stackoverflow comparison</h3>
+
+<table>
+<thead>
+<tr>
+<th>Search text   </th>
+<th> Tag           </th>
+<th> # tagged questions </th>
+<th> # search questions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CAAT          </td>
+<td> N/A           </td>
+<td> N/A                </td>
+<td> 5</td>
+</tr>
+<tr>
+<td>EaselJS       </td>
+<td> easeljs       </td>
+<td> 30                 </td>
+<td> 79</td>
+</tr>
+<tr>
+<td>fabric.js     </td>
+<td> fabricjs      </td>
+<td> 43                 </td>
+<td> 78</td>
+</tr>
+<tr>
+<td>jCanvaScript  </td>
+<td> N/A           </td>
+<td> N/A                </td>
+<td> 6</td>
+</tr>
+<tr>
+<td>Kinetic.js    </td>
+<td> kineticjs     </td>
+<td> 74                 </td>
+<td> 30</td>
+</tr>
+<tr>
+<td>oCanvas       </td>
+<td> N/A           </td>
+<td> N/A                </td>
+<td> 19</td>
+</tr>
+<tr>
+<td>Paper.js      </td>
+<td> paperjs       </td>
+<td> 9                  </td>
+<td> 49</td>
+</tr>
+<tr>
+<td>processing.js </td>
+<td> processing.js </td>
+<td> 117                </td>
+<td> 289 </td>
+</tr>
+</tbody>
+</table>
+
+
+<p><em>The gury library could not be found on StackOverflow. I&#8217;ve used N/A when I couldn&#8217;t find a matching tag.</em></p>
+
+<h3>Review from documentation, tutorials and other resources</h3>
+
+<p>When choosing a framework, I value most the Github comparison. It provides a good overview of the development state of the library and the community using it. Since I&#8217;m generally not going to an expert level in a given field, I like being able to rely on the community.</p>
+
+<p>But StackOverflow (SO) is really helpful, in particular when the comparison question has already been asked. Check this: <a href="http://stackoverflow.com/questions/8938969/current-state-of-javascript-canvas-libraries2012">Current state of Javascript canvas libraries</a></p>
+
+<p>As a consequence, I will give a deeper review on documentation, tutorials and other resources for <strong>EaselJS</strong>, <strong>fabric.js</strong>, <strong>Paper.js</strong>, <strong>processing.js</strong> and the outsider, <strong>Kinetic.js</strong> to make a choice.</p>
+
+<h4>Summary</h4>
+
+<p><strong>EaselJS</strong>, <strong>fabric.js</strong>, <strong>Paper.js</strong>, <strong>processing.js</strong> can be seen as the 4 leaders. They have definitely the biggest communities of users, are available on Github, well documented, lots of external references (questions on SO, forums), and a good thing, according the the previous SO question, they are unit-tested.</p>
+
+<p><strong>Kinetic.js</strong> is the outsider. Added more recently on Github, it&#8217;s still quite dynamic but received a warm welcome from <a href="http://stackoverflow.com/users/130652/kangax">kangax</a>, the author of Fabric.js, in a SO comment.</p>
+
+<p>These 4 libraries are all available on Github, and released under the permissive MIT license.</p>
+
+<h4>EaselJS</h4>
+
+<p>This library is <strong>part of the CreateJS suite</strong> which is a full-featured set of libraries to build advanced HTML5 interactive and animated graphics.</p>
+
+<p>In particular, combined with the animation library (TweenJS), complex animations should be buildable. You also get the SoundJS library and the asset preloading library (PreloadJS) so you should have everything you need if you intend to build a game.</p>
+
+<p>The website provides some nice demos whose source code is available within the Github repository.</p>
+
+<p>The library also seems to work well with other libraries such as Box2d and TexturePacker.</p>
+
+<p><strong>Support of touch devices is built in.</strong></p>
+
+<h4>fabric.js</h4>
+
+<p>Looking at the <a href="http://fabricjs.com/">home page</a>, it seems this library is more oriented on building <strong>vector edition tools</strong>. The main features are:</p>
+
+<ul>
+<li>create and manipulate (move, scale, rotate&#8230;) vector shapes and text objects,</li>
+<li>import/export from/to SVG.</li>
+</ul>
+
+
+<p>It&#8217;s summarized as <em>&#8220;an interactive object model on top of canvas element&#8221;</em>.</p>
+
+<p><strong>If your goal is to build complex scenes, animate objects, it seems to me it&#8217;s not the right choice.</strong></p>
+
+<h4>Paper.js</h4>
+
+<p>This library is a port from the Scriptographer library. A particularity is it&#8217;s Paperscript language, which is basically an extended Javascript providing some mathematical operations on point and size objects. However it&#8217;s still <a href="http://paperjs.org/tutorials/getting-started/paperscript-interoperability/">not documented</a>.</p>
+
+<p>This library seems powerful in its capacity to build complex vector objects and managing mouse interactions. However, there is no mention of touch devices support, and the animation capability seems to be limited to the <code>onFrame()</code> method which is called 60 times per second and allows you to change the content of the canvas.</p>
+
+<h4>processing.js</h4>
+
+<p>The core goal of this library is to build <strong>interactive visualizations</strong>.</p>
+
+<p>This library has a particulary history since it&#8217;s a port of the famous Processing library. I say famous, not because I knew it myself, but because it&#8217;s said to be famous among the multimedia and art community which uses it to build <strong>interactive artistic creations</strong>.</p>
+
+<p>Looking at the <a href="http://processingjs.org/learning/">first code example</a>, it seems that this library intends to lower the learning curve for building animated and interactive graphics with the Canvas. It provides the tools to easily have a run loop and a <code>draw()</code> method you simply fill to build your visualization.</p>
+
+<p>I think it thus provide a <strong>low learning-curve</strong>, perfect for <strong>non-developers artists and creative people</strong>, but is <strong>not the best-suited tool for building object-oriented components</strong>.</p>
+
+<h4>Kinetic.js</h4>
+
+<p>Kinetic.js is the outsider of this comparison because looking to its Github repo, it&#8217;s far from being the most used one. However, a search on &#8220;canvas library&#8221; will return the associated HTML5 tutorials as first result, and it has a good deal of questions on StackOverflow.</p>
+
+<p>The name is a good clue, but this library is advertised as <strong>pretty fast</strong> with lots of objects thanks to the use of multiple canvases.</p>
+
+<p>It is provided with a <strong>nice documentation with tutorials</strong>, with an introduction on barebones HTML5 canvas use, detailed documentation on Kinetic.js and Three.js. It also provides nice tips, not specific to the library itself, to perform some actions with canvas.</p>
+
+<h3>Result</h3>
+
+<p>According to this review, I think I could go with one of <strong>EaselJS</strong> or <strong>Kinetic.js</strong>. <strong>Paper.js</strong> was not far but there is no mention of touch device support, so I&#8217;m pretty sure this would not be complicated to integrate, but I prefer to have something built in the library.</p>
+
+<p>Finally, I will go with the outsider <strong>Kinetic.js</strong> because:</p>
+
+<ul>
+<li>I feel good with the example code,</li>
+<li>the author provides an excellent <a href="http://www.html5canvastutorials.com/">set of tutorials</a>,</li>
+<li>the documentation and examples are cleara and easy to read,</li>
+<li>everything I need is included in the library (I don&#8217;t feel like I may need to add another library such as <strong>TweenJS</strong> to solve a small problem while loading another large library I&#8217;m using at 20%).</li>
+</ul>
+
+
+<p><em>Feel free to share your comments, reviews, or missing libraries!</em></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Romain Champourlier</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-20T12:35:00+02:00" pubdate data-updated="true">Jun 20<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/canvas/'>canvas</a>, <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/html5/'>html5</a>, <a class='category' href='/blog/categories/webdev/'>webdev</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/" title="Previous Post: XCode failing when building for archiving because of a missing library link">&laquo; XCode failing when building for archiving because of a missing library link</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+<section>
+  <h1>About Me</h1>
+  <div id="twitter-profile" style="margin-top:0.5em;">
+    <strong><p>Romain Champourlier</p></strong>
+    <p>The geeky-tech-dev blog of Romain Champourlier, French engineer and entrepreneur.</p>
+  </div>
+  <script type="text/javascript">
+    $.domReady(function(){
+        var container = $('#twitter-profile'),
+            user = "softrli";
+            
+        $.ajax({
+            url: "http://api.twitter.com/1/users/show.json?include_entities=false&screen_name="+user+"&callback=?"
+          , type: 'jsonp'
+          , error: function (err) { $('#twitter-profile').addClass('error');  }
+          , success: function(data) {
+              container.html('<img class="left" src="http://api.twitter.com/1/users/profile_image/'+user+'.json?size=bigger" alt="@'+user+'"><p><strong>'+data.name+'</strong><br/>('+data.location+')</p><p>'+data.description+'</p>');
+            }
+        })
+      });
+  </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("softrli", 5, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/softrli" class="twitter-follow-button" data-show-count="true">Follow @softrli</a>
+  
+</section>
+
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/">Which HTML5 Canvas Javascript library should I use?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/">XCode failing when building for archiving because of a missing library link</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app/">How to use Bootstrap within your Rails 3.1+ app</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/26/applescript-to-automate-the-setup-of-your-development-space/">AppleScript to automate the setup of your development space</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/24/forked-tabbarkit/">Forked TabBarKit</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/rchampourlier">@rchampourlier</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'rchampourlier',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Romain Champourlier -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'softrli';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.softr.li/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/';
+        var disqus_url = 'http://www.softr.li/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
