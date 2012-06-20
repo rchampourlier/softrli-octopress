@@ -3,7 +3,7 @@ layout: post
 title: "Adding SSL on some pages of your Rails application"
 date: 2012-03-23 09:49
 comments: true
-categories: [development, sysadmin, rubyonrails, unix]
+categories: [development, sysadmin, rubyonrails, unix, nginx]
 
 ---
 
@@ -15,23 +15,43 @@ This tutorial should help you to setup SSL on your *staging* and *production* se
 
 We start by creating a self-signed certificate you will be able to use on your test/staging server, before buying a real certificate and configuring your production machine with it.
 
+### The terminal commands
+
 *On your server console*
 
-	openssl genrsa -aes256 -out server.key 2048
-	openssl req -new -key server.key -out server.csr
-	openssl rsa -in server.key.bak -out server.key
-	sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+	openssl genrsa -aes256 -out server.key 2048 # step 1
+	openssl req -new -key server.key -out server.csr # step 2
+	mv server.key server.key.bak # step 3
+	openssl rsa -in server.key.bak -out server.key # step 4
+	sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt # step 5
 
-What does it do?
+### What does it do?
 
-* Generates a private/public key pair
-* Creates a certificate request
+1. Generates a private/public key pair
+2. Creates a certificate request
 	- You **must** fill every requested field unless it is marked optional.
 	- In France, you should use the name of the "departement" to fill the _State or Province Name_.
 	- Use your company name for _Organization Name_.
-	- Be sure to fill the chosen website URL for _Common Name_. **Don't fill your personal name for a website SSL certificate request!**
-* Removed the passphrase from the private key. You have to do this, so that it won't be needed when starting the webserver. Since this is probably done automatically (at server boot or through automatic management tools), you won't be there to enter the passphrase. **Be sure however that your private key is secure (root user access only), and revoke it as soon as you think it was stolen.**
-* Generates the certificate.
+	- Be sure to fill the chosen website domain name for _Common Name_. **Don't fill your personal name for a website SSL certificate request!**
+3. Copies the passphrase-protected private key to `server.key.bak`.
+4. Removes the passphrase from the private key. You have to do this, so that it won't be needed when starting the webserver. Since this is probably done automatically (at server boot or through automatic management tools), you won't be there to enter the passphrase. **Be sure however that your private key is secure (root user access only), and revoke it as soon as you think it was compromised.** _If you didn't remove it, `server.key.bak` contains your passphrase-protected key, while `server.key` is the passphrase-free one._
+5. Generates the self-signed certificate.
+
+### How to fill, a French example
+
+* Country Name: FR
+* State or Province Name: Paris
+* Locality Name: Paris
+* Organization Name: Avdice
+* Organizational Unit Name: IT Service
+* Common Name: www.website.com
+* Email Address: mail@website.com
+
+_Nothing for challenge password and optional company name._
+
+## Generate the Certificate Signing Request to get a real SSL certificate for your production server
+
+The process is exactly the same as the one above, except you do not do step 5. You will buy a certificate from a provider, send it the CSR file you've created thanks to the steps 1 and 2, and it will provide you with the certificate.
 
 ## Move the files to the correct place
 
@@ -177,9 +197,15 @@ This involves using the `_url` helper instead of the `_path` one, and adding thi
 
 Be sure to change the url of forms matching SSL-enabled routes, or you'll get `404`s!
 
-## Test
+## Testing
 
 You should now be able to test this configuration with your browser. You will need to deploy your updated app to a staging machine, unless your development is SSL-capable.
+
+### With a self-signed SSL certificate (on staging)
+
+The browser **will** complain that the certificate is not valid. It's normal, since it is not signed by a valid certificate authority. **You are indeed the certificate authority** (remember, it's self-signed), and **you are not known by the browser as a valid certificate authority!**
+
+### With a true SSL certificate (on production)
 
 You may encounter some issues with your browser recognizing the issued certificate. The browser may complain it is signed by an unknown authority. This may happen when an unknown intermediate certification authority is used. In this case, you have to modify your certificate file to include the complete chain of certificates. Be sure to insert the certificates from the chain **above** your site's certificate!
 
