@@ -4,7 +4,7 @@
   <title><![CDATA[Category: nginx | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/nginx/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-06-20T12:43:41+02:00</updated>
+  <updated>2012-06-21T11:54:14+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -57,7 +57,7 @@ sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.
 </ol>
 
 
-<h3>How to fill, a French example</h3>
+<h3>How to fill, example for a company in Paris, France</h3>
 
 <ul>
 <li>Country Name: FR</li>
@@ -76,23 +76,51 @@ sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.
 
 <p>The process is exactly the same as the one above, except you do not do step 5. You will buy a certificate from a provider, send it the CSR file you've created thanks to the steps 1 and 2, and it will provide you with the certificate.</p>
 
+<h3>Generate the chained certificate file</h3>
+
+<p>Some certification authorities used to issue your certificate may not be known by the browser. To ensure the browser correctly recognize your certificate as valid, you have to complete your certificate by appending the intermediate authorities' certificates.</p>
+
+<p>Your SSL provider should have sent you with your certificate file the required intermediate certificates and the order in which they are to be used. For example, for a PositiveSSL certificate here is an extract of the email containing the certificate:</p>
+
+<ul>
+<li>Root CA Certificate - AddTrustExternalCARoot.crt</li>
+<li>Intermediate CA Certificate - PositiveSSLCA2.crt</li>
+<li>Your PositiveSSL Certificate - www_website_com.crt</li>
+</ul>
+
+
+<p>To generate our chained certificate file, we have to concatenate the provided certificates <strong>in the order of the certification, starting from your certificate to the root one</strong>.</p>
+
+<p>Here are the commands we use with the previous example:</p>
+
+<p><code>
+cat www_website_com.crt &gt; server.crt
+cat PositiveSSLCA2.crt &gt;&gt; server.crt
+cat AddTrustExternalCARoot.crt &gt;&gt; server.crt
+</code></p>
+
 <h2>Move the files to the correct place</h2>
 
-<pre><code>sudo mv server.crt /etc/ssl/application_name.crt
-sudo mv server.key /etc/ssl/private/application_name.key
-</code></pre>
+<ul>
+<li>For a self-signed certificate (staging), the <code>server.crt</code> file is the one you generated during the procedure.</li>
+<li><p>For a true certificate (production), the <code>server.crt</code> is the chained-certificate file you generated thanks to the previous section guide.</p>
+
+<p>  sudo mv server.crt /etc/ssl/certs/application_name.crt
+  sudo mv server.key /etc/ssl/private/application_name.key</p></li>
+</ul>
+
 
 <h2>Change the permissions of the files to make them safe</h2>
 
 <pre><code>sudo chown root:ssl-cert /etc/ssl/private/application_name.key
 sudo chmod 0600 /etc/ssl/private/application_name.key
+sudo chown root:root /etc/ssl/certs/application_name.crt
 sudo chmod 0600 /etc/ssl/certs/application_name.crt 
-sudo chown root:ssl-cert /etc/ssl/certs/application_name.crt 
 </code></pre>
 
 <h2>Update the configuration of your webserver to add a SSL host</h2>
 
-<p><em>This tutorial is written for nginx v0.7.65. It's quite old but it's the default package on Ubuntu 10.04.3 LTS. I however recommend you to update it by installing it directly from the source, it's quite easy!</em></p>
+<p><em>This tutorial is written for nginx v0.7.65. It's quite old but it's the default package on Ubuntu 10.04.3 LTS. I however recommend you to update it by installing it directly from the source, it's quite easy! Still, the tutorial should be valid for a newer version too...</em></p>
 
 <p>Adding the SSL host to your nginx configuration file essentially means to add the following lines:</p>
 
@@ -243,15 +271,11 @@ end
 
 <h3>With a true SSL certificate (on production)</h3>
 
-<p>You may encounter some issues with your browser recognizing the issued certificate. The browser may complain it is signed by an unknown authority. This may happen when an unknown intermediate certification authority is used. In this case, you have to modify your certificate file to include the complete chain of certificates. Be sure to insert the certificates from the chain <strong>above</strong> your site's certificate!</p>
-
-<p>An example line to do this:</p>
-
-<p><code>
-cat bundled_certificate_chain.crt &gt;&gt; server.crt
-</code></p>
+<p>You may encounter some issues with your browser recognizing the issued certificate. The browser may complain it is signed by an unknown authority. This may happen when an unknown intermediate certification authority is used.</p>
 
 <p>You can use this service to check your server is sending the expected certificate chain: <a href="http://www.sslshopper.com/ssl-checker.html">http://www.sslshopper.com/ssl-checker.html</a></p>
+
+<p>If the certificate chain is not valid, check again the <em>Generating the chained certificate file</em> section.</p>
 
 <h2>References</h2>
 

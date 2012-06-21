@@ -22,7 +22,7 @@
         <loc>
             http://www.softr.li/blog/2012/03/23/adding-ssl-on-some-pages-of-your-rails-application/
         </loc>
-        <lastmod>2012-06-15T20:42:28+02:00</lastmod>
+        <lastmod>2012-06-21T11:46:54+02:00</lastmod>
     </url>
     <url>
         <loc>http://www.softr.li/blog/2012/04/10/moving-from-rvm-to-rbenv/</loc>
@@ -106,10 +106,10 @@
     </url>
     <url>
         <loc>http://www.softr.li/blog/archives/</loc>
-        <lastmod>2012-06-20T12:39:02+02:00</lastmod>
+        <lastmod>2012-06-21T11:46:54+02:00</lastmod>
     </url>
     <url>
         <loc>http://www.softr.li/</loc>
-        <lastmod>2012-06-20T12:39:02+02:00</lastmod>
+        <lastmod>2012-06-21T11:46:54+02:00</lastmod>
     </url>
 </urlset>
