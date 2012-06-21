@@ -37,7 +37,7 @@ We start by creating a self-signed certificate you will be able to use on your t
 4. Removes the passphrase from the private key. You have to do this, so that it won't be needed when starting the webserver. Since this is probably done automatically (at server boot or through automatic management tools), you won't be there to enter the passphrase. **Be sure however that your private key is secure (root user access only), and revoke it as soon as you think it was compromised.** _If you didn't remove it, `server.key.bak` contains your passphrase-protected key, while `server.key` is the passphrase-free one._
 5. Generates the self-signed certificate.
 
-### How to fill, a French example
+### How to fill, example for a company in Paris, France
 
 * Country Name: FR
 * State or Province Name: Paris
@@ -53,21 +53,44 @@ _Nothing for challenge password and optional company name._
 
 The process is exactly the same as the one above, except you do not do step 5. You will buy a certificate from a provider, send it the CSR file you've created thanks to the steps 1 and 2, and it will provide you with the certificate.
 
+### Generate the chained certificate file
+
+Some certification authorities used to issue your certificate may not be known by the browser. To ensure the browser correctly recognize your certificate as valid, you have to complete your certificate by appending the intermediate authorities' certificates.
+
+Your SSL provider should have sent you with your certificate file the required intermediate certificates and the order in which they are to be used. For example, for a PositiveSSL certificate here is an extract of the email containing the certificate:
+
+* Root CA Certificate - AddTrustExternalCARoot.crt
+* Intermediate CA Certificate - PositiveSSLCA2.crt
+* Your PositiveSSL Certificate - www_website_com.crt
+
+To generate our chained certificate file, we have to concatenate the provided certificates **in the order of the certification, starting from your certificate to the root one**.
+
+Here are the commands we use with the previous example:
+
+```
+cat www_website_com.crt > server.crt
+cat PositiveSSLCA2.crt >> server.crt
+cat AddTrustExternalCARoot.crt >> server.crt
+```
+
 ## Move the files to the correct place
 
-	sudo mv server.crt /etc/ssl/application_name.crt
+* For a self-signed certificate (staging), the `server.crt` file is the one you generated during the procedure.
+* For a true certificate (production), the `server.crt` is the chained-certificate file you generated thanks to the previous section guide.
+
+	sudo mv server.crt /etc/ssl/certs/application_name.crt
 	sudo mv server.key /etc/ssl/private/application_name.key
 	
 ## Change the permissions of the files to make them safe
 
 	sudo chown root:ssl-cert /etc/ssl/private/application_name.key
 	sudo chmod 0600 /etc/ssl/private/application_name.key
+	sudo chown root:root /etc/ssl/certs/application_name.crt
 	sudo chmod 0600 /etc/ssl/certs/application_name.crt 
-	sudo chown root:ssl-cert /etc/ssl/certs/application_name.crt 
 	
 ## Update the configuration of your webserver to add a SSL host
 
-*This tutorial is written for nginx v0.7.65. It's quite old but it's the default package on Ubuntu 10.04.3 LTS. I however recommend you to update it by installing it directly from the source, it's quite easy!*
+*This tutorial is written for nginx v0.7.65. It's quite old but it's the default package on Ubuntu 10.04.3 LTS. I however recommend you to update it by installing it directly from the source, it's quite easy! Still, the tutorial should be valid for a newer version too...*
 
 Adding the SSL host to your nginx configuration file essentially means to add the following lines:
 
@@ -207,15 +230,11 @@ The browser **will** complain that the certificate is not valid. It's normal, si
 
 ### With a true SSL certificate (on production)
 
-You may encounter some issues with your browser recognizing the issued certificate. The browser may complain it is signed by an unknown authority. This may happen when an unknown intermediate certification authority is used. In this case, you have to modify your certificate file to include the complete chain of certificates. Be sure to insert the certificates from the chain **above** your site's certificate!
-
-An example line to do this:
-
-```
-cat bundled_certificate_chain.crt >> server.crt
-```
+You may encounter some issues with your browser recognizing the issued certificate. The browser may complain it is signed by an unknown authority. This may happen when an unknown intermediate certification authority is used.
 
 You can use this service to check your server is sending the expected certificate chain: <http://www.sslshopper.com/ssl-checker.html>
+
+If the certificate chain is not valid, check again the _Generating the chained certificate file_ section.
 	
 ## References
 
