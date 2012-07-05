@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: canvas - softr.li</title>
+  <title>Setup automatic clearing of your Rails sessions - softr.li</title>
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="Category: canvas">
+  <meta name="description" content="With every connection to your application of a new user, bot or whatever, Rails will create a new session object. If you&#8217;re using ActiveRecord &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.softr.liblog/categories/canvas">
+  <link rel="canonical" href="http://www.softr.li/blog/2012/07/05/setup-automatic-clearing-of-your-rails-sessions">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -75,36 +75,143 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Canvas</h1>
+    
+      <h1 class="entry-title">Setup Automatic Clearing of Your Rails Sessions</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-05T09:40:00+02:00" pubdate data-updated="true">Jul 5<span>th</span>, 2012</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>With every connection to your application of a new user, bot or whatever, Rails will create a new session object.</p>
 
-  
-  <h2>2012</h2>
+<p>If you&#8217;re using <a href="http://api.rubyonrails.org/classes/ActiveRecord/SessionStore.html">ActiveRecord::SessionStore</a> to save your sessions in your database, your database may already be alarmingly growing in size, due to the number of sessions it contains.</p>
 
-<article>
-  
-<h1><a href="/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/">Which HTML5 Canvas Javascript library should I use?</a></h1>
-<time datetime="2012-06-20T12:35:00+02:00" pubdate><span class='month'>Jun</span> <span class='day'>20</span> <span class='year'>2012</span></time>
+<h2>The rake db:sessions:clear task</h2>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/canvas/'>canvas</a>, <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/html5/'>html5</a>, <a class='category' href='/blog/categories/webdev/'>webdev</a></span>
-</footer>
+<p>If you don&#8217;t mind a lot about your users loosing their session, you can simply use the provided <code>rake db:sessions:clear</code> task. It will simply delete all sessions in the database. Side-effect: all current sessions are deleted, so signed in users get signed out, and you should hope they had nothing under way!</p>
+
+<h2>A more user-friendly solution</h2>
+
+<p>Writing a simple rake task to replace the default one and only remove sessions older than 2 weeks is as easy as adding this file to your project:</p>
+
+<figure class='code'><figcaption><span>lib/tasks/sessions.rake  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">namespace</span> <span class="ss">:sessions</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">desc</span> <span class="s2">&quot;Clear expired sessions (more than 2 weeks old)&quot;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">:cleanup</span> <span class="o">=&gt;</span> <span class="ss">:environment</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;DELETE FROM sessions WHERE (updated_at &lt; &#39;</span><span class="si">#{</span><span class="no">Date</span><span class="o">.</span><span class="n">today</span> <span class="o">-</span> <span class="mi">2</span><span class="o">.</span><span class="n">weeks</span><span class="si">}</span><span class="s2">&#39;)&quot;</span>
+</span><span class='line'>    <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<p>Now, if you run <code>rake sessions:cleanup</code>, only the older sessions will be removed from your database.</p>
+
+<h2>Last but not least: automation</h2>
+
+<p>So that you don&#8217;t have to run it every day, you can setup a cron task to do it for you. Here is the line we use:</p>
+
+<figure class='code'><figcaption><span>crontab </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># m h  dom mon dow   command
+</span><span class='line'>01 3 * * * bash -l -c 'cd /home/deployer/rails/project/current; bundle exec rake sessions:cleanup'</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions">http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions</a></li>
+</ul>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Romain Champourlier</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-05T09:40:00+02:00" pubdate data-updated="true">Jul 5<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/database/'>database</a>, <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/maintenance/'>maintenance</a>, <a class='category' href='/blog/categories/rubyonrails/'>rubyonrails</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/07/05/setup-automatic-clearing-of-your-rails-sessions/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/07/05/setup-automatic-clearing-of-your-rails-sessions/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/" title="Previous Post: Which HTML5 Canvas Javascript library should I use?">&laquo; Which HTML5 Canvas Javascript library should I use?</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -226,7 +333,10 @@
       var disqus_shortname = 'softrli';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.softr.li/blog/2012/07/05/setup-automatic-clearing-of-your-rails-sessions/';
+        var disqus_url = 'http://www.softr.li/blog/2012/07/05/setup-automatic-clearing-of-your-rails-sessions/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

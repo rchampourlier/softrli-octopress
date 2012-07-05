@@ -4,7 +4,7 @@
   <title><![CDATA[Category: development | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/development/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-06-21T11:54:14+02:00</updated>
+  <updated>2012-07-05T10:25:42+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,77 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Setup automatic clearing of your Rails sessions]]></title>
+    <link href="http://www.softr.li/blog/2012/07/05/setup-automatic-clearing-of-your-rails-sessions/"/>
+    <updated>2012-07-05T09:40:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/07/05/setup-automatic-clearing-of-your-rails-sessions</id>
+    <content type="html"><![CDATA[<p>With every connection to your application of a new user, bot or whatever, Rails will create a new session object.</p>
+
+<p>If you're using <a href="http://api.rubyonrails.org/classes/ActiveRecord/SessionStore.html">ActiveRecord::SessionStore</a> to save your sessions in your database, your database may already be alarmingly growing in size, due to the number of sessions it contains.</p>
+
+<h2>The rake db:sessions:clear task</h2>
+
+<p>If you don't mind a lot about your users loosing their session, you can simply use the provided <code>rake db:sessions:clear</code> task. It will simply delete all sessions in the database. Side-effect: all current sessions are deleted, so signed in users get signed out, and you should hope they had nothing under way!</p>
+
+<h2>A more user-friendly solution</h2>
+
+<p>Writing a simple rake task to replace the default one and only remove sessions older than 2 weeks is as easy as adding this file to your project:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>lib/tasks/sessions.rake  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">namespace</span> <span class="ss">:sessions</span> <span class="k">do</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  desc &quot;Clear expired sessions (more than 2 weeks old)&quot;</span>
+</span><span class='line'><span class="sr">  task :cleanup =&gt; :environment do&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;DELETE FROM sessions WHERE (updated_at &amp;lt; &#39;</span><span class="si">#{</span><span class="no">Date</span><span class="o">.</span><span class="n">today</span> <span class="o">-</span> <span class="mi">2</span><span class="o">.</span><span class="n">weeks</span><span class="si">}</span><span class="s2">&#39;)&quot;</span>
+</span><span class='line'><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Now, if you run <code>rake sessions:cleanup</code>, only the older sessions will be removed from your database.</p>
+
+<h2>Last but not least: automation</h2>
+
+<p>So that you don't have to run it every day, you can setup a cron task to do it for you. Here is the line we use:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>crontab </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;h1>m h  dom mon dow   command&lt;/h1>
+</span><span class='line'>
+</span><span class='line'>&lt;p>01 3 * * * bash -l -c 'cd /home/deployer/rails/project/current; bundle exec rake sessions:cleanup'</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions">http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Which HTML5 Canvas Javascript library should I use?]]></title>
@@ -551,23 +622,6 @@ end using terms from</code></pre></noscript></div>
 <p><em>If you need any help, just ask!</em></p>
 
 <p><em>If you're aware of a better solution to setup a development environment like this, don't hesitate to tell me! I'm pretty sure there are some other ways I don't know yet...</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Forked TabBarKit]]></title>
-    <link href="http://www.softr.li/blog/2012/05/24/forked-tabbarkit/"/>
-    <updated>2012-05-24T16:52:00+02:00</updated>
-    <id>http://www.softr.li/blog/2012/05/24/forked-tabbarkit</id>
-    <content type="html"><![CDATA[<p>I have had to rewrite some parts of TBKTabBarController since I needed to be able to programmatically select a tab. This is normally possible by setting the <code>selectedIndex</code> or the <code>selectedViewController</code> property of the tab bar controller, but this was not working with TabBarKit.</p>
-
-<p>I investigated and detected this behavior was not implemented, so I decided to complete it myself.</p>
-
-<p>Along the way, I discovered there were some issues with the <code>containerView</code> being mixed up with the <code>TBKTabBarController</code>'s view, so I also corrected these bugs.</p>
-
-<p>I've forked the repository and updated it with my corrected code, so have a look to this <a href="https://github.com/rchampourlier/TabBarKit">repo</a> if you need this.</p>
-
-<p>Oh, I also added a <code>TBKTabBarStyleTwiceHeight</code> I use to double the size of the tab bar on iPad, so you get this for free too ;)</p>
 ]]></content>
   </entry>
   
