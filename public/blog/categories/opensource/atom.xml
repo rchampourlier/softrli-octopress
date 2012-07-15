@@ -4,7 +4,7 @@
   <title><![CDATA[Category: opensource | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/opensource/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-07-05T10:25:42+02:00</updated>
+  <updated>2012-07-15T18:26:18+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,23 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Fasten Sinatra development with guard-shotgun]]></title>
+    <link href="http://www.softr.li/blog/2012/07/15/sinatra-guard-shotgun/"/>
+    <updated>2012-07-15T18:20:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/07/15/sinatra-guard-shotgun</id>
+    <content type="html"><![CDATA[<p><a href="http://www.sinatrarb.com/">Sinatra</a> is a really nice way to <strong>bootstrap projects</strong>. It allows to <strong>start really fast</strong>, and is really suited for <strong>API-based</strong> projects (may be a good choice for your next mobile-or-web-app backend).</p>
+
+<p>Unlike Ruby on Rails however, Sinatra does not reload your code with each request, so you have to restart the server each time your code changes. To help you with this burden, there is a small tool called <a href="https://github.com/rtomayko/shotgun">Shotgun</a>.</p>
+
+<p>I've used it but I rapidly faced a <a href="https://github.com/rtomayko/shotgun/issues/34">logging issue</a> making it useless.</p>
+
+<p>Since I was using <strong>the excellent <a href="https://github.com/guard/guard/">Guard</a></strong>, and I had already seen a similar reloading module for Webrick, I just decided to code <a href="https://github.com/rchampourlier/guard-shotgun">guard-shotgun</a>. It's a fairly simple <strong>plugin for Guard</strong> providing the <strong>same feature as Shotgun</strong>, but using the rock-solid fundation provided by Guard!</p>
+
+<p>Feel free to use, fork, and even feedback it!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Forked TabBarKit]]></title>

@@ -9,16 +9,7 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="1
-2
-3
-4
-5
-gem uninstall gem_name
-git clone git://github.com/repo_name/gem_name.git
-cd gem_name
-gem build gem_name.gemspec
-gem install ./&lt;the gem &hellip;">
+  <meta name="description" content="For our Cultimots application, I wanted to customize the application&#8217;s tab bar. I looked a little on Google, cocoacontrols.com, Github, but I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +76,51 @@ gem install ./&lt;the gem &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/10/debugging-tabbarkit-a-barebones-kit-for-custom-tab-bar-on-ios/">Debugging TabBarKit, a Barebones Kit for Custom Tab Bar on iOS</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-10T12:36:00+02:00" pubdate data-updated="true">May 10<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>For our <a href="http://itunes.apple.com/fr/app/cultimots-un-jeu-culture-vocabulaire/id483710651?l=fr&amp;ls=1&amp;mt=8">Cultimots</a> application, I wanted to customize the application&#8217;s tab bar. I looked a little on Google, <a href="http://cocoacontrols.com/">cocoacontrols.com</a>, Github, but I didn&#8217;t want to use a full-featured solution which may not remain configurable for what I add in mind.</p>
+
+<p>I finally went for <strong>TabBarKit</strong>, which is quite barebones, <strong>reproducing the basic features of <code>UITabBar</code></strong> while letting me <strong>play with the code to get my own thing</strong>.</p>
+
+<p>On this way I encountered several time-consuming issues due to the non-existent documentation of TabBarKit and some bugs in the shared code. Since I already customized the code to fit my own project <strong>I won&#8217;t share the updated source code</strong>, I will however share the issues I met and the solutions I found. Hope this will make your path faster than mine!</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/05/10/debugging-tabbarkit-a-barebones-kit-for-custom-tab-bar-on-ios/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -473,47 +509,6 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration/">Using Cloned Virtualized Machines but Having Issues With Your Network Configuration?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-05T09:18:00+01:00" pubdate data-updated="true">Jan 5<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Trying to get your cloned VirtualBox on the host network without success? This may help you&#8230;</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -572,6 +567,10 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/07/15/sinatra-guard-shotgun/">Fasten Sinatra development with guard-shotgun</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/07/05/setup-automatic-clearing-of-your-rails-sessions/">Setup automatic clearing of your Rails sessions</a>
       </li>
     
@@ -585,10 +584,6 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
     
       <li class="post">
         <a href="/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app/">How to use Bootstrap within your Rails 3.1+ app</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/05/26/applescript-to-automate-the-setup-of-your-development-space/">AppleScript to automate the setup of your development space</a>
       </li>
     
   </ul>

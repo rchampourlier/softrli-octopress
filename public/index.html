@@ -9,7 +9,7 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="With every connection to your application of a new user, bot or whatever, Rails will create a new session object. If you&#8217;re using ActiveRecord &hellip;">
+  <meta name="description" content="Sinatra is a really nice way to bootstrap projects. It allows to start really fast, and is really suited for API-based projects (may be a good choice &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,50 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/15/sinatra-guard-shotgun/">Fasten Sinatra Development With Guard-shotgun</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-15T18:20:00+02:00" pubdate data-updated="true">Jul 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.sinatrarb.com/">Sinatra</a> is a really nice way to <strong>bootstrap projects</strong>. It allows to <strong>start really fast</strong>, and is really suited for <strong>API-based</strong> projects (may be a good choice for your next mobile-or-web-app backend).</p>
+
+<p>Unlike Ruby on Rails however, Sinatra does not reload your code with each request, so you have to restart the server each time your code changes. To help you with this burden, there is a small tool called <a href="https://github.com/rtomayko/shotgun">Shotgun</a>.</p>
+
+<p>I&#8217;ve used it but I rapidly faced a <a href="https://github.com/rtomayko/shotgun/issues/34">logging issue</a> making it useless.</p>
+
+<p>Since I was using <strong>the excellent <a href="https://github.com/guard/guard/">Guard</a></strong>, and I had already seen a similar reloading module for Webrick, I just decided to code <a href="https://github.com/rchampourlier/guard-shotgun">guard-shotgun</a>. It&#8217;s a fairly simple <strong>plugin for Guard</strong> providing the <strong>same feature as Shotgun</strong>, but using the rock-solid fundation provided by Guard!</p>
+
+<p>Feel free to use, fork, and even feedback it!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -552,51 +596,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/10/debugging-tabbarkit-a-barebones-kit-for-custom-tab-bar-on-ios/">Debugging TabBarKit, a Barebones Kit for Custom Tab Bar on iOS</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-10T12:36:00+02:00" pubdate data-updated="true">May 10<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>For our <a href="http://itunes.apple.com/fr/app/cultimots-un-jeu-culture-vocabulaire/id483710651?l=fr&amp;ls=1&amp;mt=8">Cultimots</a> application, I wanted to customize the application&#8217;s tab bar. I looked a little on Google, <a href="http://cocoacontrols.com/">cocoacontrols.com</a>, Github, but I didn&#8217;t want to use a full-featured solution which may not remain configurable for what I add in mind.</p>
-
-<p>I finally went for <strong>TabBarKit</strong>, which is quite barebones, <strong>reproducing the basic features of <code>UITabBar</code></strong> while letting me <strong>play with the code to get my own thing</strong>.</p>
-
-<p>On this way I encountered several time-consuming issues due to the non-existent documentation of TabBarKit and some bugs in the shared code. Since I already customized the code to fit my own project <strong>I won&#8217;t share the updated source code</strong>, I will however share the issues I met and the solutions I found. Hope this will make your path faster than mine!</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/05/10/debugging-tabbarkit-a-barebones-kit-for-custom-tab-bar-on-ios/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -653,6 +652,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/07/15/sinatra-guard-shotgun/">Fasten Sinatra development with guard-shotgun</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/07/05/setup-automatic-clearing-of-your-rails-sessions/">Setup automatic clearing of your Rails sessions</a>
       </li>
     
@@ -666,10 +669,6 @@
     
       <li class="post">
         <a href="/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app/">How to use Bootstrap within your Rails 3.1+ app</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/05/26/applescript-to-automate-the-setup-of-your-development-space/">AppleScript to automate the setup of your development space</a>
       </li>
     
   </ul>

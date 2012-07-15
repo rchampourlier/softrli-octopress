@@ -4,7 +4,7 @@
   <title><![CDATA[softr.li]]></title>
   <link href="http://www.softr.li/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-07-05T10:25:42+02:00</updated>
+  <updated>2012-07-15T18:26:18+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,23 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Fasten Sinatra development with guard-shotgun]]></title>
+    <link href="http://www.softr.li/blog/2012/07/15/sinatra-guard-shotgun/"/>
+    <updated>2012-07-15T18:20:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/07/15/sinatra-guard-shotgun</id>
+    <content type="html"><![CDATA[<p><a href="http://www.sinatrarb.com/">Sinatra</a> is a really nice way to <strong>bootstrap projects</strong>. It allows to <strong>start really fast</strong>, and is really suited for <strong>API-based</strong> projects (may be a good choice for your next mobile-or-web-app backend).</p>
+
+<p>Unlike Ruby on Rails however, Sinatra does not reload your code with each request, so you have to restart the server each time your code changes. To help you with this burden, there is a small tool called <a href="https://github.com/rtomayko/shotgun">Shotgun</a>.</p>
+
+<p>I&#8217;ve used it but I rapidly faced a <a href="https://github.com/rtomayko/shotgun/issues/34">logging issue</a> making it useless.</p>
+
+<p>Since I was using <strong>the excellent <a href="https://github.com/guard/guard/">Guard</a></strong>, and I had already seen a similar reloading module for Webrick, I just decided to code <a href="https://github.com/rchampourlier/guard-shotgun">guard-shotgun</a>. It&#8217;s a fairly simple <strong>plugin for Guard</strong> providing the <strong>same feature as Shotgun</strong>, but using the rock-solid fundation provided by Guard!</p>
+
+<p>Feel free to use, fork, and even feedback it!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Setup automatic clearing of your Rails sessions]]></title>
@@ -1937,40 +1954,6 @@ end
 <li>iOS x.x Library > Data Management > Core Data Model Versioning and Data Migration Programming Guide > Versioning > Model Versions</li>
 </ol>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using cloned virtualized machines but having issues with your network configuration?]]></title>
-    <link href="http://www.softr.li/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration/"/>
-    <updated>2012-01-05T09:18:00+01:00</updated>
-    <id>http://www.softr.li/blog/2012/01/05/using-cloned-virtualized-machines-but-having-issues-with-your-network-configuration</id>
-    <content type="html"><![CDATA[<p>Trying to get your cloned VirtualBox on the host network without success? This may help you&#8230;</p>
-
-<!-- more -->
-
-
-<p>If like me, you&#8217;re using <strong>VirtualBox virtual machines</strong> a lot, eg.:</p>
-
-<ul>
-<li>to <strong>simulate your production environment</strong> (what we may call <em>staging</em>),</li>
-<li>or more lately in my case, to <strong>run a PostgreSQL database</strong> and thus stop using SQLite to do your Rails developments and just use the production&#8217;s server&#8230;</li>
-</ul>
-
-
-<p>&#8230;then you may have wanted to clone some of your virtual machines once you installed the barebone server, and you may thus have faced <strong>an issue with the network of the cloned machine not working anymore.</strong></p>
-
-<p><strong>The solution to the problem is quite simple, but it needs to be found!</strong></p>
-
-<p>This one is working well with my images under <strong> Ubuntu 10.04.3 LTS</strong>. You can find some help <a href="http://blog.computerant.com/2010/01/02/virtualbox-cloning-ubuntu/">on this other post</a>, or if you want the shortest way:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo mv /etc/udev/rules.d/70-persistent-net.rules /etc/udev/rules.d/70-persistent-net.rules.broken
-</span><span class='line'>sudo shutdown now -r</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This should restart your machine&#8230; and restore your network! Have fun ;)</p>
 ]]></content>
   </entry>
   
