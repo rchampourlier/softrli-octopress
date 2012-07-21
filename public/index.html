@@ -9,7 +9,11 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="Sinatra is a really nice way to bootstrap projects. It allows to start really fast, and is really suited for API-based projects (may be a good choice &hellip;">
+  <meta name="description" content="How to 1
+2
+3
+wget -c http://download.virtualbox.org/virtualbox/4.1.18/VBoxGuestAdditions_4.1.18.iso
+sudo mount VBoxGuestAdditions_4.1.18.iso -o loop &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -82,7 +86,73 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/07/15/sinatra-guard-shotgun/">Fasten Sinatra Development With Guard-shotgun</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/07/21/softrli-update-virtual-box-guest-additions/">How to Update VirtualBox Guest Additions on a Vagrant Virtual Machine</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-21T18:00:00+02:00" pubdate data-updated="true">Jul 21<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h4>How to</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget -c http://download.virtualbox.org/virtualbox/4.1.18/VBoxGuestAdditions_4.1.18.iso
+</span><span class='line'>sudo mount VBoxGuestAdditions_4.1.18.iso -o loop /mnt
+</span><span class='line'>sudo sh /mnt/VBoxLinuxAdditions.run --nox11</span></code></pre></td></tr></table></div></figure>
+
+
+<p>At this point, <strong>you may encounter an error</strong> saying you need to specify <code>KERN_dir</code>. I spent some time finding what was required, finally after running all the following package installations it worked!</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install linux-headers-generic
+</span><span class='line'>sudo apt-get install dkms gcc
+</span><span class='line'>sudo apt-get install linux-headers-2.6.32-38-generic</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I assume the most important is <code>dkms</code> and the appropriate <code>linux-headers-...</code> package. <strong>Check the log message</strong> provided with the error, it may indicate which package version has to be installed.</p>
+
+<p><strong>Do not worry for the <code>Installing the Window System drivers ...fail!</code></strong> error message, this is no issue we have no window system on a vagrant box.</p>
+
+<h4>References</h4>
+
+<ul>
+<li><a href="http://till.klampaeckel.de/blog/archives/155-VirtualBox-Guest-Additions-and-vagrant.html">till.klampaeckel.de/blog/archives/155-VirtualBox-Guest-Additions-and-vagrant.html</a></li>
+<li><a href="http://ubuntuforums.org/showthread.php?t=1684185">ubuntuforums.org/showthread.php?t=1684185</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/15/sinatra-guard-shotgun/">Faster Sinatra Development With Guard-shotgun</a></h1>
     
     
       <p class="meta">
@@ -549,53 +619,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/19/organization-for-provisioning-your-environments-from-dev-to-prod-with-chef/">Organization for Provisioning Your Environments (From Dev to Prod) With Chef</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-19T11:56:00+02:00" pubdate data-updated="true">May 19<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>When you start developping a project with a team, you may start facing issues requiring you to share the same development environment. I just discovered <a href="www.vagrantup.com">Vagrant</a> and it&#8217;s the perfect solution for doing this.</p>
-
-<p>Vagrant is nice, but it stills requires you to provision your machine with the needed language stacks, services, etc. This is why it&#8217;s provided with a way to hook into Chef or Puppet.</p>
-
-<p><em>I&#8217;ll go with Chef because I had already given it a try sometime ago, and config files are written in Ruby, which I know.</em></p>
-
-<p>Since you&#8217;re going to build recipes and/or cookbooks <strong>to provision your development machine, what about going a little further and using Chef to provision your staging/production machines too?</strong></p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/05/19/organization-for-provisioning-your-environments-from-dev-to-prod-with-chef/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -652,7 +675,11 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/07/15/sinatra-guard-shotgun/">Fasten Sinatra development with guard-shotgun</a>
+        <a href="/blog/2012/07/21/softrli-update-virtual-box-guest-additions/">How to update VirtualBox Guest Additions on a Vagrant virtual machine</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/07/15/sinatra-guard-shotgun/">Faster Sinatra development with guard-shotgun</a>
       </li>
     
       <li class="post">
@@ -665,10 +692,6 @@
     
       <li class="post">
         <a href="/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/">XCode failing when building for archiving because of a missing library link</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app/">How to use Bootstrap within your Rails 3.1+ app</a>
       </li>
     
   </ul>

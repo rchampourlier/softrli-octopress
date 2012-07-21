@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sinatra | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/sinatra/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-07-15T18:26:18+02:00</updated>
+  <updated>2012-07-21T18:04:49+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Fasten Sinatra development with guard-shotgun]]></title>
+    <title type="html"><![CDATA[Faster Sinatra development with guard-shotgun]]></title>
     <link href="http://www.softr.li/blog/2012/07/15/sinatra-guard-shotgun/"/>
     <updated>2012-07-15T18:20:00+02:00</updated>
     <id>http://www.softr.li/blog/2012/07/15/sinatra-guard-shotgun</id>

@@ -5,11 +5,15 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Forked TabBarKit - softr.li</title>
+  <title>How to update VirtualBox Guest Additions on a Vagrant virtual machine - softr.li</title>
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="I have had to rewrite some parts of TBKTabBarController since I needed to be able to programmatically select a tab. This is normally possible by &hellip;">
+  <meta name="description" content="How to 1
+2
+3
+wget -c http://download.virtualbox.org/virtualbox/4.1.18/VBoxGuestAdditions_4.1.18.iso
+sudo mount VBoxGuestAdditions_4.1.18.iso -o loop &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +22,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.softr.li/blog/2012/05/24/forked-tabbarkit">
+  <link rel="canonical" href="http://www.softr.li/blog/2012/07/21/softrli-update-virtual-box-guest-additions">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -79,7 +83,7 @@
   
   <header>
     
-      <h1 class="entry-title">Forked TabBarKit</h1>
+      <h1 class="entry-title">How to Update VirtualBox Guest Additions on a Vagrant Virtual Machine</h1>
     
     
       <p class="meta">
@@ -95,22 +99,44 @@
   
 
 
-<time datetime="2012-05-24T16:52:00+02:00" pubdate data-updated="true">May 24<span>th</span>, 2012</time>
+<time datetime="2012-07-21T18:00:00+02:00" pubdate data-updated="true">Jul 21<span>st</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I have had to rewrite some parts of TBKTabBarController since I needed to be able to programmatically select a tab. This is normally possible by setting the <code>selectedIndex</code> or the <code>selectedViewController</code> property of the tab bar controller, but this was not working with TabBarKit.</p>
+<div class="entry-content"><h4>How to</h4>
 
-<p>I investigated and detected this behavior was not implemented, so I decided to complete it myself.</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget -c http://download.virtualbox.org/virtualbox/4.1.18/VBoxGuestAdditions_4.1.18.iso
+</span><span class='line'>sudo mount VBoxGuestAdditions_4.1.18.iso -o loop /mnt
+</span><span class='line'>sudo sh /mnt/VBoxLinuxAdditions.run --nox11</span></code></pre></td></tr></table></div></figure>
 
-<p>Along the way, I discovered there were some issues with the <code>containerView</code> being mixed up with the <code>TBKTabBarController</code>&#8217;s view, so I also corrected these bugs.</p>
 
-<p>I&#8217;ve forked the repository and updated it with my corrected code, so have a look to this <a href="https://github.com/rchampourlier/TabBarKit">repo</a> if you need this.</p>
+<p>At this point, <strong>you may encounter an error</strong> saying you need to specify <code>KERN_dir</code>. I spent some time finding what was required, finally after running all the following package installations it worked!</p>
 
-<p>Oh, I also added a <code>TBKTabBarStyleTwiceHeight</code> I use to double the size of the tab bar on iPad, so you get this for free too ;)</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install linux-headers-generic
+</span><span class='line'>sudo apt-get install dkms gcc
+</span><span class='line'>sudo apt-get install linux-headers-2.6.32-38-generic</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I assume the most important is <code>dkms</code> and the appropriate <code>linux-headers-...</code> package. <strong>Check the log message</strong> provided with the error, it may indicate which package version has to be installed.</p>
+
+<p><strong>Do not worry for the <code>Installing the Window System drivers ...fail!</code></strong> error message, this is no issue we have no window system on a vagrant box.</p>
+
+<h4>References</h4>
+
+<ul>
+<li><a href="http://till.klampaeckel.de/blog/archives/155-VirtualBox-Guest-Additions-and-vagrant.html">till.klampaeckel.de/blog/archives/155-VirtualBox-Guest-Additions-and-vagrant.html</a></li>
+<li><a href="http://ubuntuforums.org/showthread.php?t=1684185">ubuntuforums.org/showthread.php?t=1684185</a></li>
+</ul>
+
 </div>
 
 
@@ -133,12 +159,12 @@
   
 
 
-<time datetime="2012-05-24T16:52:00+02:00" pubdate data-updated="true">May 24<span>th</span>, 2012</time>
+<time datetime="2012-07-21T18:00:00+02:00" pubdate data-updated="true">Jul 21<span>st</span>, 2012</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/ios/'>ios</a>, <a class='category' href='/blog/categories/opensource/'>opensource</a>
+    <a class='category' href='/blog/categories/vagrant/'>vagrant</a>, <a class='category' href='/blog/categories/virtualization/'>virtualization</a>
   
 </span>
 
@@ -147,7 +173,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/05/24/forked-tabbarkit/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/05/24/forked-tabbarkit/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/07/21/softrli-update-virtual-box-guest-additions/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/07/21/softrli-update-virtual-box-guest-additions/" >Tweet</a>
   
   
   
@@ -156,10 +182,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/" title="Previous Post: Chef recipe to install a PostgreSQL server on a machine configured with en_US locales">&laquo; Chef recipe to install a PostgreSQL server on a machine configured with en_US locales</a>
+        <a class="basic-alignment left" href="/blog/2012/07/15/sinatra-guard-shotgun/" title="Previous Post: Faster Sinatra development with guard-shotgun">&laquo; Faster Sinatra development with guard-shotgun</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/05/26/applescript-to-automate-the-setup-of-your-development-space/" title="Next Post: AppleScript to automate the setup of your development space">AppleScript to automate the setup of your development space &raquo;</a>
       
     </p>
   </footer>
@@ -292,8 +316,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.softr.li/blog/2012/05/24/forked-tabbarkit/';
-        var disqus_url = 'http://www.softr.li/blog/2012/05/24/forked-tabbarkit/';
+        var disqus_identifier = 'http://www.softr.li/blog/2012/07/21/softrli-update-virtual-box-guest-additions/';
+        var disqus_url = 'http://www.softr.li/blog/2012/07/21/softrli-update-virtual-box-guest-additions/';
         var disqus_script = 'embed.js';
       
     (function () {

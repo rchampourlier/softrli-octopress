@@ -9,7 +9,7 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="For our Cultimots application, I wanted to customize the application&#8217;s tab bar. I looked a little on Google, cocoacontrols.com, Github, but I &hellip;">
+  <meta name="description" content="When you start developping a project with a team, you may start facing issues requiring you to share the same development environment. I just &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,53 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/19/organization-for-provisioning-your-environments-from-dev-to-prod-with-chef/">Organization for Provisioning Your Environments (From Dev to Prod) With Chef</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-19T11:56:00+02:00" pubdate data-updated="true">May 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When you start developping a project with a team, you may start facing issues requiring you to share the same development environment. I just discovered <a href="www.vagrantup.com">Vagrant</a> and it&#8217;s the perfect solution for doing this.</p>
+
+<p>Vagrant is nice, but it stills requires you to provision your machine with the needed language stacks, services, etc. This is why it&#8217;s provided with a way to hook into Chef or Puppet.</p>
+
+<p><em>I&#8217;ll go with Chef because I had already given it a try sometime ago, and config files are written in Ruby, which I know.</em></p>
+
+<p>Since you&#8217;re going to build recipes and/or cookbooks <strong>to provision your development machine, what about going a little further and using Chef to provision your staging/production machines too?</strong></p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/05/19/organization-for-provisioning-your-environments-from-dev-to-prod-with-chef/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -468,47 +515,6 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/17/getting-the-correct-object-data-model-for-really-automatic-coredata-lightweight-migration/">Getting the Correct Object Data Model for Really Automatic CoreData Lightweight Migrations</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-17T09:31:00+01:00" pubdate data-updated="true">Jan 17<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>If you&#8217;re using CoreData for your iOS application, you may have the need sometimes <strong>to update your data model</strong>. If your application is already live (e.g. shipped on the AppStore), you will have to <strong>migrate your existing data when updating the model</strong>.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/01/17/getting-the-correct-object-data-model-for-really-automatic-coredata-lightweight-migration/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -567,7 +573,11 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2012/07/15/sinatra-guard-shotgun/">Fasten Sinatra development with guard-shotgun</a>
+        <a href="/blog/2012/07/21/softrli-update-virtual-box-guest-additions/">How to update VirtualBox Guest Additions on a Vagrant virtual machine</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/07/15/sinatra-guard-shotgun/">Faster Sinatra development with guard-shotgun</a>
       </li>
     
       <li class="post">
@@ -580,10 +590,6 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
     
       <li class="post">
         <a href="/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/">XCode failing when building for archiving because of a missing library link</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app/">How to use Bootstrap within your Rails 3.1+ app</a>
       </li>
     
   </ul>

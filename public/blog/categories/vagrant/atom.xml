@@ -4,7 +4,7 @@
   <title><![CDATA[Category: vagrant | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/vagrant/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-07-15T18:26:18+02:00</updated>
+  <updated>2012-07-21T18:04:49+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to update VirtualBox Guest Additions on a Vagrant virtual machine]]></title>
+    <link href="http://www.softr.li/blog/2012/07/21/softrli-update-virtual-box-guest-additions/"/>
+    <updated>2012-07-21T18:00:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/07/21/softrli-update-virtual-box-guest-additions</id>
+    <content type="html"><![CDATA[<h4>How to</h4>
+
+<p><code>
+wget -c http://download.virtualbox.org/virtualbox/4.1.18/VBoxGuestAdditions_4.1.18.iso
+sudo mount VBoxGuestAdditions_4.1.18.iso -o loop /mnt
+sudo sh /mnt/VBoxLinuxAdditions.run --nox11
+</code></p>
+
+<p>At this point, <strong>you may encounter an error</strong> saying you need to specify <code>KERN_dir</code>. I spent some time finding what was required, finally after running all the following package installations it worked!</p>
+
+<p><code>
+sudo apt-get install linux-headers-generic
+sudo apt-get install dkms gcc
+sudo apt-get install linux-headers-2.6.32-38-generic
+</code></p>
+
+<p>I assume the most important is <code>dkms</code> and the appropriate <code>linux-headers-...</code> package. <strong>Check the log message</strong> provided with the error, it may indicate which package version has to be installed.</p>
+
+<p><strong>Do not worry for the <code>Installing the Window System drivers ...fail!</code></strong> error message, this is no issue we have no window system on a vagrant box.</p>
+
+<h4>References</h4>
+
+<ul>
+<li><a href="http://till.klampaeckel.de/blog/archives/155-VirtualBox-Guest-Additions-and-vagrant.html">till.klampaeckel.de/blog/archives/155-VirtualBox-Guest-Additions-and-vagrant.html</a></li>
+<li><a href="http://ubuntuforums.org/showthread.php?t=1684185">ubuntuforums.org/showthread.php?t=1684185</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Chef recipe to install a PostgreSQL server on a machine configured with en_US locales]]></title>
