@@ -4,7 +4,7 @@
   <title><![CDATA[Category: vagrant | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/vagrant/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-07-21T18:04:49+02:00</updated>
+  <updated>2012-07-21T18:06:33+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Running guard over Vagrant]]></title>
+    <link href="http://www.softr.li/blog/2012/07/21/running-guard-over-vagrant/"/>
+    <updated>2012-07-21T18:05:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/07/21/running-guard-over-vagrant</id>
+    <content type="html"><![CDATA[<p>To keep it simple, you can't... do it properly. File events are not correctly triggered by VirtualBox on the guest when the files are updated from the host (see the related Github <a href="https://github.com/guard/listen/issues/53">issue</a>). So <strong>guard cannot detect the events issued by the host</strong>... unless you run it with the polling option:</p>
+
+<p><code>
+vagrant -p
+</code></p>
+
+<p>This polling option works correctly on the latest versions of VirtualBox (there was an <a href="https://github.com/guard/guard/issues/269">issue</a> before 4.1.12), but it remains a bad option because doing so my <strong>system's CPU instantly goes to a constant 100% charge</strong>.</p>
+
+<p>To <strong>improve the situation</strong>, you can still <strong>reduce the latency</strong> so that the polling is not done so frequently. This naturally adds some delay before the triggering of the events, but it will keep your system cool.</p>
+
+<p><code>
+guard -p -l 10
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to update VirtualBox Guest Additions on a Vagrant virtual machine]]></title>

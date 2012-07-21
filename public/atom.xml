@@ -4,7 +4,7 @@
   <title><![CDATA[softr.li]]></title>
   <link href="http://www.softr.li/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-07-21T18:04:49+02:00</updated>
+  <updated>2012-07-21T18:06:33+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Running guard over Vagrant]]></title>
+    <link href="http://www.softr.li/blog/2012/07/21/running-guard-over-vagrant/"/>
+    <updated>2012-07-21T18:05:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/07/21/running-guard-over-vagrant</id>
+    <content type="html"><![CDATA[<p>To keep it simple, you can&#8217;t&#8230; do it properly. File events are not correctly triggered by VirtualBox on the guest when the files are updated from the host (see the related Github <a href="https://github.com/guard/listen/issues/53">issue</a>). So <strong>guard cannot detect the events issued by the host</strong>&#8230; unless you run it with the polling option:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant -p</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This polling option works correctly on the latest versions of VirtualBox (there was an <a href="https://github.com/guard/guard/issues/269">issue</a> before 4.1.12), but it remains a bad option because doing so my <strong>system&#8217;s CPU instantly goes to a constant 100% charge</strong>.</p>
+
+<p>To <strong>improve the situation</strong>, you can still <strong>reduce the latency</strong> so that the polling is not done so frequently. This naturally adds some delay before the triggering of the events, but it will keep your system cool.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>guard -p -l 10</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to update VirtualBox Guest Additions on a Vagrant virtual machine]]></title>
@@ -1594,298 +1615,6 @@ $ git clone git://github.com/sstephenson/ruby-build.git
 <h2>Hubticle tags</h2>
 
 <p>ruby, RVM, rbenv, gem, gemset, development, environment, bundle</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Adding SSL on some pages of your Rails application]]></title>
-    <link href="http://www.softr.li/blog/2012/03/23/adding-ssl-on-some-pages-of-your-rails-application/"/>
-    <updated>2012-03-23T09:49:00+01:00</updated>
-    <id>http://www.softr.li/blog/2012/03/23/adding-ssl-on-some-pages-of-your-rails-application</id>
-    <content type="html"><![CDATA[<p>This tutorial should help you to setup SSL on your <em>staging</em> and <em>production</em> servers as well as update your Rails application to require SSL for specific controller actions.</p>
-
-<!-- more -->
-
-
-<h2>Generate a self-signed certificate to test on your staging server</h2>
-
-<p>We start by creating a self-signed certificate you will be able to use on your test/staging server, before buying a real certificate and configuring your production machine with it.</p>
-
-<h3>The terminal commands</h3>
-
-<p><em>On your server console</em></p>
-
-<pre><code>openssl genrsa -aes256 -out server.key 2048 # step 1
-openssl req -new -key server.key -out server.csr # step 2
-mv server.key server.key.bak # step 3
-openssl rsa -in server.key.bak -out server.key # step 4
-sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt # step 5
-</code></pre>
-
-<h3>What does it do?</h3>
-
-<ol>
-<li>Generates a private/public key pair</li>
-<li>Creates a certificate request
-
-<ul>
-<li>You <strong>must</strong> fill every requested field unless it is marked optional.</li>
-<li>In France, you should use the name of the &#8220;departement&#8221; to fill the <em>State or Province Name</em>.</li>
-<li>Use your company name for <em>Organization Name</em>.</li>
-<li>Be sure to fill the chosen website domain name for <em>Common Name</em>. <strong>Don&#8217;t fill your personal name for a website SSL certificate request!</strong></li>
-</ul>
-</li>
-<li>Copies the passphrase-protected private key to <code>server.key.bak</code>.</li>
-<li>Removes the passphrase from the private key. You have to do this, so that it won&#8217;t be needed when starting the webserver. Since this is probably done automatically (at server boot or through automatic management tools), you won&#8217;t be there to enter the passphrase. <strong>Be sure however that your private key is secure (root user access only), and revoke it as soon as you think it was compromised.</strong> <em>If you didn&#8217;t remove it, <code>server.key.bak</code> contains your passphrase-protected key, while <code>server.key</code> is the passphrase-free one.</em></li>
-<li>Generates the self-signed certificate.</li>
-</ol>
-
-
-<h3>How to fill, example for a company in Paris, France</h3>
-
-<ul>
-<li>Country Name: FR</li>
-<li>State or Province Name: Paris</li>
-<li>Locality Name: Paris</li>
-<li>Organization Name: Avdice</li>
-<li>Organizational Unit Name: IT Service</li>
-<li>Common Name: www.website.com</li>
-<li>Email Address: mail@website.com</li>
-</ul>
-
-
-<p><em>Nothing for challenge password and optional company name.</em></p>
-
-<h2>Generate the Certificate Signing Request to get a real SSL certificate for your production server</h2>
-
-<p>The process is exactly the same as the one above, except you do not do step 5. You will buy a certificate from a provider, send it the CSR file you&#8217;ve created thanks to the steps 1 and 2, and it will provide you with the certificate.</p>
-
-<h3>Generate the chained certificate file</h3>
-
-<p>Some certification authorities used to issue your certificate may not be known by the browser. To ensure the browser correctly recognize your certificate as valid, you have to complete your certificate by appending the intermediate authorities&#8217; certificates.</p>
-
-<p>Your SSL provider should have sent you with your certificate file the required intermediate certificates and the order in which they are to be used. For example, for a PositiveSSL certificate here is an extract of the email containing the certificate:</p>
-
-<ul>
-<li>Root CA Certificate - AddTrustExternalCARoot.crt</li>
-<li>Intermediate CA Certificate - PositiveSSLCA2.crt</li>
-<li>Your PositiveSSL Certificate - www_website_com.crt</li>
-</ul>
-
-
-<p>To generate our chained certificate file, we have to concatenate the provided certificates <strong>in the order of the certification, starting from your certificate to the root one</strong>.</p>
-
-<p>Here are the commands we use with the previous example:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cat www_website_com.crt &gt; server.crt
-</span><span class='line'>cat PositiveSSLCA2.crt &gt;&gt; server.crt
-</span><span class='line'>cat AddTrustExternalCARoot.crt &gt;&gt; server.crt</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Move the files to the correct place</h2>
-
-<ul>
-<li>For a self-signed certificate (staging), the <code>server.crt</code> file is the one you generated during the procedure.</li>
-<li><p>For a true certificate (production), the <code>server.crt</code> is the chained-certificate file you generated thanks to the previous section guide.</p>
-
-<p>  sudo mv server.crt /etc/ssl/certs/application_name.crt
-  sudo mv server.key /etc/ssl/private/application_name.key</p></li>
-</ul>
-
-
-<h2>Change the permissions of the files to make them safe</h2>
-
-<pre><code>sudo chown root:ssl-cert /etc/ssl/private/application_name.key
-sudo chmod 0600 /etc/ssl/private/application_name.key
-sudo chown root:root /etc/ssl/certs/application_name.crt
-sudo chmod 0600 /etc/ssl/certs/application_name.crt 
-</code></pre>
-
-<h2>Update the configuration of your webserver to add a SSL host</h2>
-
-<p><em>This tutorial is written for nginx v0.7.65. It&#8217;s quite old but it&#8217;s the default package on Ubuntu 10.04.3 LTS. I however recommend you to update it by installing it directly from the source, it&#8217;s quite easy! Still, the tutorial should be valid for a newer version too&#8230;</em></p>
-
-<p>Adding the SSL host to your nginx configuration file essentially means to add the following lines:</p>
-
-<pre><code>server {
-    listen &lt;%= app_port_ssl %&gt;;
-    client_max_body_size 500M;
-    server_name &lt;%= server_name %&gt;;
-    ssl                     on;
-    ssl_certificate         /etc/ssl/certs/application_name.crt;
-    ssl_certificate_key     /etc/ssl/private/application_name.key;
-    ssl_session_timeout     5m;
-
-    [...remaining configuration]
-}
-</code></pre>
-
-<p>You have to make some changes for the location you&#8217;re proxying to Rails too.</p>
-
-<p>In our case, we have this root location:</p>
-
-<pre><code>location / {
-  # Returns file if it exists, else send to app server's location
-  try_files $uri @app_server;
-}
-</code></pre>
-
-<p>Our standard (ie. HTTP) <code>@app_server</code> location is defined like this:</p>
-
-<pre><code>location @app_server {
-  proxy_set_header X-Forwarded-For$proxy_add_x_forwarded_for;
-  proxy_set_header Host $http_host;
-  proxy_pass http://&lt;%= application %&gt;_app_server;
-}
-</code></pre>
-
-<p>The one for SSL is like this:</p>
-
-<pre><code>location @app_server {
-  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-  proxy_set_header X-Forwarded-Proto https;
-  proxy_set_header Host $http_host;
-  proxy_pass http://&lt;%= application %&gt;_app_server;
-  proxy_redirect off;
-  proxy_max_temp_file_size 0;
-}
-</code></pre>
-
-<p>You see some additional proxy directives, in particular <code>proxy_set_header X-Forwarded-Proto https;</code>, they ensure that Rails can correctly detect the request was made through HTTPS, not HTTP.</p>
-
-<p>The remaining configuration may be a copy of your HTTP server configuration, in which case your server will do both HTTP and HTTPS the same way, or a specific configuration if you want to process different locations, perform redirections, etc.</p>
-
-<h2>Update Rails application to require SSL for specific actions</h2>
-
-<p>Our goal is to have only specific controller actions requiring SSL. We don&#8217;t want everything to be secured, this would unnecessarily increase our server&#8217;s load.</p>
-
-<p>We assume that our webserver-level configuration (nginx in our case) is not managing HTTP/HTTPS routing (we could do this through webserver rules, however we consider that this is business/app-level related, so this should be done at app-level).</p>
-
-<p><em>This tutorial is made for Rails 3.0.x (tested with 3.0.12)</em></p>
-
-<h3>Install <code>ssl_requirement</code> gem</h3>
-
-<p>Use this fork: <a href="https://github.com/bartt/ssl_requirement">https://github.com/bartt/ssl_requirement</a> and follow the guide.</p>
-
-<p><strong>If you want the short way&#8230;</strong></p>
-
-<p>Add to your Gemfile</p>
-
-<pre><code>gem 'bartt-ssl_requirement', '~&gt;1.4.0', :require =&gt; 'ssl_requirement'
-</code></pre>
-
-<h3>Configure Devise for SSL</h3>
-
-<p>Add the following code at the bottom of your <code>Application</code> class definition within <code>config/application.rb</code>:</p>
-
-<pre><code>config.to_prepare do
-  Devise::RegistrationsController.ssl_required :new, :create
-  Devise::SessionsController.ssl_required :new, :create
-end
-</code></pre>
-
-<p>Add to your <code>ApplicationController</code></p>
-
-<pre><code>include ::SslRequirement
-</code></pre>
-
-<p>For any other controller action you want SSL, add this  to your controller class:</p>
-
-<pre><code>ssl_required :action_name
-</code></pre>
-
-<h3>Review routes when SSL is required</h3>
-
-<p>You probably don&#8217;t want to limit all your secured routes to SSL. In most cases, it&#8217;s better if you don&#8217;t, so that the user gets a redirection when he tries to access through <code>http</code> a route with ssl required.</p>
-
-<p>However, you can&#8217;t do so for <code>POST</code> routes: redirection won&#8217;t work, since it will redirect to a <code>GET</code>. For these routes, you can add the SSL constraint on the route, so that the user get a <code>404</code> error when he tries to mess with the URL&#8217;s protocol!</p>
-
-<p>If you&#8217;re using Devise, you&#8217;ll probably want to do this for you <code>user_registration</code> and <code>user_session</code> <code>POST</code> routes.</p>
-
-<p>You will have to override Devise&#8217;s defaults routes for <code>sessions</code> and <code>registrations</code> controllers. For the override, you&#8217;ll use:</p>
-
-<pre><code>devise_for  :users, 
-  :skip =&gt; [:registrations, :sessions]
-</code></pre>
-
-<p>This simply tells Devise to skip the registrations and sessions routes, as you&#8217;ll give them yourself to enforce the SSL requirement.</p>
-
-<p>And now, you create these routes by yourself:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">devise_scope</span> <span class="ss">:user</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">scope</span> <span class="s1">&#39;/users&#39;</span> <span class="k">do</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Setting up registrations routes manually for https on create</span>
-</span><span class='line'>    <span class="n">get</span> <span class="s1">&#39;/cancel&#39;</span><span class="p">,</span>        <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#cancel&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:cancel_user_registration</span>
-</span><span class='line'>    <span class="n">post</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>              <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#create&#39;</span><span class="p">,</span>
-</span><span class='line'>                          <span class="ss">:constraints</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:protocol</span> <span class="o">=&gt;</span> <span class="n">secured_protocol</span> <span class="p">},</span>
-</span><span class='line'>                          <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:user_registration</span>
-</span><span class='line'>    <span class="n">get</span> <span class="s1">&#39;/sign_up&#39;</span><span class="p">,</span>       <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#new&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:new_user_registration</span>
-</span><span class='line'>    <span class="n">get</span> <span class="s1">&#39;/edit&#39;</span><span class="p">,</span>          <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#edit&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:edit_user_registration</span>
-</span><span class='line'>    <span class="n">put</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>               <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#update&#39;</span>
-</span><span class='line'>    <span class="n">delete</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>            <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/registrations#destroy&#39;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Sessions routes for https on create</span>
-</span><span class='line'>    <span class="n">get</span> <span class="s1">&#39;/sign_in&#39;</span><span class="p">,</span>       <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/sessions#new&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:new_user_session</span>
-</span><span class='line'>    <span class="n">post</span> <span class="s1">&#39;/sign_in&#39;</span><span class="p">,</span>      <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/sessions#create&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:user_session</span><span class="p">,</span>
-</span><span class='line'>                          <span class="ss">:constraints</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="ss">:protocol</span> <span class="o">=&gt;</span> <span class="n">secured_protocol</span> <span class="p">}</span>
-</span><span class='line'>    <span class="n">delete</span> <span class="s1">&#39;/sign_out&#39;</span><span class="p">,</span>   <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;devise/sessions#destroy&#39;</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:destroy_user_session</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Change your links to go <code>https</code></h2>
-
-<p>This involves using the <code>_url</code> helper instead of the <code>_path</code> one, and adding this option: <code>:protocol =&gt; "https"</code>.</p>
-
-<p>Be sure to change the url of forms matching SSL-enabled routes, or you&#8217;ll get <code>404</code>s!</p>
-
-<h2>Testing</h2>
-
-<p>You should now be able to test this configuration with your browser. You will need to deploy your updated app to a staging machine, unless your development is SSL-capable.</p>
-
-<h3>With a self-signed SSL certificate (on staging)</h3>
-
-<p>The browser <strong>will</strong> complain that the certificate is not valid. It&#8217;s normal, since it is not signed by a valid certificate authority. <strong>You are indeed the certificate authority</strong> (remember, it&#8217;s self-signed), and <strong>you are not known by the browser as a valid certificate authority!</strong></p>
-
-<h3>With a true SSL certificate (on production)</h3>
-
-<p>You may encounter some issues with your browser recognizing the issued certificate. The browser may complain it is signed by an unknown authority. This may happen when an unknown intermediate certification authority is used.</p>
-
-<p>You can use this service to check your server is sending the expected certificate chain: <a href="http://www.sslshopper.com/ssl-checker.html">http://www.sslshopper.com/ssl-checker.html</a></p>
-
-<p>If the certificate chain is not valid, check again the <em>Generating the chained certificate file</em> section.</p>
-
-<h2>References</h2>
-
-<ul>
-<li><a href="http://wiki.nginx.org/HttpSslModule">http://wiki.nginx.org/HttpSslModule</a></li>
-</ul>
-
 ]]></content>
   </entry>
   

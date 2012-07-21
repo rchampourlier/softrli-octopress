@@ -9,11 +9,7 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="How to 1
-2
-3
-wget -c http://download.virtualbox.org/virtualbox/4.1.18/VBoxGuestAdditions_4.1.18.iso
-sudo mount VBoxGuestAdditions_4.1.18.iso -o loop &hellip;">
+  <meta name="description" content="To keep it simple, you can&#8217;t&#8230; do it properly. File events are not correctly triggered by VirtualBox on the guest when the files are &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +76,54 @@ sudo mount VBoxGuestAdditions_4.1.18.iso -o loop &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/21/running-guard-over-vagrant/">Running Guard Over Vagrant</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-21T18:05:00+02:00" pubdate data-updated="true">Jul 21<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>To keep it simple, you can&#8217;t&#8230; do it properly. File events are not correctly triggered by VirtualBox on the guest when the files are updated from the host (see the related Github <a href="https://github.com/guard/listen/issues/53">issue</a>). So <strong>guard cannot detect the events issued by the host</strong>&#8230; unless you run it with the polling option:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant -p</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This polling option works correctly on the latest versions of VirtualBox (there was an <a href="https://github.com/guard/guard/issues/269">issue</a> before 4.1.12), but it remains a bad option because doing so my <strong>system&#8217;s CPU instantly goes to a constant 100% charge</strong>.</p>
+
+<p>To <strong>improve the situation</strong>, you can still <strong>reduce the latency</strong> so that the polling is not done so frequently. This naturally adds some delay before the triggering of the events, but it will keep your system cool.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>guard -p -l 10</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -575,50 +619,6 @@ sudo mount VBoxGuestAdditions_4.1.18.iso -o loop &hellip;">
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/20/vagrant-stacks-a-provision-on-demand-tool-for-vagrant/">Vagrant-stacks, a Provision-on-demand Tool for Vagrant!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-20T09:42:00+02:00" pubdate data-updated="true">May 20<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.vagrantup.com">Vagrant</a> is really an excellent tool for building and using virtual machines for your development environment. It <strong>ease the maintenance</strong> and allows to <strong>share the same environment within the whole team</strong>.</p>
-
-<p>However, <strong>Vagrant itself only provides you with barebones boxes</strong>.  You still have to work for provisioning the box, <strong>which requires that you build a Chef recipe</strong> (or Puppet, but I&#8217;m using Chef so I will only refer to this one).</p>
-
-<p><strong>Instead of using a packaged box</strong> (e.g. from <a href="[http://vagrantbox.es">vagrantbox.es</a>) which you may <strong>not trust or feal comfortable with</strong>, you can use <a href="https://github.com/rchampourlier/vagrant-stacks">this repo</a> to <strong>build and package your Vagrant box by yourself</strong>. It provides the tools and some configurations which will enable you to build a provisioned box without writing the recipe! The advantage of this approach over packaged boxes is that you can <strong>review how the box is built and provisioned</strong>. You can even refine the configurations and build new ones by forking the repo and submitting pull requests!</p>
-
-<p>It already provides a configuration for a <strong>Ruby 1.9.2-p290 stack, managed with rbenv and Bundler, plus a PostgreSQL 8.4 database and MongoDB</strong>.</p>
-
-<p>So feel free to <strong>try and share new configurations</strong>! Enjoy!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -675,6 +675,10 @@ sudo mount VBoxGuestAdditions_4.1.18.iso -o loop &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/07/21/running-guard-over-vagrant/">Running guard over Vagrant</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/07/21/softrli-update-virtual-box-guest-additions/">How to update VirtualBox Guest Additions on a Vagrant virtual machine</a>
       </li>
     
@@ -688,10 +692,6 @@ sudo mount VBoxGuestAdditions_4.1.18.iso -o loop &hellip;">
     
       <li class="post">
         <a href="/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/">Which HTML5 Canvas Javascript library should I use?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/">XCode failing when building for archiving because of a missing library link</a>
       </li>
     
   </ul>
