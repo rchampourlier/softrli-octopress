@@ -9,7 +9,7 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="To keep it simple, you can&#8217;t&#8230; do it properly. File events are not correctly triggered by VirtualBox on the guest when the files are &hellip;">
+  <meta name="description" content="This is more a note-to-myself post, but if someone falls in the same hole, this may be helpful as I couldn&#8217;t found any help on this on the web &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,64 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/25/postgresql-schema-owner-altered-during-dump-prevent-access-from-rails/">PostgreSQL Schema&#8217;s Owner Altered in Database Dump Preventing Rails From Finding the Data</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-25T15:40:00+02:00" pubdate data-updated="true">Jul 25<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This is more a note-to-myself post, but if someone falls in the same hole, this may be helpful as I couldn&#8217;t found any help on this on the web&#8230;</p>
+
+<p>I have a Rails application whose database is regularly backed up (thanks to the <a href="https://github.com/meskyanichi/backup/">Backup gem</a>). While updating my development environment (which is under Vagrant) and trying a migration to Rails 3.2, I was bitten by a hard-to-debug <strong>issue involving PostgreSQL schemas</strong>.</p>
+
+<p>After creating the db (with <code>rake db:create</code>) and before loading the dump (using <code>psql -d app_development -f app.sql</code>), everything was fine: Rails could find the tables, tell which schema it was working on (returning <code>public</code> when running <code>ActiveRecord::Base.connection.current_schema</code> in the console).</p>
+
+<p>However, as soon as I loaded the dump file, Rails could not find the data anymore (more precisely the schema). It could still access the database itself, but not the schema. Related issues were:</p>
+
+<ul>
+<li>Rails keeping saying <code>...(Table doesn't exist)</code>,</li>
+<li>or a more significative <strong><code>PG::Error: ERROR:  no schema has been selected to create in</code></strong> when running <code>rake db:migrate</code>.</li>
+</ul>
+
+
+<p>The culprit was this line in the <code>app.sql</code> dump file:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ALTER SCHEMA public OWNER TO postgres;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The schema&#8217;s owner was changed to <code>postgres</code>, while Rails was trying to access it as another user (the database&#8217;s owner).</p>
+
+<p>I just changed <code>postgres</code> to match my database name, and it worked again. Be sure to check your schema&#8217;s owner if you meet these issues!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -568,57 +626,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/">Chef Recipe to Install a PostgreSQL Server on a Machine Configured With en_US Locales</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-22T00:00:00+02:00" pubdate data-updated="true">May 22<span>nd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>If you have tried to install a PostgreSQL server on a Vagrant box and you&#8217;re not an english-native, you may have faced an UTF8 issue:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE DATABASE db_mydb OWNER my_user ENCODING 'UTF8' TEMPLATE template1;
-</span><span class='line'>createdb: database creation failed: ERROR:  encoding UTF8 does not match locale en_US
-</span><span class='line'>DETAIL:  The chosen LC_CTYPE setting requires encoding LATIN1</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is due to your Vagrant base box being configured with <code>en_US</code> locales. When the PostgreSQL server is installed, it is configured according to these locales, and gets an <code>en_US</code> config which is not compatible with <code>UTF8</code> encoding databases.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -675,6 +682,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/07/25/postgresql-schema-owner-altered-during-dump-prevent-access-from-rails/">PostgreSQL schema&#8217;s owner altered in database dump preventing Rails from finding the data</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/07/21/running-guard-over-vagrant/">Running guard over Vagrant</a>
       </li>
     
@@ -688,10 +699,6 @@
     
       <li class="post">
         <a href="/blog/2012/07/05/setup-automatic-clearing-of-your-rails-sessions/">Setup automatic clearing of your Rails sessions</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/06/20/which-html5-canvas-javascript-library-should-i-use/">Which HTML5 Canvas Javascript library should I use?</a>
       </li>
     
   </ul>

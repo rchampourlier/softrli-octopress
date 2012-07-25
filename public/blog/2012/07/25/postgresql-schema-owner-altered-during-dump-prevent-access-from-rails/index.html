@@ -5,13 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Chef recipe to install a PostgreSQL server on a machine configured with en_US locales - softr.li</title>
+  <title>PostgreSQL schema's owner altered in database dump preventing Rails from finding the data - softr.li</title>
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="If you have tried to install a PostgreSQL server on a Vagrant box and you&#8217;re not an english-native, you may have faced an UTF8 issue: 1
-2
-3 &hellip;">
+  <meta name="description" content="This is more a note-to-myself post, but if someone falls in the same hole, this may be helpful as I couldn&#8217;t found any help on this on the web &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.softr.li/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales">
+  <link rel="canonical" href="http://www.softr.li/blog/2012/07/25/postgresql-schema-owner-altered-during-dump-prevent-access-from-rails">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -81,7 +79,7 @@
   
   <header>
     
-      <h1 class="entry-title">Chef Recipe to Install a PostgreSQL Server on a Machine Configured With en_US Locales</h1>
+      <h1 class="entry-title">PostgreSQL Schema's Owner Altered in Database Dump Preventing Rails From Finding the Data</h1>
     
     
       <p class="meta">
@@ -97,74 +95,36 @@
   
 
 
-<time datetime="2012-05-22T00:00:00+02:00" pubdate data-updated="true">May 22<span>nd</span>, 2012</time>
+<time datetime="2012-07-25T15:40:00+02:00" pubdate data-updated="true">Jul 25<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>If you have tried to install a PostgreSQL server on a Vagrant box and you&#8217;re not an english-native, you may have faced an UTF8 issue:</p>
+<div class="entry-content"><p>This is more a note-to-myself post, but if someone falls in the same hole, this may be helpful as I couldn&#8217;t found any help on this on the web&#8230;</p>
+
+<p>I have a Rails application whose database is regularly backed up (thanks to the <a href="https://github.com/meskyanichi/backup/">Backup gem</a>). While updating my development environment (which is under Vagrant) and trying a migration to Rails 3.2, I was bitten by a hard-to-debug <strong>issue involving PostgreSQL schemas</strong>.</p>
+
+<p>After creating the db (with <code>rake db:create</code>) and before loading the dump (using <code>psql -d app_development -f app.sql</code>), everything was fine: Rails could find the tables, tell which schema it was working on (returning <code>public</code> when running <code>ActiveRecord::Base.connection.current_schema</code> in the console).</p>
+
+<p>However, as soon as I loaded the dump file, Rails could not find the data anymore (more precisely the schema). It could still access the database itself, but not the schema. Related issues were:</p>
+
+<ul>
+<li>Rails keeping saying <code>...(Table doesn't exist)</code>,</li>
+<li>or a more significative <strong><code>PG::Error: ERROR:  no schema has been selected to create in</code></strong> when running <code>rake db:migrate</code>.</li>
+</ul>
+
+
+<p>The culprit was this line in the <code>app.sql</code> dump file:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE DATABASE db_mydb OWNER my_user ENCODING 'UTF8' TEMPLATE template1;
-</span><span class='line'>createdb: database creation failed: ERROR:  encoding UTF8 does not match locale en_US
-</span><span class='line'>DETAIL:  The chosen LC_CTYPE setting requires encoding LATIN1</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ALTER SCHEMA public OWNER TO postgres;</span></code></pre></td></tr></table></div></figure>
 
 
-<p>This is due to your Vagrant base box being configured with <code>en_US</code> locales. When the PostgreSQL server is installed, it is configured according to these locales, and gets an <code>en_US</code> config which is not compatible with <code>UTF8</code> encoding databases.</p>
+<p>The schema&#8217;s owner was changed to <code>postgres</code>, while Rails was trying to access it as another user (the database&#8217;s owner).</p>
 
-<!-- more -->
-
-
-<p>Manually, you would change your server&#8217;s locales before running the PostgreSQL installation.</p>
-
-<p>To do this using Chef, this will take you 2 additional steps.</p>
-
-<h3>1. Configure the machine&#8217;s locales permanently</h3>
-
-<p>An approach which worked for me is to add a <code>/etc/profile.d/lang.sh</code> file which will configure your shell with the appropriate locale-related environment variables. Here is the template script:</p>
-
-<figure class='code'><figcaption><span>lang.sh</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">export </span><span class="nv">LANGUAGE</span><span class="o">=</span><span class="s2">&quot;en_US.UTF-8&quot;</span>
-</span><span class='line'><span class="nb">export </span><span class="nv">LANG</span><span class="o">=</span><span class="s2">&quot;en_US.UTF-8&quot;</span>
-</span><span class='line'><span class="nb">export </span><span class="nv">LC_ALL</span><span class="o">=</span><span class="s2">&quot;en_US.UTF-8&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Once this is done, you need to run some commands on the server to prepare the locale files:</p>
-
-<figure class='code'><figcaption><span>lang.sh</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>locale-gen en_US.UTF-8
-</span><span class='line'>dpkg-reconfigure locales
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I&#8217;ve build a small cookbook as part of my <a href="https://github.com/rchampourlier/vagrant-stacks">vagrant-stacks</a> repo, you can find it <a href="https://github.com/rchampourlier/vagrant-stacks/tree/master/cookbooks_local/set_locale">there</a>.</p>
-
-<h3>2. Install the PostgreSQL server with the appropriate environment variables</h3>
-
-<p>After running the locale configuration from your Chef recipe, you may want to continue with the PostgreSQL install. However, even if we&#8217;ve added the <code>lang.sh</code> initialization script, it hadn&#8217;t the chance to be loaded yet. So the required environment variables are not set yet.</p>
-
-<p>To ensure these environment variables get loaded when we run our <code>postgresql::server</code> recipe, we will encapsulate this call in a small recipe:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;LANGUAGE&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;LANG&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;LC_ALL&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;en_US.UTF-8&quot;</span>
-</span><span class='line'><span class="n">include_recipe</span> <span class="s2">&quot;postgresql::server&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can find this mini-recipe <a href="https://github.com/rchampourlier/vagrant-stacks/tree/master/cookbooks_local/postgresql_server_utf8">here</a> again in my vagrant-stacks repo!</p>
-
-<p><strong>That should be all!</strong></p>
-
-<p><em>If I forgot some step or you can&#8217;t manage to get this working, do not hesitate to write a comment. I&#8217;ll do my best to answer!</em></p>
+<p>I just changed <code>postgres</code> to match my database name, and it worked again. Be sure to check your schema&#8217;s owner if you meet these issues!</p>
 </div>
 
 
@@ -187,12 +147,12 @@
   
 
 
-<time datetime="2012-05-22T00:00:00+02:00" pubdate data-updated="true">May 22<span>nd</span>, 2012</time>
+<time datetime="2012-07-25T15:40:00+02:00" pubdate data-updated="true">Jul 25<span>th</span>, 2012</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/chef/'>chef</a>, <a class='category' href='/blog/categories/database/'>database</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>, <a class='category' href='/blog/categories/unix/'>unix</a>, <a class='category' href='/blog/categories/vagrant/'>vagrant</a>
+    <a class='category' href='/blog/categories/database/'>database</a>, <a class='category' href='/blog/categories/postgresql/'>postgresql</a>, <a class='category' href='/blog/categories/rails/'>rails</a>
   
 </span>
 
@@ -201,7 +161,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/07/25/postgresql-schema-owner-altered-during-dump-prevent-access-from-rails/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/07/25/postgresql-schema-owner-altered-during-dump-prevent-access-from-rails/" >Tweet</a>
   
   
   
@@ -210,10 +170,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/05/20/vagrant-stacks-a-provision-on-demand-tool-for-vagrant/" title="Previous Post: vagrant-stacks, a provision-on-demand tool for Vagrant!">&laquo; vagrant-stacks, a provision-on-demand tool for Vagrant!</a>
+        <a class="basic-alignment left" href="/blog/2012/07/21/running-guard-over-vagrant/" title="Previous Post: Running guard over Vagrant">&laquo; Running guard over Vagrant</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/05/24/forked-tabbarkit/" title="Next Post: Forked TabBarKit">Forked TabBarKit &raquo;</a>
       
     </p>
   </footer>
@@ -346,8 +304,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.softr.li/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/';
-        var disqus_url = 'http://www.softr.li/blog/2012/05/22/chef-recipe-to-install-a-postgresql-server-on-a-machine-configured-with-en_us-locales/';
+        var disqus_identifier = 'http://www.softr.li/blog/2012/07/25/postgresql-schema-owner-altered-during-dump-prevent-access-from-rails/';
+        var disqus_url = 'http://www.softr.li/blog/2012/07/25/postgresql-schema-owner-altered-during-dump-prevent-access-from-rails/';
         var disqus_script = 'embed.js';
       
     (function () {

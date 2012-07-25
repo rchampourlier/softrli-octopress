@@ -4,7 +4,7 @@
   <title><![CDATA[Category: database | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/database/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-07-23T15:07:46+02:00</updated>
+  <updated>2012-07-25T15:54:32+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,37 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[PostgreSQL schema's owner altered in database dump preventing Rails from finding the data]]></title>
+    <link href="http://www.softr.li/blog/2012/07/25/postgresql-schema-owner-altered-during-dump-prevent-access-from-rails/"/>
+    <updated>2012-07-25T15:40:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/07/25/postgresql-schema-owner-altered-during-dump-prevent-access-from-rails</id>
+    <content type="html"><![CDATA[<p>This is more a note-to-myself post, but if someone falls in the same hole, this may be helpful as I couldn't found any help on this on the web...</p>
+
+<p>I have a Rails application whose database is regularly backed up (thanks to the <a href="https://github.com/meskyanichi/backup/">Backup gem</a>). While updating my development environment (which is under Vagrant) and trying a migration to Rails 3.2, I was bitten by a hard-to-debug <strong>issue involving PostgreSQL schemas</strong>.</p>
+
+<p>After creating the db (with <code>rake db:create</code>) and before loading the dump (using <code>psql -d app_development -f app.sql</code>), everything was fine: Rails could find the tables, tell which schema it was working on (returning <code>public</code> when running <code>ActiveRecord::Base.connection.current_schema</code> in the console).</p>
+
+<p>However, as soon as I loaded the dump file, Rails could not find the data anymore (more precisely the schema). It could still access the database itself, but not the schema. Related issues were:</p>
+
+<ul>
+<li>Rails keeping saying <code>...(Table doesn't exist)</code>,</li>
+<li>or a more significative <strong><code>PG::Error: ERROR:  no schema has been selected to create in</code></strong> when running <code>rake db:migrate</code>.</li>
+</ul>
+
+
+<p>The culprit was this line in the <code>app.sql</code> dump file:</p>
+
+<p><code>
+ALTER SCHEMA public OWNER TO postgres;
+</code></p>
+
+<p>The schema's owner was changed to <code>postgres</code>, while Rails was trying to access it as another user (the database's owner).</p>
+
+<p>I just changed <code>postgres</code> to match my database name, and it worked again. Be sure to check your schema's owner if you meet these issues!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Setup automatic clearing of your Rails sessions]]></title>
