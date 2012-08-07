@@ -9,9 +9,7 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="If you have tried to install a PostgreSQL server on a Vagrant box and you&#8217;re not an english-native, you may have faced an UTF8 issue: 1
-2
-3 &hellip;">
+  <meta name="description" content="I have had to rewrite some parts of TBKTabBarController since I needed to be able to programmatically select a tab. This is normally possible by &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +76,50 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/24/forked-tabbarkit/">Forked TabBarKit</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-24T16:52:00+02:00" pubdate data-updated="true">May 24<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have had to rewrite some parts of TBKTabBarController since I needed to be able to programmatically select a tab. This is normally possible by setting the <code>selectedIndex</code> or the <code>selectedViewController</code> property of the tab bar controller, but this was not working with TabBarKit.</p>
+
+<p>I investigated and detected this behavior was not implemented, so I decided to complete it myself.</p>
+
+<p>Along the way, I discovered there were some issues with the <code>containerView</code> being mixed up with the <code>TBKTabBarController</code>&#8217;s view, so I also corrected these bugs.</p>
+
+<p>I&#8217;ve forked the repository and updated it with my corrected code, so have a look to this <a href="https://github.com/rchampourlier/TabBarKit">repo</a> if you need this.</p>
+
+<p>Oh, I also added a <code>TBKTabBarStyleTwiceHeight</code> I use to double the size of the tab bar on iPad, so you get this for free too ;)</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -482,47 +524,6 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/14/simple-cheatsheet-for-git-submodules/">Simple Cheatsheet for Git Submodules</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-14T10:01:00+02:00" pubdate data-updated="true">Apr 14<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Just a cheatsheet for <strong>git and submodules</strong>.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/04/14/simple-cheatsheet-for-git-submodules/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -581,6 +582,10 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/08/07/setup-development-environment-with-vagrant/">Setup development environment with Vagrant</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/07/25/postgresql-schema-owner-altered-during-dump-prevent-access-from-rails/">PostgreSQL schema&#8217;s owner altered in database dump preventing Rails from finding the data</a>
       </li>
     
@@ -594,10 +599,6 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
     
       <li class="post">
         <a href="/blog/2012/07/15/sinatra-guard-shotgun/">Faster Sinatra development with guard-shotgun</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/07/05/setup-automatic-clearing-of-your-rails-sessions/">Setup automatic clearing of your Rails sessions</a>
       </li>
     
   </ul>

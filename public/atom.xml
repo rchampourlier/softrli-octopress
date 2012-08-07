@@ -4,7 +4,7 @@
   <title><![CDATA[softr.li]]></title>
   <link href="http://www.softr.li/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-07-25T15:54:32+02:00</updated>
+  <updated>2012-08-07T21:07:17+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,81 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Setup development environment with Vagrant]]></title>
+    <link href="http://www.softr.li/blog/2012/08/07/setup-development-environment-with-vagrant/"/>
+    <updated>2012-08-07T21:00:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/08/07/setup-development-environment-with-vagrant</id>
+    <content type="html"><![CDATA[<h3>Install Vagrant</h3>
+
+<p>First, we want to install Vagrant on our development machine. Go to <a href="http://vagrantup.com/">the Vagrant website</a> and download the latest binaries for your OS. If there is no binary package available, you can install it through Rubygems using <code>gem install vagrant</code>, but Vagrant&#8217;s guide tells us binaries are the best choice.</p>
+
+<h3>Download your first Vagrant virtual machine</h3>
+
+<p>To build its development environments, Vagrant relies on Virtual Box virtual machines with a barebones OS installation. We will work with the common Ubuntu 10.04.3 LTS, also known as Lucid Lynx. So we have to download the corresponding Vagrant box, which is done by:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant box add lucid32 http://files.vagrantup.com/lucid32.box</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This box is a fully functional Ubuntu Lucid machine with 512MB of RAM. As soon as the command ends, we&#8217;re ready to go on.</p>
+
+<p><em>Note that if you are already using Vagrant and added this box before, you should already be ready for the next part.</em></p>
+
+<h3>Configuring the project to use the Vagrant box</h3>
+
+<p>Go to your project&#8217;s directory, and run this to init Vagrant with the project:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant init lucid32</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will create the Vagrant&#8217;s configuration file, <code>Vagrantfile</code>. The generated files contains already lots of commented commands to setup the configuration. For now, we replace this all by this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Vagrant::Config.run do |config|
+</span><span class='line'>  config.vm.box = "lucid32"
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Run the Vagrant box</h3>
+
+<p>Run <code>vagrant up</code> to setup and start the virtual machine. It can&#8217;t do much for now, but it starts! If everything is good, you should see this finish message:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[default] VM booted and ready for use!
+</span><span class='line'>[default] Configuring and enabling network interfaces...
+</span><span class='line'>[default] Mounting shared folders...
+</span><span class='line'>[default] -- v-root: /vagrant</span></code></pre></td></tr></table></div></figure>
+
+
+<p>However, if the process seems to stop on <code>[default] Waiting for VM to boot. This can take a few minutes.</code> you may have the same issue I had with Vagrant not achieving to connect to the virtual machine with the default network configuration (NAT). There is <a href="https://github.com/mitchellh/vagrant/issues/455">an issue on Github</a> related to this problem. The cause of this issue is currently unclear, but on my system adding this to the <code>Vagrantfile</code> has made it work without any hickup for several months:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Tries to fix issue #455
+</span><span class='line'>  config.vm.customize ["modifyvm", :id, "--rtcuseutc", "on"]
+</span><span class='line'>  config.ssh.max_tries = 10</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Preparing the environment</h3>
+
+<p>From now, the box you installed is not provisionned with any server software. To do so, the best way is to have built a set of Chef or Puppet recipes (or cookbook) that you will specify into <code>Vagrantfile</code>. Doing so, <code>vagrant up</code> will provision the required environment in one single step. We won&#8217;t cover this subject in here, since it focuses on setting up Vagrant itself. If you want some help to setup Chef for example, I wrote several articles on the subject, check <a href="http://www.softr.li/blog/categories/vagrant/">the vagrant category</a>.</p>
+
+<h3>References</h3>
+
+<p><a href="http://docs.puppetlabs.com/puppet_core_types_cheatsheet.pdf">http://docs.puppetlabs.com/puppet_core_types_cheatsheet.pdf</a>
+<a href="https://github.com/example42/puppet-modules">https://github.com/example42/puppet-modules</a>
+<a href="http://www.example42.com/">http://www.example42.com/</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[PostgreSQL schema's owner altered in database dump preventing Rails from finding the data]]></title>
@@ -1505,43 +1580,6 @@ rake build
 <h2>Hubticle tags</h2>
 
 <p>ruby, gem, jeweler, library, module, share, github</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Simple cheatsheet for git submodules]]></title>
-    <link href="http://www.softr.li/blog/2012/04/14/simple-cheatsheet-for-git-submodules/"/>
-    <updated>2012-04-14T10:01:00+02:00</updated>
-    <id>http://www.softr.li/blog/2012/04/14/simple-cheatsheet-for-git-submodules</id>
-    <content type="html"><![CDATA[<p>Just a cheatsheet for <strong>git and submodules</strong>.</p>
-
-<!-- more -->
-
-
-<p></p>
-
-<h2>Steps</h2>
-
-<ol>
-<li>Add the submodule using a <code>git submodule add...</code> command (see below for the different options).</li>
-<li>Run <code>git submodule init</code>.</li>
-</ol>
-
-
-<h2>Local submodules</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git submodule add "/absolute/path/to/the/submodule/repository" local/path/for/the/submodule</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To perform operations on the submodule, go in its folder. From then you can make commits and push them to the &#8216;remote&#8217; repository.</p>
-
-<h2>Remote submodules</h2>
-
-<p>Add a remote submodule, include external project and track updates</p>
-
-<pre><code>git submodule add https://path_to_the_git_repository.git ./local_path_to_the_submodule_directory
-</code></pre>
 ]]></content>
   </entry>
   

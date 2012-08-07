@@ -4,7 +4,7 @@
   <title><![CDATA[Category: development | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/development/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-07-25T15:54:32+02:00</updated>
+  <updated>2012-08-07T21:07:17+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,75 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Setup development environment with Vagrant]]></title>
+    <link href="http://www.softr.li/blog/2012/08/07/setup-development-environment-with-vagrant/"/>
+    <updated>2012-08-07T21:00:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/08/07/setup-development-environment-with-vagrant</id>
+    <content type="html"><![CDATA[<h3>Install Vagrant</h3>
+
+<p>First, we want to install Vagrant on our development machine. Go to <a href="http://vagrantup.com/">the Vagrant website</a> and download the latest binaries for your OS. If there is no binary package available, you can install it through Rubygems using <code>gem install vagrant</code>, but Vagrant's guide tells us binaries are the best choice.</p>
+
+<h3>Download your first Vagrant virtual machine</h3>
+
+<p>To build its development environments, Vagrant relies on Virtual Box virtual machines with a barebones OS installation. We will work with the common Ubuntu 10.04.3 LTS, also known as Lucid Lynx. So we have to download the corresponding Vagrant box, which is done by:</p>
+
+<p><code>
+$ vagrant box add lucid32 http://files.vagrantup.com/lucid32.box
+</code></p>
+
+<p>This box is a fully functional Ubuntu Lucid machine with 512MB of RAM. As soon as the command ends, we're ready to go on.</p>
+
+<p><em>Note that if you are already using Vagrant and added this box before, you should already be ready for the next part.</em></p>
+
+<h3>Configuring the project to use the Vagrant box</h3>
+
+<p>Go to your project's directory, and run this to init Vagrant with the project:</p>
+
+<p><code>
+$ vagrant init lucid32
+</code>
+This will create the Vagrant's configuration file, <code>Vagrantfile</code>. The generated files contains already lots of commented commands to setup the configuration. For now, we replace this all by this:</p>
+
+<p><code>
+Vagrant::Config.run do |config|
+  config.vm.box = "lucid32"
+end
+</code></p>
+
+<h3>Run the Vagrant box</h3>
+
+<p>Run <code>vagrant up</code> to setup and start the virtual machine. It can't do much for now, but it starts! If everything is good, you should see this finish message:</p>
+
+<p><code>
+[default] VM booted and ready for use!
+[default] Configuring and enabling network interfaces...
+[default] Mounting shared folders...
+[default] -- v-root: /vagrant
+</code></p>
+
+<p>However, if the process seems to stop on <code>[default] Waiting for VM to boot. This can take a few minutes.</code> you may have the same issue I had with Vagrant not achieving to connect to the virtual machine with the default network configuration (NAT). There is <a href="https://github.com/mitchellh/vagrant/issues/455">an issue on Github</a> related to this problem. The cause of this issue is currently unclear, but on my system adding this to the <code>Vagrantfile</code> has made it work without any hickup for several months:</p>
+
+<p>```</p>
+
+<h1>Tries to fix issue #455</h1>
+
+<p>  config.vm.customize ["modifyvm", :id, "--rtcuseutc", "on"]
+  config.ssh.max_tries = 10
+```</p>
+
+<h3>Preparing the environment</h3>
+
+<p>From now, the box you installed is not provisionned with any server software. To do so, the best way is to have built a set of Chef or Puppet recipes (or cookbook) that you will specify into <code>Vagrantfile</code>. Doing so, <code>vagrant up</code> will provision the required environment in one single step. We won't cover this subject in here, since it focuses on setting up Vagrant itself. If you want some help to setup Chef for example, I wrote several articles on the subject, check <a href="http://www.softr.li/blog/categories/vagrant/">the vagrant category</a>.</p>
+
+<h3>References</h3>
+
+<p><a href="http://docs.puppetlabs.com/puppet_core_types_cheatsheet.pdf">http://docs.puppetlabs.com/puppet_core_types_cheatsheet.pdf</a>
+<a href="https://github.com/example42/puppet-modules">https://github.com/example42/puppet-modules</a>
+<a href="http://www.example42.com/">http://www.example42.com/</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Running guard over Vagrant]]></title>
@@ -427,50 +496,6 @@ guard -p -l 10
 
 
 <p><em>Feel free to share your comments, reviews, or missing libraries!</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[XCode failing when building for archiving because of a missing library link]]></title>
-    <link href="http://www.softr.li/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/"/>
-    <updated>2012-06-11T11:07:00+02:00</updated>
-    <id>http://www.softr.li/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link</id>
-    <content type="html"><![CDATA[<h3>The issue</h3>
-
-<p>You may be using opensource libraries within your iOS project. (<em>If you don't, you should, it's a great time-saver. Check <a href="http://pinterest.com/rchampourlier/best-ios-controls/">here</a> for some starters.</em>)</p>
-
-<p>As you may know, XCode may sometimes become really painful when dealing with the <strong>compilation and linking of external libraries</strong>. It may just work fine when compiling for development, but when you want it compiled for distribution, XCode may just not agree anymore.</p>
-
-<p>I just faced such an issue this morning. This time, I met the <code>ld: library not found for...</code> error:</p>
-
-<p><img src="/images/2012-06-11-screenshot-1.png"></p>
-
-<!-- more -->
-
-
-<p>Googling a little, I found these two StackOverflow answers, but they could not help me. You can give a try, this may still contain the answer to your own issue.</p>
-
-<h3>The solution</h3>
-
-<ul>
-<li><a href="http://stackoverflow.com/questions/5584317/compile-build-or-archive-problems-with-xcode-4-and-dependancies">Compile, Build or Archive problems with Xcode 4 (and dependancies)</a></li>
-<li><a href="http://stackoverflow.com/questions/6004919/missing-library-link-error-when-doing-product-build-for-archiving-in-xcode-4">Missing Library link error when doing Product > Build For Archiving in Xcode 4</a></li>
-</ul>
-
-
-<p>I checked where the generated could be, and looking at the logs of the build process, I could find the directory's path: <code>/Users/me/Library/Developer/Xcode/DerivedData/.../</code></p>
-
-<p>Checking the content of this directory, I discovered that my issue was that the library was indeed not build for the <code>Distribution-iphoneos</code> configuration:</p>
-
-<p><img src="/images/2012-06-11-screenshot-2.png"></p>
-
-<p>Correcting the issue was as simple as going to the library's project settings and adding the <code>Distribution</code> configuration:</p>
-
-<p><img src="/images/2012-06-11-screenshot-3.png"></p>
-
-<h3>The conclusion</h3>
-
-<p>Be sure to check that the libraries you include within your XCode project have all the necessary configurations setup!</p>
 ]]></content>
   </entry>
   
