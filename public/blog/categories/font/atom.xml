@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: font | softr.li]]></title>
+  <link href="http://www.softr.li/blog/categories/font/atom.xml" rel="self"/>
+  <link href="http://www.softr.li/"/>
+  <updated>2012-08-08T23:06:04+02:00</updated>
+  <id>http://www.softr.li/</id>
+  <author>
+    <name><![CDATA[Romain Champourlier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Build your very own icon font]]></title>
+    <link href="http://www.softr.li/blog/2012/08/08/softrli-build-own-icon-font/"/>
+    <updated>2012-08-08T22:50:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/08/08/softrli-build-own-icon-font</id>
+    <content type="html"><![CDATA[<p>I intend to give you <strong>the fastest road to your own icon font</strong>. How fast?</p>
+
+<ol>
+<li>You find SVG files of the icons you want in your set. Except giving you some sources to find them (which I do), I'm afraid I can't save you this step.</li>
+<li>Use the magic of <a href="http://keyamoon.com/icomoon/app">IcoMoon</a>, an HTML5 application brought to you by Keyamoon, to <strong>package all these icons in a set of fonts, CSS and JS</strong>. Once this is done, you're ready to use your brand new custom icon font!</li>
+<li>That's true, no step 3!</li>
+</ol>
+
+
+<!-- more -->
+
+
+<h3>Introduction</h3>
+
+<p>There are plenty of reasons of using a custom icon font instead of sprites, if you're still not convinced, you can do a web search, but:</p>
+
+<ul>
+<li>it's <strong>easier to build</strong> with the tip I give you here,</li>
+<li>it's <strong>vector</strong>, so you can get your icons at <strong>whatever-size-you-want</strong>,</li>
+<li>it's <strong>less data and requests</strong> for your users (one font file for any size, any color, and it can be embedded in the CSS),</li>
+<li>many more...</li>
+</ul>
+
+
+<p>There are <strong>plenty of icon sets available</strong> as fonts for free on the web, even apps allowing you to build custom sets from a selection of icons. However, you may have some icons on your own, and making your custom set is often the key to an homogeneous design. Here are some sources I've found:</p>
+
+<object width="560" height="420" id="pt-embed-4167394-658-object" type="application/x-shockwave-flash" data="http://cdn.pearltrees.com/s/embed/getApp"><param name="flashvars" value="lang=fr_FR&amp;embedId=pt-embed-4167394-658&amp;treeId=4167394&amp;pearlId=33352719&amp;treeTitle=icons&amp;site=www.pearltrees.com%2F" /><param name="movie" value="http://cdn.pearltrees.com/s/embed/getApp" /><param name="wmode" value="opaque" /><param name="allowscriptaccess" value="always" /><a href="http://www.pearltrees.com/rchampourlier/icons/id4167394" alt="icons" style="text-decoration:underline;"><span style="font-size:14pt;color:black;font-weight:bold">icons</span><span style="font-size:10pt;color:#999999;font-weight:normal"> et icons font/set composers / misc dans dev / Romain Champourlier (rchampourlier)</span></a></object>
+
+
+<p><strong>Now let's get started!</strong></p>
+
+<h3>Get some SVG files for your icons</h3>
+
+<p>First you need a <strong>good set of SVG files</strong>. You can find them on the web (in the sources above for example), or build them yourself.</p>
+
+<p>Other options may work well too, but to be sure your font looks good, you should ensure:</p>
+
+<ul>
+<li>all SVG files have the same size (I use 512x512pt),</li>
+<li>the path is merged,</li>
+<li>the icon is centered horizontally (I'm not quite sure what the best option for vertical alignment is, I centered and I'm fine).</li>
+</ul>
+
+
+<p><em>(To edit these files you can use Inkscape with is opensource.)</em></p>
+
+<h3>IcoMoon, the magical HTML5 app for your custom icon fonts needs</h3>
+
+<p>Well, just go <a href="http://keyamoon.com/icomoon/app">there</a>. The application is <strong>easy to use, reliable, well designed</strong>. It's HTML5 and you can even download a JSON file to save your config. You can thus build several sets of fonts, reload them later. You can even reload a generated font to edit it. This app is <strong>awesome</strong>!</p>
+
+<p>Once you've uploaded your set of icons or chosen some from the available sets, you select the ones you want in your font and click the "Font" button.</p>
+
+<p><img src="/images/2012-08-08-screenshot1.png"></p>
+
+<p>The last step before downloading the font is to set some options. I mostly went with the defaults, except for the "Reset Encoding". I'm using "Private Use Area", so that if the font can't be load the icons don't get replaced by random characters.</p>
+
+<p><img src="/images/2012-08-08-screenshot2.png"></p>
+
+<p>Finally, I set a name for my font and I use the Base64 and CSS embedding option. As such, my font is already available in the generated CSS so it makes even 1 request less for the users' browsers!</p>
+
+<p><img src="/images/2012-08-08-screenshot3.png"></p>
+
+<p>Now is the download time!</p>
+
+<p>You're getting the fonts, the CSS file providing you with the styles to use your icons. The styles are automatically based on the name of your icon files. You also get a <code>JS</code> file to help Internet Explorer 6 &amp; 7 with these icon fonts. Finally, an <code>index.html</code> file you can use to <strong>browse your icons</strong>, along with the CSS classes!</p>
+
+<p><img src="/images/2012-08-08-screenshot4.png"></p>
+
+<p>So, wasn't it fast? Don't hesitate to share if you know a fastest way!</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -9,7 +9,7 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="Install Vagrant First, we want to install Vagrant on our development machine. Go to the Vagrant website and download the latest binaries for your OS &hellip;">
+  <meta name="description" content="I intend to give you the fastest road to your own icon font. How fast? You find SVG files of the icons you want in your set. Except giving you some &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,54 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/08/08/softrli-build-own-icon-font/">Build Your Very Own Icon Font</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-08-08T22:50:00+02:00" pubdate data-updated="true">Aug 8<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I intend to give you <strong>the fastest road to your own icon font</strong>. How fast?</p>
+
+<ol>
+<li>You find SVG files of the icons you want in your set. Except giving you some sources to find them (which I do), I&#8217;m afraid I can&#8217;t save you this step.</li>
+<li>Use the magic of <a href="http://keyamoon.com/icomoon/app">IcoMoon</a>, an HTML5 application brought to you by Keyamoon, to <strong>package all these icons in a set of fonts, CSS and JS</strong>. Once this is done, you&#8217;re ready to use your brand new custom icon font!</li>
+<li>That&#8217;s true, no step 3!</li>
+</ol>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/08/08/softrli-build-own-icon-font/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -427,11 +475,11 @@
 
 <p>If you&#8217;re using <a href="http://api.rubyonrails.org/classes/ActiveRecord/SessionStore.html">ActiveRecord::SessionStore</a> to save your sessions in your database, your database may already be alarmingly growing in size, due to the number of sessions it contains.</p>
 
-<h2>The rake db:sessions:clear task</h2>
+<h3>The rake db:sessions:clear task</h3>
 
 <p>If you don&#8217;t mind a lot about your users loosing their session, you can simply use the provided <code>rake db:sessions:clear</code> task. It will simply delete all sessions in the database. Side-effect: all current sessions are deleted, so signed in users get signed out, and you should hope they had nothing under way!</p>
 
-<h2>A more user-friendly solution</h2>
+<h3>A more user-friendly solution</h3>
 
 <p>Writing a simple rake task to replace the default one and only remove sessions older than 2 weeks is as easy as adding this file to your project:</p>
 
@@ -459,7 +507,7 @@
 
 <p>Now, if you run <code>rake sessions:cleanup</code>, only the older sessions will be removed from your database.</p>
 
-<h2>Last but not least: automation</h2>
+<h3>Last but not least: automation</h3>
 
 <p>So that you don&#8217;t have to run it every day, you can setup a cron task to do it for you. Here is the line we use:</p>
 
@@ -470,7 +518,7 @@
 </span><span class='line'>01 3 * * * bash -l -c 'cd /home/deployer/rails/project/current; bundle exec rake sessions:cleanup'</span></code></pre></td></tr></table></div></figure>
 
 
-<h2>References</h2>
+<h3>References</h3>
 
 <ul>
 <li><a href="http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions">http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions</a></li>
@@ -629,61 +677,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/26/applescript-to-automate-the-setup-of-your-development-space/">AppleScript to Automate the Setup of Your Development Space</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-26T16:34:00+02:00" pubdate data-updated="true">May 26<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Today is Saturday, and like every week-end, I&#8217;m getting a little lazy.</p>
-
-<p>Say you&#8217;re working on a Rails project on MacOS X. If you&#8217;re like me, you like to have a terminal window for your project with several tabs:</p>
-
-<ul>
-<li>one for typing various commands,</li>
-<li>one with your <code>spork</code> process,</li>
-<li>one with your <code>rails console</code>,</li>
-<li>and one with your <code>rails server</code>.</li>
-</ul>
-
-
-<p>Starting all this little world already involves some keystrokes and typing, even more if you&#8217;re using Vagrant (which <a href="http://www.softr.li/blog/categories/vagrant/">I&#8217;m using for a week</a> and is really awesome).</p>
-
-<p>So why not use the simple tools provided by Apple to have this setup with a single action?</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/05/26/applescript-to-automate-the-setup-of-your-development-space/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -740,6 +733,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/08/08/softrli-build-own-icon-font/">Build your very own icon font</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/08/07/setup-development-environment-with-vagrant/">Setup development environment with Vagrant</a>
       </li>
     
@@ -753,10 +750,6 @@
     
       <li class="post">
         <a href="/blog/2012/07/21/softrli-update-virtual-box-guest-additions/">How to update VirtualBox Guest Additions on a Vagrant virtual machine</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/07/15/sinatra-guard-shotgun/">Faster Sinatra development with guard-shotgun</a>
       </li>
     
   </ul>

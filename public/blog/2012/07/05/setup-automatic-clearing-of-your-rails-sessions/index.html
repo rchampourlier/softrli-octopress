@@ -106,11 +106,11 @@
 
 <p>If you&#8217;re using <a href="http://api.rubyonrails.org/classes/ActiveRecord/SessionStore.html">ActiveRecord::SessionStore</a> to save your sessions in your database, your database may already be alarmingly growing in size, due to the number of sessions it contains.</p>
 
-<h2>The rake db:sessions:clear task</h2>
+<h3>The rake db:sessions:clear task</h3>
 
 <p>If you don&#8217;t mind a lot about your users loosing their session, you can simply use the provided <code>rake db:sessions:clear</code> task. It will simply delete all sessions in the database. Side-effect: all current sessions are deleted, so signed in users get signed out, and you should hope they had nothing under way!</p>
 
-<h2>A more user-friendly solution</h2>
+<h3>A more user-friendly solution</h3>
 
 <p>Writing a simple rake task to replace the default one and only remove sessions older than 2 weeks is as easy as adding this file to your project:</p>
 
@@ -138,7 +138,7 @@
 
 <p>Now, if you run <code>rake sessions:cleanup</code>, only the older sessions will be removed from your database.</p>
 
-<h2>Last but not least: automation</h2>
+<h3>Last but not least: automation</h3>
 
 <p>So that you don&#8217;t have to run it every day, you can setup a cron task to do it for you. Here is the line we use:</p>
 
@@ -149,7 +149,7 @@
 </span><span class='line'>01 3 * * * bash -l -c 'cd /home/deployer/rails/project/current; bundle exec rake sessions:cleanup'</span></code></pre></td></tr></table></div></figure>
 
 
-<h2>References</h2>
+<h3>References</h3>
 
 <ul>
 <li><a href="http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions">http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions</a></li>
@@ -265,6 +265,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/08/08/softrli-build-own-icon-font/">Build your very own icon font</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/08/07/setup-development-environment-with-vagrant/">Setup development environment with Vagrant</a>
       </li>
     
@@ -278,10 +282,6 @@
     
       <li class="post">
         <a href="/blog/2012/07/21/softrli-update-virtual-box-guest-additions/">How to update VirtualBox Guest Additions on a Vagrant virtual machine</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/07/15/sinatra-guard-shotgun/">Faster Sinatra development with guard-shotgun</a>
       </li>
     
   </ul>

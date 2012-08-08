@@ -4,7 +4,7 @@
   <title><![CDATA[softr.li]]></title>
   <link href="http://www.softr.li/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-08-07T21:07:17+02:00</updated>
+  <updated>2012-08-08T23:06:04+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,83 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Build your very own icon font]]></title>
+    <link href="http://www.softr.li/blog/2012/08/08/softrli-build-own-icon-font/"/>
+    <updated>2012-08-08T22:50:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/08/08/softrli-build-own-icon-font</id>
+    <content type="html"><![CDATA[<p>I intend to give you <strong>the fastest road to your own icon font</strong>. How fast?</p>
+
+<ol>
+<li>You find SVG files of the icons you want in your set. Except giving you some sources to find them (which I do), I&#8217;m afraid I can&#8217;t save you this step.</li>
+<li>Use the magic of <a href="http://keyamoon.com/icomoon/app">IcoMoon</a>, an HTML5 application brought to you by Keyamoon, to <strong>package all these icons in a set of fonts, CSS and JS</strong>. Once this is done, you&#8217;re ready to use your brand new custom icon font!</li>
+<li>That&#8217;s true, no step 3!</li>
+</ol>
+
+
+<!-- more -->
+
+
+<h3>Introduction</h3>
+
+<p>There are plenty of reasons of using a custom icon font instead of sprites, if you&#8217;re still not convinced, you can do a web search, but:</p>
+
+<ul>
+<li>it&#8217;s <strong>easier to build</strong> with the tip I give you here,</li>
+<li>it&#8217;s <strong>vector</strong>, so you can get your icons at <strong>whatever-size-you-want</strong>,</li>
+<li>it&#8217;s <strong>less data and requests</strong> for your users (one font file for any size, any color, and it can be embedded in the CSS),</li>
+<li>many more&#8230;</li>
+</ul>
+
+
+<p>There are <strong>plenty of icon sets available</strong> as fonts for free on the web, even apps allowing you to build custom sets from a selection of icons. However, you may have some icons on your own, and making your custom set is often the key to an homogeneous design. Here are some sources I&#8217;ve found:</p>
+
+<object width="560" height="420" id="pt-embed-4167394-658-object" type="application/x-shockwave-flash" data="http://cdn.pearltrees.com/s/embed/getApp"><param name="flashvars" value="lang=fr_FR&amp;embedId=pt-embed-4167394-658&amp;treeId=4167394&amp;pearlId=33352719&amp;treeTitle=icons&amp;site=www.pearltrees.com%2F" /><param name="movie" value="http://cdn.pearltrees.com/s/embed/getApp" /><param name="wmode" value="opaque" /><param name="allowscriptaccess" value="always" /><a href="http://www.pearltrees.com/rchampourlier/icons/id4167394" alt="icons" style="text-decoration:underline;"><span style="font-size:14pt;color:black;font-weight:bold">icons</span><span style="font-size:10pt;color:#999999;font-weight:normal"> et icons font/set composers / misc dans dev / Romain Champourlier (rchampourlier)</span></a></object>
+
+
+<p><strong>Now let&#8217;s get started!</strong></p>
+
+<h3>Get some SVG files for your icons</h3>
+
+<p>First you need a <strong>good set of SVG files</strong>. You can find them on the web (in the sources above for example), or build them yourself.</p>
+
+<p>Other options may work well too, but to be sure your font looks good, you should ensure:</p>
+
+<ul>
+<li>all SVG files have the same size (I use 512x512pt),</li>
+<li>the path is merged,</li>
+<li>the icon is centered horizontally (I&#8217;m not quite sure what the best option for vertical alignment is, I centered and I&#8217;m fine).</li>
+</ul>
+
+
+<p><em>(To edit these files you can use Inkscape with is opensource.)</em></p>
+
+<h3>IcoMoon, the magical HTML5 app for your custom icon fonts needs</h3>
+
+<p>Well, just go <a href="http://keyamoon.com/icomoon/app">there</a>. The application is <strong>easy to use, reliable, well designed</strong>. It&#8217;s HTML5 and you can even download a JSON file to save your config. You can thus build several sets of fonts, reload them later. You can even reload a generated font to edit it. This app is <strong>awesome</strong>!</p>
+
+<p>Once you&#8217;ve uploaded your set of icons or chosen some from the available sets, you select the ones you want in your font and click the &#8220;Font&#8221; button.</p>
+
+<p><img src="http://www.softr.li/images/2012-08-08-screenshot1.png"></p>
+
+<p>The last step before downloading the font is to set some options. I mostly went with the defaults, except for the &#8220;Reset Encoding&#8221;. I&#8217;m using &#8220;Private Use Area&#8221;, so that if the font can&#8217;t be load the icons don&#8217;t get replaced by random characters.</p>
+
+<p><img src="http://www.softr.li/images/2012-08-08-screenshot2.png"></p>
+
+<p>Finally, I set a name for my font and I use the Base64 and CSS embedding option. As such, my font is already available in the generated CSS so it makes even 1 request less for the users&#8217; browsers!</p>
+
+<p><img src="http://www.softr.li/images/2012-08-08-screenshot3.png"></p>
+
+<p>Now is the download time!</p>
+
+<p>You&#8217;re getting the fonts, the CSS file providing you with the styles to use your icons. The styles are automatically based on the name of your icon files. You also get a <code>JS</code> file to help Internet Explorer 6 &amp; 7 with these icon fonts. Finally, an <code>index.html</code> file you can use to <strong>browse your icons</strong>, along with the CSS classes!</p>
+
+<p><img src="http://www.softr.li/images/2012-08-08-screenshot4.png"></p>
+
+<p>So, wasn&#8217;t it fast? Don&#8217;t hesitate to share if you know a fastest way!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Setup development environment with Vagrant]]></title>
@@ -205,11 +282,11 @@
 
 <p>If you&#8217;re using <a href="http://api.rubyonrails.org/classes/ActiveRecord/SessionStore.html">ActiveRecord::SessionStore</a> to save your sessions in your database, your database may already be alarmingly growing in size, due to the number of sessions it contains.</p>
 
-<h2>The rake db:sessions:clear task</h2>
+<h3>The rake db:sessions:clear task</h3>
 
 <p>If you don&#8217;t mind a lot about your users loosing their session, you can simply use the provided <code>rake db:sessions:clear</code> task. It will simply delete all sessions in the database. Side-effect: all current sessions are deleted, so signed in users get signed out, and you should hope they had nothing under way!</p>
 
-<h2>A more user-friendly solution</h2>
+<h3>A more user-friendly solution</h3>
 
 <p>Writing a simple rake task to replace the default one and only remove sessions older than 2 weeks is as easy as adding this file to your project:</p>
 
@@ -237,7 +314,7 @@
 
 <p>Now, if you run <code>rake sessions:cleanup</code>, only the older sessions will be removed from your database.</p>
 
-<h2>Last but not least: automation</h2>
+<h3>Last but not least: automation</h3>
 
 <p>So that you don&#8217;t have to run it every day, you can setup a cron task to do it for you. Here is the line we use:</p>
 
@@ -248,7 +325,7 @@
 </span><span class='line'>01 3 * * * bash -l -c 'cd /home/deployer/rails/project/current; bundle exec rake sessions:cleanup'</span></code></pre></td></tr></table></div></figure>
 
 
-<h2>References</h2>
+<h3>References</h3>
 
 <ul>
 <li><a href="http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions">http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions</a></li>
@@ -1505,81 +1582,6 @@ npm link module
 <pre><code>var object.attribute = newValue;
 db.collectionName.save(object);
 </code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to make your own gems with Jeweler]]></title>
-    <link href="http://www.softr.li/blog/2012/04/14/how-to-make-your-own-gems-with-jeweler/"/>
-    <updated>2012-04-14T10:03:00+02:00</updated>
-    <id>http://www.softr.li/blog/2012/04/14/how-to-make-your-own-gems-with-jeweler</id>
-    <content type="html"><![CDATA[<p>A really simple walkthrough on how to <strong>package a gem easily</strong> using the <strong>Jeweler</strong> gem.</p>
-
-<!-- more -->
-
-
-<h2>Prerequisites</h2>
-
-<ul>
-<li>You&#8217;re using Bundler.</li>
-<li>You have <code>gem 'jeweler'</code> in your <code>Gemfile</code>.</li>
-<li>You have run <code>bundle install</code>.</li>
-</ul>
-
-
-<h2>Add the <code>gemspec</code> task to your <code>Rakefile</code></h2>
-
-<p>Add these lines to your <code>Rakefile</code>. This will help Jeweler to build the appropriate <code>gemspec</code> for your gem.</p>
-
-<pre><code>begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gemspec|
-    gemspec.name = "the_name_of_your_gem"
-    gemspec.summary = "A summary for your gem"
-    gemspec.description = "A description for your gem"
-    gemspec.email = "your_name@your_company.com"
-    gemspec.homepage = "http://an_url_for_your_gem.com"
-    gemspec.authors = ["your@email.com"]
-  end
-rescue LoadError
-  puts "Jeweler not available. Install it with: gem install jeweler"
-end
-</code></pre>
-
-<h2>Package the gem</h2>
-
-<p>To package the gem, you just have to run the <code>rake</code> task you added, and another <code>build</code> task.</p>
-
-<pre><code>rake gemspec
-rake build
-</code></pre>
-
-<h2>Include your gem hosted on Github in your Rails application</h2>
-
-<p>Assuming your repository is commited on Github, you can easily include your gem in your Rails project using the following line in your <code>Gemfile</code>:</p>
-
-<pre><code>gem 'your_gem_name', :git =&gt; "path_to_your_gem.git"
-</code></pre>
-
-<p>You can also specify a branch with <code>:branch =&gt; "stable"</code> and a tag with <code>:tag =&gt; "2-stable"</code>.</p>
-
-<h2>Include your gem from a local directory</h2>
-
-<p>You can tell Bundler to get your gem from a local directory using the <code>:path</code> parameter. The path is relative to the directory containing the <code>Gemfile</code>:</p>
-
-<pre><code>gem "rails", :path =&gt; "vendor/rails"
-</code></pre>
-
-<h2>Directly include the library</h2>
-
-<p><em>If you&#8217;re building a gem, that&#8217;s probably not your goal, but you can also just include an external lib without needing to package it as a gem. Just use:</em></p>
-
-<pre><code>require 'path_to_gem/lib/gem'
-</code></pre>
-
-<h2>Hubticle tags</h2>
-
-<p>ruby, gem, jeweler, library, module, share, github</p>
 ]]></content>
   </entry>
   

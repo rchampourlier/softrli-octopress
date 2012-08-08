@@ -4,7 +4,7 @@
   <title><![CDATA[Category: development | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/development/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-08-07T21:07:17+02:00</updated>
+  <updated>2012-08-08T23:06:04+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -129,11 +129,11 @@ guard -p -l 10
 
 <p>If you're using <a href="http://api.rubyonrails.org/classes/ActiveRecord/SessionStore.html">ActiveRecord::SessionStore</a> to save your sessions in your database, your database may already be alarmingly growing in size, due to the number of sessions it contains.</p>
 
-<h2>The rake db:sessions:clear task</h2>
+<h3>The rake db:sessions:clear task</h3>
 
 <p>If you don't mind a lot about your users loosing their session, you can simply use the provided <code>rake db:sessions:clear</code> task. It will simply delete all sessions in the database. Side-effect: all current sessions are deleted, so signed in users get signed out, and you should hope they had nothing under way!</p>
 
-<h2>A more user-friendly solution</h2>
+<h3>A more user-friendly solution</h3>
 
 <p>Writing a simple rake task to replace the default one and only remove sessions older than 2 weeks is as easy as adding this file to your project:</p>
 
@@ -166,7 +166,7 @@ guard -p -l 10
 
 <p>Now, if you run <code>rake sessions:cleanup</code>, only the older sessions will be removed from your database.</p>
 
-<h2>Last but not least: automation</h2>
+<h3>Last but not least: automation</h3>
 
 <p>So that you don't have to run it every day, you can setup a cron task to do it for you. Here is the line we use:</p>
 
@@ -182,7 +182,7 @@ guard -p -l 10
 </span><span class='line'>
 </span><span class='line'>&lt;p>01 3 * * * bash -l -c 'cd /home/deployer/rails/project/current; bundle exec rake sessions:cleanup'</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<h2>References</h2>
+<h3>References</h3>
 
 <ul>
 <li><a href="http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions">http://blog.brightbox.co.uk/posts/clearing-out-rails-sessions</a></li>
