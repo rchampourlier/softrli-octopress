@@ -4,7 +4,7 @@
   <title><![CDATA[softr.li]]></title>
   <link href="http://www.softr.li/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-08-08T23:06:04+02:00</updated>
+  <updated>2012-10-19T11:53:24+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,104 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Cropping with live preview in Rails, using Jcrop]]></title>
+    <link href="http://www.softr.li/blog/2012/10/19/image-cropping-with-live-preview-in-rails/"/>
+    <updated>2012-10-19T11:50:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/10/19/image-cropping-with-live-preview-in-rails</id>
+    <content type="html"><![CDATA[<p>Well, thanks to the <a href="http://railscasts.com/episodes/182-cropping-images">Jcrop Railscast</a>, I had setup <strong>avatar upload and cropping features</strong> on <a href="http://www.avdice.com">our project</a>.</p>
+
+<p>With the major changes coming in our next release, this little feature <strong>wasn&#8217;t working anymore</strong>, and I couldn&#8217;t figure why my preview was working like a mess&#8230;</p>
+
+<p>I looked into the code, which matches the <a href="http://deepliquid.com/projects/Jcrop/demos.php?demo=thumbnail">Jcrop&#8217;s original example</a>, but I couldn&#8217;t figure what was wrong! Wow, but that&#8217;s a pretty simple thing, no? Just scaling and offsetting a picture, shouldn&#8217;t take long to understand?!</p>
+
+<p>Well, the code wasn&#8217;t looking good enough. I&#8217;m undertaking <a href="https://www.edx.org/courses/BerkeleyX/CS169.1x/2012_Fall/about">edX SAAS course</a> so I want my code to be <em>beautiful</em>. So, let&#8217;s rewrite it!</p>
+
+<h3>The context</h3>
+
+<ul>
+<li>I want a <strong>simple cropping feature</strong>, using Paperclip just like the one setup in the Railscast, and the <strong>live preview</strong>.</li>
+<li>I just need to crop to a <strong>square picture</strong>.</li>
+<li>I want it to work!</li>
+</ul>
+
+
+<p>I won&#8217;t rewrite the whole tutorial, since the Railscast is perfect to setup your model with Paperclip, add the cropper module, but the Javascript with preview was a wreck, and that&#8217;s what I rewrote.</p>
+
+<h3>The Javascript</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>:javascript
+</span><span class='line'>  
+</span><span class='line'>  var previewSize = 150;
+</span><span class='line'>  var originalSize = {
+</span><span class='line'>    width: #{@user.avatar_geometry(:original).width},
+</span><span class='line'>    height: #{@user.avatar_geometry(:original).height}
+</span><span class='line'>  };
+</span><span class='line'>
+</span><span class='line'>  function updatePreview(coords) {
+</span><span class='line'>    var ratio = previewSize / coords.w;
+</span><span class='line'>    
+</span><span class='line'>    $('#preview').css({
+</span><span class='line'>      width: Math.round(originalSize.width * ratio) + 'px',  
+</span><span class='line'>      height: Math.round(originalSize.height * ratio) + 'px',  
+</span><span class='line'>      marginLeft: '-' + Math.round(coords.x * ratio) + 'px',  
+</span><span class='line'>      marginTop: '-' + Math.round(coords.y * ratio) + 'px'  
+</span><span class='line'>    });
+</span><span class='line'>
+</span><span class='line'>    $('#profile_crop_x').val(Math.floor(coords.x));  
+</span><span class='line'>    $('#profile_crop_y').val(Math.floor(coords.y));  
+</span><span class='line'>    $('#profile_crop_w').val(Math.floor(coords.w));  
+</span><span class='line'>    $('#profile_crop_h').val(Math.floor(coords.h));    
+</span><span class='line'>  };
+</span><span class='line'>
+</span><span class='line'>  $(function() {
+</span><span class='line'>    $('#cropbox').Jcrop({
+</span><span class='line'>      onChange: updatePreview,  
+</span><span class='line'>      onSelect: updatePreview,  
+</span><span class='line'>      setSelect: [0, 0, originalSize.width * 0.9, originalSize.height * 0.9],  
+</span><span class='line'>      aspectRatio: 1
+</span><span class='line'>    });
+</span><span class='line'>  });</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I think this version makes more sense, and in my case it works perfectly. I used some drawings to help me rewriting this, so you may find it helpful, in particular if you want something to start with if you don&#8217;t just want a square target size!</p>
+
+<p><img src="https://s3-eu-west-1.amazonaws.com/softrli/assets/2012-10-19-image-cropping-with-live-preview-in-rails-asset-1.png" alt="" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Build your very own icon font]]></title>
@@ -1524,63 +1622,6 @@ npm link
 
 <pre><code>cd your_application
 npm link module
-</code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MongoDB CheatSheet]]></title>
-    <link href="http://www.softr.li/blog/2012/04/15/mongodb-cheatsheet/"/>
-    <updated>2012-04-15T10:05:00+02:00</updated>
-    <id>http://www.softr.li/blog/2012/04/15/mongodb-cheatsheet</id>
-    <content type="html"><![CDATA[<p>Another cheatsheet, for <strong>useful MongoDB commands</strong> to use inside the <code>mongo</code> command-line tool.</p>
-
-<!-- more -->
-
-
-<h2>Get a list of handy commands</h2>
-
-<pre><code>help
-</code></pre>
-
-<h2>List DBs</h2>
-
-<pre><code>show dbs
-</code></pre>
-
-<h2>Select a DB</h2>
-
-<pre><code>use mydb
-</code></pre>
-
-<h2>Show collections</h2>
-
-<pre><code>show collections
-</code></pre>
-
-<h2>List all documents in a collection</h2>
-
-<pre><code>db.collectionName.find()
-</code></pre>
-
-<h2>Get a specific object in a collection</h2>
-
-<h3>Through its index</h3>
-
-<pre><code>var object = db.collectionName.find().toArray()[index];
-</code></pre>
-
-<h3>With a where-like clause</h3>
-
-<p>Assuming you want to find objects matching x=1 and y=2:</p>
-
-<pre><code>var objects = db.collectionName.find((x:1), (y:2));
-</code></pre>
-
-<h2>Update an object</h2>
-
-<pre><code>var object.attribute = newValue;
-db.collectionName.save(object);
 </code></pre>
 ]]></content>
   </entry>

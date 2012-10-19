@@ -4,7 +4,7 @@
   <title><![CDATA[Category: web | softr.li]]></title>
   <link href="http://www.softr.li/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://www.softr.li/"/>
-  <updated>2012-08-08T23:06:04+02:00</updated>
+  <updated>2012-10-19T11:53:24+02:00</updated>
   <id>http://www.softr.li/</id>
   <author>
     <name><![CDATA[Romain Champourlier]]></name>
@@ -12,6 +12,82 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Cropping with live preview in Rails, using Jcrop]]></title>
+    <link href="http://www.softr.li/blog/2012/10/19/image-cropping-with-live-preview-in-rails/"/>
+    <updated>2012-10-19T11:50:00+02:00</updated>
+    <id>http://www.softr.li/blog/2012/10/19/image-cropping-with-live-preview-in-rails</id>
+    <content type="html"><![CDATA[<p>Well, thanks to the <a href="http://railscasts.com/episodes/182-cropping-images">Jcrop Railscast</a>, I had setup <strong>avatar upload and cropping features</strong> on <a href="http://www.avdice.com">our project</a>.</p>
+
+<p>With the major changes coming in our next release, this little feature <strong>wasn't working anymore</strong>, and I couldn't figure why my preview was working like a mess...</p>
+
+<p>I looked into the code, which matches the <a href="http://deepliquid.com/projects/Jcrop/demos.php?demo=thumbnail">Jcrop's original example</a>, but I couldn't figure what was wrong! Wow, but that's a pretty simple thing, no? Just scaling and offsetting a picture, shouldn't take long to understand?!</p>
+
+<p>Well, the code wasn't looking good enough. I'm undertaking <a href="https://www.edx.org/courses/BerkeleyX/CS169.1x/2012_Fall/about">edX SAAS course</a> so I want my code to be <em>beautiful</em>. So, let's rewrite it!</p>
+
+<h3>The context</h3>
+
+<ul>
+<li>I want a <strong>simple cropping feature</strong>, using Paperclip just like the one setup in the Railscast, and the <strong>live preview</strong>.</li>
+<li>I just need to crop to a <strong>square picture</strong>.</li>
+<li>I want it to work!</li>
+</ul>
+
+
+<p>I won't rewrite the whole tutorial, since the Railscast is perfect to setup your model with Paperclip, add the cropper module, but the Javascript with preview was a wreck, and that's what I rewrote.</p>
+
+<h3>The Javascript</h3>
+
+<p>```
+:javascript</p>
+
+<p>  var previewSize = 150;
+  var originalSize = {</p>
+
+<pre><code>width: #{@user.avatar_geometry(:original).width},
+height: #{@user.avatar_geometry(:original).height}
+</code></pre>
+
+<p>  };</p>
+
+<p>  function updatePreview(coords) {</p>
+
+<pre><code>var ratio = previewSize / coords.w;
+
+$('#preview').css({
+  width: Math.round(originalSize.width * ratio) + 'px',  
+  height: Math.round(originalSize.height * ratio) + 'px',  
+  marginLeft: '-' + Math.round(coords.x * ratio) + 'px',  
+  marginTop: '-' + Math.round(coords.y * ratio) + 'px'  
+});
+
+$('#profile_crop_x').val(Math.floor(coords.x));  
+$('#profile_crop_y').val(Math.floor(coords.y));  
+$('#profile_crop_w').val(Math.floor(coords.w));  
+$('#profile_crop_h').val(Math.floor(coords.h));    
+</code></pre>
+
+<p>  };</p>
+
+<p>  $(function() {</p>
+
+<pre><code>$('#cropbox').Jcrop({
+  onChange: updatePreview,  
+  onSelect: updatePreview,  
+  setSelect: [0, 0, originalSize.width * 0.9, originalSize.height * 0.9],  
+  aspectRatio: 1
+});
+</code></pre>
+
+<p>  });
+```</p>
+
+<p>I think this version makes more sense, and in my case it works perfectly. I used some drawings to help me rewriting this, so you may find it helpful, in particular if you want something to start with if you don't just want a square target size!</p>
+
+<p><img src="https://s3-eu-west-1.amazonaws.com/softrli/assets/2012-10-19-image-cropping-with-live-preview-in-rails-asset-1.png" alt="" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Build your very own icon font]]></title>

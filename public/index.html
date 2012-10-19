@@ -9,7 +9,7 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="I intend to give you the fastest road to your own icon font. How fast? You find SVG files of the icons you want in your set. Except giving you some &hellip;">
+  <meta name="description" content="Well, thanks to the Jcrop Railscast, I had setup avatar upload and cropping features on our project. With the major changes coming in our next &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,131 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/10/19/image-cropping-with-live-preview-in-rails/">Cropping With Live Preview in Rails, Using Jcrop</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-19T11:50:00+02:00" pubdate data-updated="true">Oct 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Well, thanks to the <a href="http://railscasts.com/episodes/182-cropping-images">Jcrop Railscast</a>, I had setup <strong>avatar upload and cropping features</strong> on <a href="http://www.avdice.com">our project</a>.</p>
+
+<p>With the major changes coming in our next release, this little feature <strong>wasn&#8217;t working anymore</strong>, and I couldn&#8217;t figure why my preview was working like a mess&#8230;</p>
+
+<p>I looked into the code, which matches the <a href="http://deepliquid.com/projects/Jcrop/demos.php?demo=thumbnail">Jcrop&#8217;s original example</a>, but I couldn&#8217;t figure what was wrong! Wow, but that&#8217;s a pretty simple thing, no? Just scaling and offsetting a picture, shouldn&#8217;t take long to understand?!</p>
+
+<p>Well, the code wasn&#8217;t looking good enough. I&#8217;m undertaking <a href="https://www.edx.org/courses/BerkeleyX/CS169.1x/2012_Fall/about">edX SAAS course</a> so I want my code to be <em>beautiful</em>. So, let&#8217;s rewrite it!</p>
+
+<h3>The context</h3>
+
+<ul>
+<li>I want a <strong>simple cropping feature</strong>, using Paperclip just like the one setup in the Railscast, and the <strong>live preview</strong>.</li>
+<li>I just need to crop to a <strong>square picture</strong>.</li>
+<li>I want it to work!</li>
+</ul>
+
+
+<p>I won&#8217;t rewrite the whole tutorial, since the Railscast is perfect to setup your model with Paperclip, add the cropper module, but the Javascript with preview was a wreck, and that&#8217;s what I rewrote.</p>
+
+<h3>The Javascript</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>:javascript
+</span><span class='line'>  
+</span><span class='line'>  var previewSize = 150;
+</span><span class='line'>  var originalSize = {
+</span><span class='line'>    width: #{@user.avatar_geometry(:original).width},
+</span><span class='line'>    height: #{@user.avatar_geometry(:original).height}
+</span><span class='line'>  };
+</span><span class='line'>
+</span><span class='line'>  function updatePreview(coords) {
+</span><span class='line'>    var ratio = previewSize / coords.w;
+</span><span class='line'>    
+</span><span class='line'>    $('#preview').css({
+</span><span class='line'>      width: Math.round(originalSize.width * ratio) + 'px',  
+</span><span class='line'>      height: Math.round(originalSize.height * ratio) + 'px',  
+</span><span class='line'>      marginLeft: '-' + Math.round(coords.x * ratio) + 'px',  
+</span><span class='line'>      marginTop: '-' + Math.round(coords.y * ratio) + 'px'  
+</span><span class='line'>    });
+</span><span class='line'>
+</span><span class='line'>    $('#profile_crop_x').val(Math.floor(coords.x));  
+</span><span class='line'>    $('#profile_crop_y').val(Math.floor(coords.y));  
+</span><span class='line'>    $('#profile_crop_w').val(Math.floor(coords.w));  
+</span><span class='line'>    $('#profile_crop_h').val(Math.floor(coords.h));    
+</span><span class='line'>  };
+</span><span class='line'>
+</span><span class='line'>  $(function() {
+</span><span class='line'>    $('#cropbox').Jcrop({
+</span><span class='line'>      onChange: updatePreview,  
+</span><span class='line'>      onSelect: updatePreview,  
+</span><span class='line'>      setSelect: [0, 0, originalSize.width * 0.9, originalSize.height * 0.9],  
+</span><span class='line'>      aspectRatio: 1
+</span><span class='line'>    });
+</span><span class='line'>  });</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I think this version makes more sense, and in my case it works perfectly. I used some drawings to help me rewriting this, so you may find it helpful, in particular if you want something to start with if you don&#8217;t just want a square target size!</p>
+
+<p><img src="https://s3-eu-west-1.amazonaws.com/softrli/assets/2012-10-19-image-cropping-with-live-preview-in-rails-asset-1.png" alt="" /></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -632,51 +757,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app/">How to Use Bootstrap Within Your Rails 3.1+ App</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-07T12:00:00+02:00" pubdate data-updated="true">Jun 7<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://twitter.github.com/bootstrap">Bootstrap</a> is a real gift from Twitter. It provides a good deal of packaged, well-designed and simple to use UI components for any web application.</p>
-
-<p>I wanted to use it for quite some time, but I hadn&#8217;t found the time nor the project to apply it on. I recently updated an administration web-app for one of my project, and I felt it was the good time.</p>
-
-<p>So here are my first feedbacks and tips on how to integrated Bootstrap with Rails (I&#8217;m on Rails 3.2.5, it&#8217;s the lowest-effort path if you&#8217;re using Formtastic too).</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/06/07/how-to-use-bootstrap-within-your-rails-3.1-app/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -733,6 +813,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/10/19/image-cropping-with-live-preview-in-rails/">Cropping with live preview in Rails, using Jcrop</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/08/08/softrli-build-own-icon-font/">Build your very own icon font</a>
       </li>
     
@@ -746,10 +830,6 @@
     
       <li class="post">
         <a href="/blog/2012/07/21/running-guard-over-vagrant/">Running guard over Vagrant</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/07/21/softrli-update-virtual-box-guest-additions/">How to update VirtualBox Guest Additions on a Vagrant virtual machine</a>
       </li>
     
   </ul>

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Setup development environment with Vagrant - softr.li</title>
+  <title>Cropping with live preview in Rails, using Jcrop - softr.li</title>
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="Install Vagrant First, we want to install Vagrant on our development machine. Go to the Vagrant website and download the latest binaries for your OS &hellip;">
+  <meta name="description" content="Well, thanks to the Jcrop Railscast, I had setup avatar upload and cropping features on our project. With the major changes coming in our next &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.softr.li/blog/2012/08/07/setup-development-environment-with-vagrant">
+  <link rel="canonical" href="http://www.softr.li/blog/2012/10/19/image-cropping-with-live-preview-in-rails">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -79,7 +79,7 @@
   
   <header>
     
-      <h1 class="entry-title">Setup Development Environment With Vagrant</h1>
+      <h1 class="entry-title">Cropping With Live Preview in Rails, Using Jcrop</h1>
     
     
       <p class="meta">
@@ -95,80 +95,103 @@
   
 
 
-<time datetime="2012-08-07T21:00:00+02:00" pubdate data-updated="true">Aug 7<span>th</span>, 2012</time>
+<time datetime="2012-10-19T11:50:00+02:00" pubdate data-updated="true">Oct 19<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h3>Install Vagrant</h3>
+<div class="entry-content"><p>Well, thanks to the <a href="http://railscasts.com/episodes/182-cropping-images">Jcrop Railscast</a>, I had setup <strong>avatar upload and cropping features</strong> on <a href="http://www.avdice.com">our project</a>.</p>
 
-<p>First, we want to install Vagrant on our development machine. Go to <a href="http://vagrantup.com/">the Vagrant website</a> and download the latest binaries for your OS. If there is no binary package available, you can install it through Rubygems using <code>gem install vagrant</code>, but Vagrant&#8217;s guide tells us binaries are the best choice.</p>
+<p>With the major changes coming in our next release, this little feature <strong>wasn&#8217;t working anymore</strong>, and I couldn&#8217;t figure why my preview was working like a mess&#8230;</p>
 
-<h3>Download your first Vagrant virtual machine</h3>
+<p>I looked into the code, which matches the <a href="http://deepliquid.com/projects/Jcrop/demos.php?demo=thumbnail">Jcrop&#8217;s original example</a>, but I couldn&#8217;t figure what was wrong! Wow, but that&#8217;s a pretty simple thing, no? Just scaling and offsetting a picture, shouldn&#8217;t take long to understand?!</p>
 
-<p>To build its development environments, Vagrant relies on Virtual Box virtual machines with a barebones OS installation. We will work with the common Ubuntu 10.04.3 LTS, also known as Lucid Lynx. So we have to download the corresponding Vagrant box, which is done by:</p>
+<p>Well, the code wasn&#8217;t looking good enough. I&#8217;m undertaking <a href="https://www.edx.org/courses/BerkeleyX/CS169.1x/2012_Fall/about">edX SAAS course</a> so I want my code to be <em>beautiful</em>. So, let&#8217;s rewrite it!</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant box add lucid32 http://files.vagrantup.com/lucid32.box</span></code></pre></td></tr></table></div></figure>
+<h3>The context</h3>
 
-
-<p>This box is a fully functional Ubuntu Lucid machine with 512MB of RAM. As soon as the command ends, we&#8217;re ready to go on.</p>
-
-<p><em>Note that if you are already using Vagrant and added this box before, you should already be ready for the next part.</em></p>
-
-<h3>Configuring the project to use the Vagrant box</h3>
-
-<p>Go to your project&#8217;s directory, and run this to init Vagrant with the project:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ vagrant init lucid32</span></code></pre></td></tr></table></div></figure>
+<ul>
+<li>I want a <strong>simple cropping feature</strong>, using Paperclip just like the one setup in the Railscast, and the <strong>live preview</strong>.</li>
+<li>I just need to crop to a <strong>square picture</strong>.</li>
+<li>I want it to work!</li>
+</ul>
 
 
-<p>This will create the Vagrant&#8217;s configuration file, <code>Vagrantfile</code>. The generated files contains already lots of commented commands to setup the configuration. For now, we replace this all by this:</p>
+<p>I won&#8217;t rewrite the whole tutorial, since the Railscast is perfect to setup your model with Paperclip, add the cropper module, but the Javascript with preview was a wreck, and that&#8217;s what I rewrote.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Vagrant::Config.run do |config|
-</span><span class='line'>  config.vm.box = "lucid32"
-</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Run the Vagrant box</h3>
-
-<p>Run <code>vagrant up</code> to setup and start the virtual machine. It can&#8217;t do much for now, but it starts! If everything is good, you should see this finish message:</p>
+<h3>The Javascript</h3>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[default] VM booted and ready for use!
-</span><span class='line'>[default] Configuring and enabling network interfaces...
-</span><span class='line'>[default] Mounting shared folders...
-</span><span class='line'>[default] -- v-root: /vagrant</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>:javascript
+</span><span class='line'>  
+</span><span class='line'>  var previewSize = 150;
+</span><span class='line'>  var originalSize = {
+</span><span class='line'>    width: #{@user.avatar_geometry(:original).width},
+</span><span class='line'>    height: #{@user.avatar_geometry(:original).height}
+</span><span class='line'>  };
+</span><span class='line'>
+</span><span class='line'>  function updatePreview(coords) {
+</span><span class='line'>    var ratio = previewSize / coords.w;
+</span><span class='line'>    
+</span><span class='line'>    $('#preview').css({
+</span><span class='line'>      width: Math.round(originalSize.width * ratio) + 'px',  
+</span><span class='line'>      height: Math.round(originalSize.height * ratio) + 'px',  
+</span><span class='line'>      marginLeft: '-' + Math.round(coords.x * ratio) + 'px',  
+</span><span class='line'>      marginTop: '-' + Math.round(coords.y * ratio) + 'px'  
+</span><span class='line'>    });
+</span><span class='line'>
+</span><span class='line'>    $('#profile_crop_x').val(Math.floor(coords.x));  
+</span><span class='line'>    $('#profile_crop_y').val(Math.floor(coords.y));  
+</span><span class='line'>    $('#profile_crop_w').val(Math.floor(coords.w));  
+</span><span class='line'>    $('#profile_crop_h').val(Math.floor(coords.h));    
+</span><span class='line'>  };
+</span><span class='line'>
+</span><span class='line'>  $(function() {
+</span><span class='line'>    $('#cropbox').Jcrop({
+</span><span class='line'>      onChange: updatePreview,  
+</span><span class='line'>      onSelect: updatePreview,  
+</span><span class='line'>      setSelect: [0, 0, originalSize.width * 0.9, originalSize.height * 0.9],  
+</span><span class='line'>      aspectRatio: 1
+</span><span class='line'>    });
+</span><span class='line'>  });</span></code></pre></td></tr></table></div></figure>
 
 
-<p>However, if the process seems to stop on <code>[default] Waiting for VM to boot. This can take a few minutes.</code> you may have the same issue I had with Vagrant not achieving to connect to the virtual machine with the default network configuration (NAT). There is <a href="https://github.com/mitchellh/vagrant/issues/455">an issue on Github</a> related to this problem. The cause of this issue is currently unclear, but on my system adding this to the <code>Vagrantfile</code> has made it work without any hickup for several months:</p>
+<p>I think this version makes more sense, and in my case it works perfectly. I used some drawings to help me rewriting this, so you may find it helpful, in particular if you want something to start with if you don&#8217;t just want a square target size!</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Tries to fix issue #455
-</span><span class='line'>  config.vm.customize ["modifyvm", :id, "--rtcuseutc", "on"]
-</span><span class='line'>  config.ssh.max_tries = 10</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Preparing the environment</h3>
-
-<p>From now, the box you installed is not provisionned with any server software. To do so, the best way is to have built a set of Chef or Puppet recipes (or cookbook) that you will specify into <code>Vagrantfile</code>. Doing so, <code>vagrant up</code> will provision the required environment in one single step. We won&#8217;t cover this subject in here, since it focuses on setting up Vagrant itself. If you want some help to setup Chef for example, I wrote several articles on the subject, check <a href="http://www.softr.li/blog/categories/vagrant/">the vagrant category</a>.</p>
-
-<h3>References</h3>
-
-<p><a href="http://docs.puppetlabs.com/puppet_core_types_cheatsheet.pdf">http://docs.puppetlabs.com/puppet_core_types_cheatsheet.pdf</a>
-<a href="https://github.com/example42/puppet-modules">https://github.com/example42/puppet-modules</a>
-<a href="http://www.example42.com/">http://www.example42.com/</a></p>
+<p><img src="https://s3-eu-west-1.amazonaws.com/softrli/assets/2012-10-19-image-cropping-with-live-preview-in-rails-asset-1.png" alt="" /></p>
 </div>
 
 
@@ -191,12 +214,12 @@
   
 
 
-<time datetime="2012-08-07T21:00:00+02:00" pubdate data-updated="true">Aug 7<span>th</span>, 2012</time>
+<time datetime="2012-10-19T11:50:00+02:00" pubdate data-updated="true">Oct 19<span>th</span>, 2012</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/environment/'>environment</a>, <a class='category' href='/blog/categories/vagrant/'>vagrant</a>, <a class='category' href='/blog/categories/virtualization/'>virtualization</a>
+    <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/rubyonrails/'>rubyonrails</a>, <a class='category' href='/blog/categories/web/'>web</a>
   
 </span>
 
@@ -205,7 +228,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/08/07/setup-development-environment-with-vagrant/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/08/07/setup-development-environment-with-vagrant/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/10/19/image-cropping-with-live-preview-in-rails/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/10/19/image-cropping-with-live-preview-in-rails/" >Tweet</a>
   
   
   
@@ -214,10 +237,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/07/25/postgresql-schema-owner-altered-during-dump-prevent-access-from-rails/" title="Previous Post: PostgreSQL schema's owner altered in database dump preventing Rails from finding the data">&laquo; PostgreSQL schema's owner altered in database dump preventing Rails from finding the data</a>
+        <a class="basic-alignment left" href="/blog/2012/08/08/softrli-build-own-icon-font/" title="Previous Post: Build your very own icon font">&laquo; Build your very own icon font</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/08/08/softrli-build-own-icon-font/" title="Next Post: Build your very own icon font">Build your very own icon font &raquo;</a>
       
     </p>
   </footer>
@@ -350,8 +371,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.softr.li/blog/2012/08/07/setup-development-environment-with-vagrant/';
-        var disqus_url = 'http://www.softr.li/blog/2012/08/07/setup-development-environment-with-vagrant/';
+        var disqus_identifier = 'http://www.softr.li/blog/2012/10/19/image-cropping-with-live-preview-in-rails/';
+        var disqus_url = 'http://www.softr.li/blog/2012/10/19/image-cropping-with-live-preview-in-rails/';
         var disqus_script = 'embed.js';
       
     (function () {
