@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: testing | softr.li]]></title>
+  <link href="http://www.softr.li/blog/categories/testing/atom.xml" rel="self"/>
+  <link href="http://www.softr.li/"/>
+  <updated>2012-11-08T12:17:51+01:00</updated>
+  <id>http://www.softr.li/</id>
+  <author>
+    <name><![CDATA[Romain Champourlier]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Capybara using Selenium, with RSpec, in the Vagrant (remotely)]]></title>
+    <link href="http://www.softr.li/blog/2012/11/08/capybara-selenium-rspec-vagrant-remotely/"/>
+    <updated>2012-11-08T12:00:00+01:00</updated>
+    <id>http://www.softr.li/blog/2012/11/08/capybara-selenium-rspec-vagrant-remotely</id>
+    <content type="html"><![CDATA[<h3>Let's assume:</h3>
+
+<ul>
+<li>you're using RSpec for your tests,</li>
+<li>you use Capybara for your integration/acceptance specs,</li>
+<li>you run your tests in a Vagrant box.</li>
+</ul>
+
+
+<p>Let's also say everything is working fine (I won't deal with any issue you may have before this point).</p>
+
+<p>Now, <strong>you have some features / user stories / whatever that requires some Javascript action</strong>.</p>
+
+<h3>Well.</h3>
+
+<p><strong>If you weren't using Vagrant</strong>, I'd say everything should go fine too. Just append <code>:js =&gt; true</code> to your RSpec example, it will use Selenium and everything will go fine using your installed Firefox binary.</p>
+
+<p>But <strong>you're testing in a Vagrant box</strong>. So here's what you'll get:</p>
+
+<p>```
+Failure/Error: visit "/whatever"</p>
+
+<pre><code> Selenium::WebDriver::Error::WebDriverError:
+   Could not find Firefox binary (os=linux). Make sure Firefox is installed or set the path manually with Selenium::WebDriver::Firefox::Binary.path=
+</code></pre>
+
+<p>```</p>
+
+<h3>So you may say, fine, let's install Firefox!</h3>
+
+<p>But... your Vagrant box is meant to be <strong>used in headless mode</strong>, and Firefox requires something to draw on. Still, you may have it to work. But I'll assume (again) that <strong>you don't want to bother with setting things for the client-side of the test on the development/test box</strong> (which is more server-side) <strong>, and use everything that's already on you real development machine</strong> (your day-to-day browsers).</p>
+
+<p><em>If my assumption is false, you can have a look to <a href="http://www.without-brains.net/blog/2012/08/01/capybara-and-selenium-with-vagrant/">this article</a>, which explains both approaches (but not for RSpec, that's the why of this article).</em></p>
+
+<h3>The solution? selenium server!</h3>
+
+<p>What you want is Capybara to use its selenium driver, but <strong>instead of running a local copy of the browser</strong>, use <a href="http://seleniumhq.org/download/">selenium server</a> which will <strong>allows Capybara to use browsers running in your real development machine</strong> (the host of your Vagrant development box).</p>
+
+<h3>Ok I got it, how do I do it?</h3>
+
+<p><a href="http://www.without-brains.net/blog/2012/08/01/capybara-and-selenium-with-vagrant/">This article</a> is pretty well made, with far more explanations that I provide, so I encourage you to have a look to fully understand how it works. However, <strong>it doesn't provide the solution if you're using RSpec</strong>, since it builds a simple <code>Unit::TestCase</code> example.</p>
+
+<p><strong>This is where I truly do something.</strong></p>
+
+<h3>Here's how to get it working with RSpec (and even in Spork)</h3>
+
+<p>Add this one line in your <code>spec_helper.rb</code> file (one line?!!!):</p>
+
+<p><code>
+  require_relative 'support/capybara_remote'
+</code></p>
+
+<p>After the <code>require 'capybara/rspec'</code> would be great. If you're using Spork, it should be in the <code>prefork</code> block.</p>
+
+<p>Well, not truly a one-liner. Add this to a <code>spec/support/capybara_remote.rb</code> file too:</p>
+
+<p><div><script src='https://gist.github.com/4038197.js?file='></script>
+<noscript><pre><code># SELENIUM_SERVER is the IP address or hostname of the system running Selenium
+# Server, this is used to determine where to connect to when using one of the
+# selenium_remote_* drivers
+SELENIUM_SERVER = &quot;10.10.11.1&quot;
+
+# SELENIUM_APP_HOST is the IP address or hostname of this system (where the
+# tests run against) as reachable for the SELENIUM_SERVER. This is used to set
+# the Capybara.app_host when using one of the selenium_remote_* drivers
+SELENIUM_APP_HOST = &quot;10.10.11.2&quot;
+
+# CAPYBARA_DRIVER is the Capybara driver to use, this defaults to Selenium with
+# Firefox
+CAPYBARA_DRIVER = &quot;selenium_remote_firefox&quot;
+
+# At this point, Capybara.default_driver is :rack_test, and
+# Capybara.javascript_driver is :selenium. We can't run :selenium in the Vagrant box,
+# so we set the javascript driver to :selenium_remote_firefox which we're going to
+# configure.
+Capybara.javascript_driver = :selenium_remote_firefox
+
+RSpec.configure do |config|
+
+  config.before(:each) do
+    if selenium_remote?
+      Capybara.app_host = &quot;http://#{SELENIUM_APP_HOST}:#{page.driver.rack_server.port}&quot;
+    end
+  end
+
+  config.after(:each) do
+    Capybara.reset_sessions!
+    Capybara.use_default_driver
+    Capybara.app_host = nil
+  end
+
+  # Determines if a selenium_remote_* driver is being used
+  def selenium_remote?
+    !(Capybara.current_driver.to_s =~ /\Aselenium_remote/).nil?
+  end
+end
+
+# Set the default driver to CAPYBARA_DRIVER, when you change the driver in one
+# of your tests resetting it to the default will ensure that its reset to what
+# you specified when starting the tests.
+#Capybara.default_driver = CAPYBARA_DRIVER.to_sym
+
+# CapybaraDriverRegistrar is a helper class that enables you to easily register
+# Capybara drivers
+class CapybaraDriverRegistrar
+
+  # register a Selenium driver for the given browser to run on the localhost
+  def self.register_selenium_local_driver(browser)
+    Capybara.register_driver &quot;selenium_#{browser}&quot;.to_sym do |app|
+      Capybara::Selenium::Driver.new(app, browser: browser)
+    end
+  end
+
+  # register a Selenium driver for the given browser to run with a Selenium
+  # Server on another host
+  def self.register_selenium_remote_driver(browser)
+    Capybara.register_driver &quot;selenium_remote_#{browser}&quot;.to_sym do |app|
+      Capybara::Selenium::Driver.new(app, browser: :remote, url: &quot;http://#{SELENIUM_SERVER}:4444/wd/hub&quot;, desired_capabilities: browser)
+    end
+  end
+end
+
+# Register various Selenium drivers
+CapybaraDriverRegistrar.register_selenium_remote_driver(:firefox)</code></pre></noscript></div>
+</p>
+
+<p>Be sure to adjust the constants (<code>SELENIUM_SERVER</code>, <code>SELENIUM_APP_HOST</code>, <code>CAPYBARA_DRIVER</code>) to match your configuration (as explained in the comments).</p>
+
+<p>Now, get the selenium server <code>.jar</code> and run it on your real machine (the host of your Vagrant) with this command:</p>
+
+<p><code>
+java -jar selenium-server-standalone-2.25.0.jar
+</code></p>
+
+<p>Now, any RSpec example with the <code>:js =&gt; true</code> metadata should be running in your Firefox browser on your real machine, where you can see it!</p>
+
+<h3>Wrapping up</h3>
+
+<p>We've seen how to use <strong>selenium server</strong> to allow <strong>Capybara</strong> running in a <strong>Vagrant box</strong> to use the host's <strong>browsers</strong> to run <strong>RSpec</strong> specs requiring <strong>Javascript</strong>.</p>
+
+<h3>References</h3>
+
+<ul>
+<li><a href="http://www.without-brains.net/blog/2012/08/01/capybara-and-selenium-with-vagrant/">the main source for my custom configuration</a></li>
+<li><a href="http://jeffkreeftmeijer.com/2011/capybara-ate-swinger/">more on how capybara allows to select a driver from the examples in RSpec</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

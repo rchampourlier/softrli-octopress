@@ -9,7 +9,9 @@
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="Well, thanks to the Jcrop Railscast, I had setup avatar upload and cropping features on our project. With the major changes coming in our next &hellip;">
+  <meta name="description" content="Let&#8217;s assume: you&#8217;re using RSpec for your tests,
+you use Capybara for your integration/acceptance specs,
+you run your tests in a Vagrant &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +78,187 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/11/08/capybara-selenium-rspec-vagrant-remotely/">Capybara Using Selenium, With RSpec, in the Vagrant (Remotely)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-08T12:00:00+01:00" pubdate data-updated="true">Nov 8<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Let&#8217;s assume:</h3>
+
+<ul>
+<li>you&#8217;re using RSpec for your tests,</li>
+<li>you use Capybara for your integration/acceptance specs,</li>
+<li>you run your tests in a Vagrant box.</li>
+</ul>
+
+
+<p>Let&#8217;s also say everything is working fine (I won&#8217;t deal with any issue you may have before this point).</p>
+
+<p>Now, <strong>you have some features / user stories / whatever that requires some Javascript action</strong>.</p>
+
+<h3>Well.</h3>
+
+<p><strong>If you weren&#8217;t using Vagrant</strong>, I&#8217;d say everything should go fine too. Just append <code>:js =&gt; true</code> to your RSpec example, it will use Selenium and everything will go fine using your installed Firefox binary.</p>
+
+<p>But <strong>you&#8217;re testing in a Vagrant box</strong>. So here&#8217;s what you&#8217;ll get:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Failure/Error: visit "/whatever"
+</span><span class='line'>     Selenium::WebDriver::Error::WebDriverError:
+</span><span class='line'>       Could not find Firefox binary (os=linux). Make sure Firefox is installed or set the path manually with Selenium::WebDriver::Firefox::Binary.path=</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>So you may say, fine, let&#8217;s install Firefox!</h3>
+
+<p>But&#8230; your Vagrant box is meant to be <strong>used in headless mode</strong>, and Firefox requires something to draw on. Still, you may have it to work. But I&#8217;ll assume (again) that <strong>you don&#8217;t want to bother with setting things for the client-side of the test on the development/test box</strong> (which is more server-side) <strong>, and use everything that&#8217;s already on you real development machine</strong> (your day-to-day browsers).</p>
+
+<p><em>If my assumption is false, you can have a look to <a href="http://www.without-brains.net/blog/2012/08/01/capybara-and-selenium-with-vagrant/">this article</a>, which explains both approaches (but not for RSpec, that&#8217;s the why of this article).</em></p>
+
+<h3>The solution? selenium server!</h3>
+
+<p>What you want is Capybara to use its selenium driver, but <strong>instead of running a local copy of the browser</strong>, use <a href="http://seleniumhq.org/download/">selenium server</a> which will <strong>allows Capybara to use browsers running in your real development machine</strong> (the host of your Vagrant development box).</p>
+
+<h3>Ok I got it, how do I do it?</h3>
+
+<p><a href="http://www.without-brains.net/blog/2012/08/01/capybara-and-selenium-with-vagrant/">This article</a> is pretty well made, with far more explanations that I provide, so I encourage you to have a look to fully understand how it works. However, <strong>it doesn&#8217;t provide the solution if you&#8217;re using RSpec</strong>, since it builds a simple <code>Unit::TestCase</code> example.</p>
+
+<p><strong>This is where I truly do something.</strong></p>
+
+<h3>Here&#8217;s how to get it working with RSpec (and even in Spork)</h3>
+
+<p>Add this one line in your <code>spec_helper.rb</code> file (one line?!!!):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  require_relative 'support/capybara_remote'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After the <code>require 'capybara/rspec'</code> would be great. If you&#8217;re using Spork, it should be in the <code>prefork</code> block.</p>
+
+<p>Well, not truly a one-liner. Add this to a <code>spec/support/capybara_remote.rb</code> file too:</p>
+
+<div><script src='https://gist.github.com/4038197.js?file='></script>
+<noscript><pre><code># SELENIUM_SERVER is the IP address or hostname of the system running Selenium
+# Server, this is used to determine where to connect to when using one of the
+# selenium_remote_* drivers
+SELENIUM_SERVER = &quot;10.10.11.1&quot;
+
+# SELENIUM_APP_HOST is the IP address or hostname of this system (where the
+# tests run against) as reachable for the SELENIUM_SERVER. This is used to set
+# the Capybara.app_host when using one of the selenium_remote_* drivers
+SELENIUM_APP_HOST = &quot;10.10.11.2&quot;
+
+# CAPYBARA_DRIVER is the Capybara driver to use, this defaults to Selenium with
+# Firefox
+CAPYBARA_DRIVER = &quot;selenium_remote_firefox&quot;
+
+# At this point, Capybara.default_driver is :rack_test, and
+# Capybara.javascript_driver is :selenium. We can't run :selenium in the Vagrant box,
+# so we set the javascript driver to :selenium_remote_firefox which we're going to
+# configure.
+Capybara.javascript_driver = :selenium_remote_firefox
+
+RSpec.configure do |config|
+
+  config.before(:each) do
+    if selenium_remote?
+      Capybara.app_host = &quot;http://#{SELENIUM_APP_HOST}:#{page.driver.rack_server.port}&quot;
+    end
+  end
+
+  config.after(:each) do
+    Capybara.reset_sessions!
+    Capybara.use_default_driver
+    Capybara.app_host = nil
+  end
+
+  # Determines if a selenium_remote_* driver is being used
+  def selenium_remote?
+    !(Capybara.current_driver.to_s =~ /\Aselenium_remote/).nil?
+  end
+end
+
+# Set the default driver to CAPYBARA_DRIVER, when you change the driver in one
+# of your tests resetting it to the default will ensure that its reset to what
+# you specified when starting the tests.
+#Capybara.default_driver = CAPYBARA_DRIVER.to_sym
+
+# CapybaraDriverRegistrar is a helper class that enables you to easily register
+# Capybara drivers
+class CapybaraDriverRegistrar
+
+  # register a Selenium driver for the given browser to run on the localhost
+  def self.register_selenium_local_driver(browser)
+    Capybara.register_driver &quot;selenium_#{browser}&quot;.to_sym do |app|
+      Capybara::Selenium::Driver.new(app, browser: browser)
+    end
+  end
+
+  # register a Selenium driver for the given browser to run with a Selenium
+  # Server on another host
+  def self.register_selenium_remote_driver(browser)
+    Capybara.register_driver &quot;selenium_remote_#{browser}&quot;.to_sym do |app|
+      Capybara::Selenium::Driver.new(app, browser: :remote, url: &quot;http://#{SELENIUM_SERVER}:4444/wd/hub&quot;, desired_capabilities: browser)
+    end
+  end
+end
+
+# Register various Selenium drivers
+CapybaraDriverRegistrar.register_selenium_remote_driver(:firefox)</code></pre></noscript></div>
+
+
+<p>Be sure to adjust the constants (<code>SELENIUM_SERVER</code>, <code>SELENIUM_APP_HOST</code>, <code>CAPYBARA_DRIVER</code>) to match your configuration (as explained in the comments).</p>
+
+<p>Now, get the selenium server <code>.jar</code> and run it on your real machine (the host of your Vagrant) with this command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>java -jar selenium-server-standalone-2.25.0.jar </span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, any RSpec example with the <code>:js =&gt; true</code> metadata should be running in your Firefox browser on your real machine, where you can see it!</p>
+
+<h3>Wrapping up</h3>
+
+<p>We&#8217;ve seen how to use <strong>selenium server</strong> to allow <strong>Capybara</strong> running in a <strong>Vagrant box</strong> to use the host&#8217;s <strong>browsers</strong> to run <strong>RSpec</strong> specs requiring <strong>Javascript</strong>.</p>
+
+<h3>References</h3>
+
+<ul>
+<li><a href="http://www.without-brains.net/blog/2012/08/01/capybara-and-selenium-with-vagrant/">the main source for my custom configuration</a></li>
+<li><a href="http://jeffkreeftmeijer.com/2011/capybara-ate-swinger/">more on how capybara allows to select a driver from the examples in RSpec</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -708,55 +891,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/">XCode Failing When Building for Archiving Because of a Missing Library Link</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-11T11:07:00+02:00" pubdate data-updated="true">Jun 11<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>The issue</h3>
-
-<p>You may be using opensource libraries within your iOS project. (<em>If you don&#8217;t, you should, it&#8217;s a great time-saver. Check <a href="http://pinterest.com/rchampourlier/best-ios-controls/">here</a> for some starters.</em>)</p>
-
-<p>As you may know, XCode may sometimes become really painful when dealing with the <strong>compilation and linking of external libraries</strong>. It may just work fine when compiling for development, but when you want it compiled for distribution, XCode may just not agree anymore.</p>
-
-<p>I just faced such an issue this morning. This time, I met the <code>ld: library not found for...</code> error:</p>
-
-<p><img src="/images/2012-06-11-screenshot-1.png"></p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/06/11/xcode-failing-when-building-for-archiving-because-of-a-missing-library-link/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -813,6 +947,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/11/08/capybara-selenium-rspec-vagrant-remotely/">Capybara using Selenium, with RSpec, in the Vagrant (remotely)</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/10/19/image-cropping-with-live-preview-in-rails/">Cropping with live preview in Rails, using Jcrop</a>
       </li>
     
@@ -826,10 +964,6 @@
     
       <li class="post">
         <a href="/blog/2012/07/25/postgresql-schema-owner-altered-during-dump-prevent-access-from-rails/">PostgreSQL schema&#8217;s owner altered in database dump preventing Rails from finding the data</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/07/21/running-guard-over-vagrant/">Running guard over Vagrant</a>
       </li>
     
   </ul>

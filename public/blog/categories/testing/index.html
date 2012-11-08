@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Setting up log rotation for your web apps - softr.li</title>
+  <title>Category: testing - softr.li</title>
   <meta name="author" content="Romain Champourlier">
 
   
-  <meta name="description" content="If, like me, you simply follow the common tutorials and walthroughs to setup your production environment, you may start wondering after some weeks &hellip;">
+  <meta name="description" content="Category: testing">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.softr.li/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps">
+  <link rel="canonical" href="http://www.softr.liblog/categories/testing">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -75,153 +75,36 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">Setting Up Log Rotation for Your Web Apps</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-20T10:12:00+02:00" pubdate data-updated="true">Apr 20<span>th</span>, 2012</time>
-        
-      </p>
+    <h1 class="entry-title">Category: Testing</h1>
     
   </header>
-
-
-<div class="entry-content"><p><span class='pullquote-right' data-pullquote='Just ask yourself this question: did you configure your logs rotation? '>
-If, like me, you simply follow the common tutorials and walthroughs to setup your production environment, you may start wondering after some weeks <strong>where this leak on your server&#8217;s disk space is coming from&#8230;</strong></p>
-
-<p>Just ask yourself this question: did you configure your logs rotation?</p>
-
-<p><em>(Well, that was when I was still a young CTO&#8230;)</em>
-</span></p>
-
-<!-- more -->
-
-
-<h2>The ugly</h2>
-
-<p>You&#8217;ve installed your <strong>nginx</strong> server, it proxies some well-coded <strong>Rails</strong> applications served by the nice-and-fast <strong>thin</strong> app server. All good.</p>
-
-<p>But you know, these are verbose people. They like to talk. A lot. And as obedient software, they write every character of their chatter. So this is where your leak is coming from.</p>
-
-<p>As a matter of fact, if you don&#8217;t tell somebody to clean their mess, nobody won&#8217;t&#8230; and you&#8217;re server will soon die of low-disk-space agony.</p>
-
-<h2>The bad</h2>
-
-<p>You will have to tell <code>logrotate</code> to do some work for these guys to keep their chatter under control.</p>
-
-<p><code>logrotate</code> is the cowboy which will rule the land ;) Tell it which log has to be rotated and it will automatically does the job for you. So now, get into this configuration stage&#8230;</p>
-
-<p>The <code>logrotate</code> configuration file should be <code>/etc/logrotate.conf</code>.</p>
-
-<p>You can add your instructions for log rotation by adding the following lines in this file, or you can create a new file under <code>/etc/logrotate.d</code> if you think this is a more organized way (I think). This latter option mimics the way packages configure <code>logrotate</code>. You will find several examples in this directory, so you may just look at them too.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/path/to/your/rails/applicaton/log/*.log {
-</span><span class='line'>  daily
-</span><span class='line'>  missingok
-</span><span class='line'>  rotate 7
-</span><span class='line'>  compress
-</span><span class='line'>  delaycompress
-</span><span class='line'>  notifempty
-</span><span class='line'>  copytruncate
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you want to force <code>logrotate</code> to run right now instead of waiting until tomorrow to see if your configuration is OK, you can run this command:</p>
-
-<pre><code>/usr/sbin/logrotate -f /etc/logrotate.conf
-</code></pre>
-
-<p>Else you can just wait a little.</p>
-
-<h2>The good</h2>
-
-<p>If you got through all this useless blabber about bad guys chatting and cowboys, you&#8217;ll be happy to know that some serious<del>ly boring</del> (no no, just kidding, I don&#8217;t even know him) guy has written a far more efficient tutorial on the subject, and you can find it <a href="http://www.nullislove.com/2007/09/10/rotating-rails-log-files/">here</a>.</p>
-
-<p>This guide will help you understand how <code>logrotate</code> works and the purpose of each line in the code above.</p>
-</div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">Romain Champourlier</span></span>
-
-      
-
-
-
-
-
+  <div id="blog-archives" class="category">
 
 
 
   
+  <h2>2012</h2>
+
+<article>
+  
+<h1><a href="/blog/2012/11/08/capybara-selenium-rspec-vagrant-remotely/">Capybara using Selenium, with RSpec, in the Vagrant (remotely)</a></h1>
+<time datetime="2012-11-08T12:00:00+01:00" pubdate><span class='month'>Nov</span> <span class='day'>08</span> <span class='year'>2012</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/rubyonrails/'>rubyonrails</a>, <a class='category' href='/blog/categories/testing/'>testing</a>, <a class='category' href='/blog/categories/vagrant/'>vagrant</a>, <a class='category' href='/blog/categories/web/'>web</a></span>
+</footer>
 
 
-<time datetime="2012-04-20T10:12:00+02:00" pubdate data-updated="true">Apr 20<span>th</span>, 2012</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/maintenance/'>maintenance</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.softr.li/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/" data-via="softrli" data-counturl="http://www.softr.li/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/" >Tweet</a>
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2012/04/16/linking-local-node-modules-with-npm/" title="Previous Post: Linking local node modules with npm">&laquo; Linking local node modules with npm</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2012/04/22/manually-installing-a-gem-from-a-git-repo/" title="Next Post: Manually installing a gem from a git repo">Manually installing a gem from a git repo &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-  </section>
+
+  
+</article>
 
 </div>
 
@@ -343,10 +226,7 @@ If, like me, you simply follow the common tutorials and walthroughs to setup you
       var disqus_shortname = 'softrli';
       
         
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.softr.li/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/';
-        var disqus_url = 'http://www.softr.li/blog/2012/04/20/setting-up-log-rotation-for-your-web-apps/';
-        var disqus_script = 'embed.js';
+        var disqus_script = 'count.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
